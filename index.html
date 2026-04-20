@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+  <title>РІДНЯ · Мандрівки 2026</title>
+  <!-- Шрифти -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <!-- Власні стилі -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- ===== ШАПКА (як на riddnya.org.ua) ===== -->
+  <header class="main-header">
+    <div class="header-container">
+      <div class="header-logo">
+        <a href="#">
+          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSF_iwSxss_IqdaPmPkANopDAR_VPWjW6_KxA&s" alt="РІДНЯ логотип">
+        </a>
+      </div>
+      
+      <button class="mobile-menu-toggle" id="mobileMenuToggle">
+        <i class="fas fa-bars"></i>
+      </button>
+      
+      <nav class="header-nav" id="mainNav">
+        <ul>
+          <li><a href="#">Головна</a></li>
+          <li><a href="#">Про нас</a></li>
+          <li><a href="#">Блог</a></li>
+          <li><a href="#">Звіти</a></li>
+          <li><a href="#">Контакти</a></li>
+          <li class="has-dropdown">
+            <a href="#">Проєкти <i class="fas fa-chevron-down"></i></a>
+            <ul class="dropdown">
+              <li><a href="#">Добрий господар</a></li>
+              <li><a href="#">Допомога ЗСУ</a></li>
+              <li><a href="#">Розвиток громад</a></li>
+              <li><a href="#">Учасники та волонтери</a></li>
+              <li><a href="#">Молодіжна рада</a></li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      
+      <div class="header-support">
+        <a href="#" class="support-btn">Підтримати <i class="fas fa-heart"></i></a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- Фільтри та кнопка додавання -->
+    <div class="legend-bar">
+      <div class="filter-group">
+        <button class="filter-btn active" data-filter="all"><i class="fas fa-list"></i> Усі</button>
+        <button class="filter-btn" data-filter="легка"><i class="fas fa-leaf"></i> Легка</button>
+        <button class="filter-btn" data-filter="середня"><i class="fas fa-tree"></i> Середня</button>
+        <button class="filter-btn" data-filter="вище середньої"><i class="fas fa-mountain"></i> Вище сер.</button>
+      </div>
+      <div style="display: flex; gap: 12px; align-items: center;">
+        <div class="stats-tag"><i class="fas fa-eye"></i> <span id="visibleCount">17</span> маршрутів</div>
+        <button class="add-trip-btn" id="addTripBtn"><i class="fas fa-plus"></i> Додати маршрут</button>
+      </div>
+    </div>
+
+    <!-- Контейнер карток -->
+    <div id="cardsContainer" class="cards-container"></div>
+  </main>
+
+  <!-- Модальне вікно додавання -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h2><i class="fas fa-mountain"></i> Новий маршрут</h2>
+        <button class="modal-close" id="closeModalBtn">&times;</button>
+      </div>
+      <form id="addTripForm">
+        <div class="form-group">
+          <label for="title">Назва маршруту *</label>
+          <input type="text" id="title" name="title" placeholder="г. Говерла 2061 м (старт з бази «Заросляк»)" required>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="date">Дата (напр. 15.06.2026 або 01-02.08.2026)</label>
+            <input type="text" id="date" name="date" placeholder="2026-07-01">
+          </div>
+          <div class="form-group">
+            <label for="distance">Протяжність</label>
+            <input type="text" id="distance" name="distance" placeholder="12 км">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="difficulty">Складність</label>
+            <select id="difficulty" name="difficulty">
+              <option value="легка">Легка</option>
+              <option value="середня">Середня</option>
+              <option value="вище середньої">Вище середньої</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="duration">Тривалість</label>
+            <input type="text" id="duration" name="duration" placeholder="1 день">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="guide">Провідник</label>
+          <input type="text" id="guide" name="guide" placeholder="Ім'я Прізвище">
+        </div>
+        <div class="form-group">
+          <label for="mapUrl">Посилання на карту (mapy.cz)</label>
+          <input type="url" id="mapUrl" name="mapUrl" placeholder="https://uk.mapy.cz/s/...">
+        </div>
+        <div class="form-group">
+          <label for="notes">Примітка (буде показана при наведенні на !)</label>
+          <input type="text" id="notes" name="notes" placeholder="наприклад, масове сходження">
+        </div>
+        <div class="form-group">
+          <label for="image">URL зображення (за бажанням)</label>
+          <input type="url" id="image" name="image" placeholder="https://...">
+        </div>
+        <div class="form-group checkbox-group">
+          <label>
+            <input type="checkbox" id="isCompleted"> Виконано
+          </label>
+          <label>
+            <input type="checkbox" id="isTraditional"> Традиційний маршрут
+          </label>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn-cancel" id="cancelBtn">Скасувати</button>
+          <button type="submit" class="btn-submit"><i class="fas fa-save"></i> Зберегти</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ===== ФУТЕР (як на riddnya.org.ua) ===== -->
+  <footer class="main-footer">
+    <div class="footer-container">
+      <div class="footer-top">
+        <div class="footer-logo">
+          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSF_iwSxss_IqdaPmPkANopDAR_VPWjW6_KxA&s" alt="РІДНЯ логотип">
+          <p>Благодійний фонд "Рідня"</p>
+        </div>
+        <div class="footer-social">
+          <a href="#"><i class="fab fa-facebook-f"></i></a>
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-youtube"></i></a>
+        </div>
+      </div>
+      <div class="footer-middle">
+        <div class="footer-nav">
+          <h4>Про фонд</h4>
+          <ul>
+            <li><a href="#">Наша команда</a></li>
+            <li><a href="#">Наглядова рада</a></li>
+            <li><a href="#">Правління</a></li>
+            <li><a href="#">Звіти</a></li>
+          </ul>
+        </div>
+        <div class="footer-nav">
+          <h4>Проєкти</h4>
+          <ul>
+            <li><a href="#">Добрий господар</a></li>
+            <li><a href="#">Допомога ЗСУ</a></li>
+            <li><a href="#">Розвиток громад</a></li>
+            <li><a href="#">Молодіжна рада</a></li>
+          </ul>
+        </div>
+        <div class="footer-nav">
+          <h4>Контакти</h4>
+          <ul>
+            <li><i class="fas fa-map-marker-alt"></i> м. Стрий, вул. Незалежності, 8</li>
+            <li><i class="fas fa-phone"></i> +380 67 123 45 67</li>
+            <li><i class="fas fa-envelope"></i> info@ridnya.org.ua</li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Благодійний фонд "Рідня". Усі права захищено.</p>
+        <p>Розроблено з <i class="fas fa-heart"></i> для громад</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
