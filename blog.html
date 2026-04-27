@@ -2,7 +2,7 @@
 <html lang="uk">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover">
   <title>Блог · РІДНЯ</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -15,10 +15,7 @@
     <div class="header-container">
       <a href="index.html" class="header-logo">
         <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSF_iwSxss_IqdaPmPkANopDAR_VPWjW6_KxA&s" alt="РІДНЯ логотип">
-        <div class="header-logo-text">
-          <span class="header-logo-title">РІДНЯ</span>
-          <span class="header-logo-sub">Клуб мандрівників</span>
-        </div>
+        <div class="header-logo-text"><span class="header-logo-title">РІДНЯ</span><span class="header-logo-sub">Клуб мандрівників</span></div>
       </a>
       <button class="mobile-menu-toggle" id="mobileMenuToggle"><i class="fas fa-bars"></i></button>
       <nav class="header-nav" id="mainNav">
@@ -31,107 +28,38 @@
           <li><a href="contacts.html"><i class="fas fa-envelope"></i> Контакти</a></li>
         </ul>
       </nav>
-      <div class="header-actions">
-        <a href="#" class="btn-support"><i class="fas fa-heart"></i> Підтримати</a>
-      </div>
+      <div class="header-actions"><a href="#" class="btn-support"><i class="fas fa-heart"></i> Підтримати</a></div>
     </div>
   </header>
 
   <main>
     <section class="section active">
-      <div class="section-header">
-        <span class="section-label">Читай</span>
-        <h2 class="section-title">Блог клубу</h2>
-        <p class="section-subtitle">Новини, звіти з походів, історії учасників</p>
-      </div>
-
-      <div style="display: flex; justify-content: center; margin-bottom: 30px;">
-        <button class="add-trip-btn" id="addBlogBtn"><i class="fas fa-plus"></i> Додати статтю</button>
-      </div>
-
+      <div class="section-header"><span class="section-label">Читай</span><h2 class="section-title">Блог клубу</h2><p class="section-subtitle">Новини, звіти з походів, історії учасників</p></div>
+      <div style="display: flex; justify-content: center; margin-bottom: 30px;"><button class="add-trip-btn" id="addBlogBtn"><i class="fas fa-plus"></i> Додати статтю</button></div>
       <div id="blogContainer" class="blog-grid"></div>
     </section>
   </main>
 
-  <!-- Модалка для блогу -->
   <div class="modal-overlay" id="blogModalOverlay">
     <div class="modal">
-      <div class="modal-header">
-        <h2 id="blogModalTitle"><i class="fas fa-newspaper"></i> Нова стаття</h2>
-        <button class="modal-close" id="closeBlogModalBtn">&times;</button>
-      </div>
+      <div class="modal-header"><h2 id="blogModalTitle"><i class="fas fa-newspaper"></i> Нова стаття</h2><button class="modal-close" id="closeBlogModalBtn">&times;</button></div>
       <form id="addBlogForm">
-        <div class="form-group">
-          <label for="blogTitle">Заголовок *</label>
-          <input type="text" id="blogTitle" placeholder="Назва статті" required>
-        </div>
-        <div class="form-group">
-          <label for="blogDate">Дата</label>
-          <input type="text" id="blogDate" placeholder="22.02.2026">
-        </div>
-        <div class="form-group">
-          <label for="blogText">Текст статті</label>
-          <textarea id="blogText" rows="6" placeholder="Зміст статті..."></textarea>
-        </div>
-        <div class="form-group">
-          <label for="blogImage">URL зображення</label>
-          <input type="url" id="blogImage" placeholder="https://...">
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn-cancel" id="cancelBlogBtn">Скасувати</button>
-          <button type="submit" class="btn-submit"><i class="fas fa-save"></i> Зберегти</button>
-        </div>
+        <div class="form-group"><label>Заголовок *</label><input type="text" id="blogTitle" placeholder="Назва статті" required></div>
+        <div class="form-group"><label>Дата</label><input type="text" id="blogDate" placeholder="22.02.2026"></div>
+        <div class="form-group"><label>Текст</label><textarea id="blogText" rows="5" placeholder="Зміст статті..."></textarea></div>
+        <div class="form-group"><label>URL зображення</label><input type="url" id="blogImage" placeholder="https://..."></div>
+        <div class="modal-footer"><button type="button" class="btn-cancel" id="cancelBlogBtn">Скасувати</button><button type="submit" class="btn-submit"><i class="fas fa-save"></i> Зберегти</button></div>
       </form>
     </div>
   </div>
 
   <footer class="main-footer">
     <div class="footer-container">
-      <div class="footer-top">
-        <div class="footer-logo">
-          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSF_iwSxss_IqdaPmPkANopDAR_VPWjW6_KxA&s" alt="РІДНЯ логотип">
-          <div><strong>Благодійний фонд «Рідня»</strong><p>Клуб мандрівників</p></div>
-        </div>
-        <div class="footer-social">
-          <a href="#"><i class="fab fa-facebook-f"></i></a>
-          <a href="#"><i class="fab fa-instagram"></i></a>
-          <a href="#"><i class="fab fa-youtube"></i></a>
-        </div>
-      </div>
-      <div class="footer-middle">
-        <div class="footer-nav">
-          <h4>Навігація</h4>
-          <ul>
-            <li><a href="index.html">Головна</a></li>
-            <li><a href="trips.html">Маршрути</a></li>
-            <li><a href="blog.html">Блог</a></li>
-            <li><a href="faq.html">FAQ</a></li>
-          </ul>
-        </div>
-        <div class="footer-nav">
-          <h4>Про клуб</h4>
-          <ul>
-            <li><a href="reviews.html">Відгуки</a></li>
-            <li><a href="contacts.html">Контакти</a></li>
-            <li><a href="#">Підтримати фонд</a></li>
-          </ul>
-        </div>
-        <div class="footer-nav">
-          <h4>Контакти</h4>
-          <ul>
-            <li><i class="fas fa-map-marker-alt"></i> м. Стрий, вул. Незалежності, 8</li>
-            <li><i class="fas fa-phone"></i> +380 50 370 16 40</li>
-            <li><i class="fas fa-envelope"></i> valeriy.burlaka@fristads.com</li>
-          </ul>
-        </div>
-      </div>
-      <div class="footer-bottom">
-        <p>&copy; 2026 Благодійний фонд «Рідня». Усі права захищено.</p>
-        <p>Розроблено з <i class="fas fa-heart"></i> для громад</p>
-      </div>
+      <div class="footer-top"><div class="footer-logo"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSF_iwSxss_IqdaPmPkANopDAR_VPWjW6_KxA&s" alt="РІДНЯ логотип"><div><strong>Благодійний фонд «Рідня»</strong><p>Клуб мандрівників</p></div></div><div class="footer-social"><a href="#"><i class="fab fa-facebook-f"></i></a><a href="#"><i class="fab fa-instagram"></i></a><a href="#"><i class="fab fa-youtube"></i></a></div></div>
+      <div class="footer-middle"><div class="footer-nav"><h4>Навігація</h4><ul><li><a href="index.html">Головна</a></li><li><a href="trips.html">Маршрути</a></li><li><a href="blog.html">Блог</a></li><li><a href="faq.html">FAQ</a></li></ul></div><div class="footer-nav"><h4>Про клуб</h4><ul><li><a href="reviews.html">Відгуки</a></li><li><a href="contacts.html">Контакти</a></li><li><a href="#">Підтримати фонд</a></li></ul></div><div class="footer-nav"><h4>Контакти</h4><ul><li><i class="fas fa-map-marker-alt"></i> м. Стрий, вул. Незалежності, 8</li><li><i class="fas fa-phone"></i> +380 50 370 16 40</li><li><i class="fas fa-envelope"></i> valeriy.burlaka@fristads.com</li></ul></div></div>
+      <div class="footer-bottom"><p>&copy; 2026 Благодійний фонд «Рідня». Усі права захищено.</p><p>Розроблено з <i class="fas fa-heart"></i> для громад</p></div>
     </div>
   </footer>
-
   <script src="script.js"></script>
 </body>
 </html>

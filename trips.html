@@ -2,7 +2,7 @@
 <html lang="uk">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover">
   <title>Маршрути · РІДНЯ</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -44,6 +44,24 @@
         <h2 class="section-title">Заплановані походи</h2>
         <p class="section-subtitle">Обирай маршрут до душі — від легких прогулянок до серйозних вершин</p>
       </div>
+
+      <div class="search-sort-bar">
+        <div class="search-box">
+          <i class="fas fa-search"></i>
+          <input type="text" id="searchInput" placeholder="Пошук за назвою, провідником...">
+          <button id="clearSearch" class="clear-btn" style="display:none;"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="sort-options">
+          <label for="sortBy"><i class="fas fa-sort-amount-down"></i></label>
+          <select id="sortBy">
+            <option value="default">За замовчуванням</option>
+            <option value="date">За датою</option>
+            <option value="difficulty">За складністю</option>
+            <option value="distance">За протяжністю</option>
+          </select>
+        </div>
+      </div>
+
       <div class="legend-bar">
         <div class="filter-group">
           <button class="filter-btn active" data-filter="all"><i class="fas fa-list"></i> Усі</button>
@@ -53,14 +71,13 @@
         </div>
         <div style="display: flex; gap: 12px; align-items: center;">
           <div class="stats-tag"><i class="fas fa-eye"></i> <span id="visibleCount">17</span> маршрутів</div>
-          <button class="add-trip-btn" id="addTripBtn"><i class="fas fa-plus"></i> Додати маршрут</button>
+          <button class="add-trip-btn" id="addTripBtn"><i class="fas fa-plus"></i> Додати</button>
         </div>
       </div>
       <div id="cardsContainer" class="cards-container"></div>
     </section>
   </main>
 
-  <!-- Модалка маршруту -->
   <div class="modal-overlay" id="modalOverlay">
     <div class="modal">
       <div class="modal-header">
@@ -68,78 +85,26 @@
         <button class="modal-close" id="closeModalBtn">&times;</button>
       </div>
       <form id="addTripForm">
-        <div class="form-group"><label for="title">Назва маршруту *</label><input type="text" id="title" placeholder="г. Говерла 2061 м" required></div>
-        <div class="form-row">
-          <div class="form-group"><label for="date">Дата</label><input type="text" id="date" placeholder="15.06.2026"></div>
-          <div class="form-group"><label for="distance">Протяжність</label><input type="text" id="distance" placeholder="12 км"></div>
-        </div>
-        <div class="form-row">
-          <div class="form-group"><label for="difficulty">Складність</label><select id="difficulty"><option value="легка">Легка</option><option value="середня">Середня</option><option value="вище середньої">Вище середньої</option></select></div>
-          <div class="form-group"><label for="duration">Тривалість</label><input type="text" id="duration" placeholder="1 день"></div>
-        </div>
-        <div class="form-group"><label for="guide">Провідник</label><input type="text" id="guide" placeholder="Ім'я Прізвище"></div>
-        <div class="form-group"><label for="mapUrl">Посилання на карту</label><input type="url" id="mapUrl" placeholder="https://uk.mapy.cz/s/..."></div>
-        <div class="form-group"><label for="notes">Примітка</label><input type="text" id="notes" placeholder="напр. масове сходження"></div>
-        <div class="form-group"><label for="image">URL зображення</label><input type="url" id="image" placeholder="https://..."></div>
-        <div class="form-group checkbox-group">
-          <label><input type="checkbox" id="isCompleted"> Виконано</label>
-          <label><input type="checkbox" id="isTraditional"> Традиційний маршрут</label>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn-cancel" id="cancelBtn">Скасувати</button>
-          <button type="submit" class="btn-submit"><i class="fas fa-save"></i> Зберегти</button>
-        </div>
+        <div class="form-row"><div class="form-group"><label>Назва *</label><input type="text" id="title" placeholder="г. Говерла 2061 м" required></div></div>
+        <div class="form-row"><div class="form-group"><label>Дата</label><input type="text" id="date" placeholder="15.06.2026"></div><div class="form-group"><label>Протяжність</label><input type="text" id="distance" placeholder="12 км"></div></div>
+        <div class="form-row"><div class="form-group"><label>Складність</label><select id="difficulty"><option value="легка">Легка</option><option value="середня">Середня</option><option value="вище середньої">Вище сер.</option></select></div><div class="form-group"><label>Тривалість</label><input type="text" id="duration" placeholder="1 день"></div></div>
+        <div class="form-group"><label>Провідник</label><input type="text" id="guide" placeholder="Ім'я Прізвище"></div>
+        <div class="form-group"><label>Посилання на карту</label><input type="url" id="mapUrl" placeholder="https://uk.mapy.cz/s/..."></div>
+        <div class="form-group"><label>Примітка</label><input type="text" id="notes" placeholder="масове сходження"></div>
+        <div class="form-group"><label>URL зображення</label><input type="url" id="image" placeholder="https://..."></div>
+        <div class="form-group checkbox-group"><label><input type="checkbox" id="isCompleted"> Виконано</label><label><input type="checkbox" id="isTraditional"> Традиційний маршрут</label></div>
+        <div class="modal-footer"><button type="button" class="btn-cancel" id="cancelBtn">Скасувати</button><button type="submit" class="btn-submit"><i class="fas fa-save"></i> Зберегти</button></div>
       </form>
     </div>
   </div>
 
   <footer class="main-footer">
     <div class="footer-container">
-      <div class="footer-top">
-        <div class="footer-logo">
-          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSF_iwSxss_IqdaPmPkANopDAR_VPWjW6_KxA&s" alt="РІДНЯ логотип">
-          <div><strong>Благодійний фонд «Рідня»</strong><p>Клуб мандрівників</p></div>
-        </div>
-        <div class="footer-social">
-          <a href="#"><i class="fab fa-facebook-f"></i></a>
-          <a href="#"><i class="fab fa-instagram"></i></a>
-          <a href="#"><i class="fab fa-youtube"></i></a>
-        </div>
-      </div>
-      <div class="footer-middle">
-        <div class="footer-nav">
-          <h4>Навігація</h4>
-          <ul>
-            <li><a href="index.html">Головна</a></li>
-            <li><a href="trips.html">Маршрути</a></li>
-            <li><a href="blog.html">Блог</a></li>
-            <li><a href="faq.html">FAQ</a></li>
-          </ul>
-        </div>
-        <div class="footer-nav">
-          <h4>Про клуб</h4>
-          <ul>
-            <li><a href="reviews.html">Відгуки</a></li>
-            <li><a href="contacts.html">Контакти</a></li>
-            <li><a href="#">Підтримати фонд</a></li>
-          </ul>
-        </div>
-        <div class="footer-nav">
-          <h4>Контакти</h4>
-          <ul>
-            <li><i class="fas fa-map-marker-alt"></i> м. Стрий, вул. Незалежності, 8</li>
-            <li><i class="fas fa-phone"></i> +380 50 370 16 40</li>
-            <li><i class="fas fa-envelope"></i> valeriy.burlaka@fristads.com</li>
-          </ul>
-        </div>
-      </div>
-      <div class="footer-bottom">
-        <p>&copy; 2026 Благодійний фонд «Рідня». Усі права захищено.</p>
-        <p>Розроблено з <i class="fas fa-heart"></i> для громад</p>
-      </div>
+      <div class="footer-top"><div class="footer-logo"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSF_iwSxss_IqdaPmPkANopDAR_VPWjW6_KxA&s" alt="РІДНЯ логотип"><div><strong>Благодійний фонд «Рідня»</strong><p>Клуб мандрівників</p></div></div><div class="footer-social"><a href="#"><i class="fab fa-facebook-f"></i></a><a href="#"><i class="fab fa-instagram"></i></a><a href="#"><i class="fab fa-youtube"></i></a></div></div>
+      <div class="footer-middle"><div class="footer-nav"><h4>Навігація</h4><ul><li><a href="index.html">Головна</a></li><li><a href="trips.html">Маршрути</a></li><li><a href="blog.html">Блог</a></li><li><a href="faq.html">FAQ</a></li></ul></div><div class="footer-nav"><h4>Про клуб</h4><ul><li><a href="reviews.html">Відгуки</a></li><li><a href="contacts.html">Контакти</a></li><li><a href="#">Підтримати фонд</a></li></ul></div><div class="footer-nav"><h4>Контакти</h4><ul><li><i class="fas fa-map-marker-alt"></i> м. Стрий, вул. Незалежності, 8</li><li><i class="fas fa-phone"></i> +380 50 370 16 40</li><li><i class="fas fa-envelope"></i> valeriy.burlaka@fristads.com</li></ul></div></div>
+      <div class="footer-bottom"><p>&copy; 2026 Благодійний фонд «Рідня». Усі права захищено.</p><p>Розроблено з <i class="fas fa-heart"></i> для громад</p></div>
     </div>
   </footer>
-
   <script src="script.js"></script>
 </body>
 </html>
