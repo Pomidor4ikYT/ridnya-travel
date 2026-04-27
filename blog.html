@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
-  <title>РІДНЯ · Клуб мандрівників</title>
+  <title>Блог · РІДНЯ</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&family=Manrope:wght@600;700;800&family=Montserrat:wght@600;700;800;900&display=swap" rel="stylesheet">
@@ -23,9 +23,9 @@
       <button class="mobile-menu-toggle" id="mobileMenuToggle"><i class="fas fa-bars"></i></button>
       <nav class="header-nav" id="mainNav">
         <ul>
-          <li><a href="index.html" class="active"><i class="fas fa-home"></i> Головна</a></li>
+          <li><a href="index.html"><i class="fas fa-home"></i> Головна</a></li>
           <li><a href="trips.html"><i class="fas fa-hiking"></i> Маршрути</a></li>
-          <li><a href="blog.html"><i class="fas fa-newspaper"></i> Блог</a></li>
+          <li><a href="blog.html" class="active"><i class="fas fa-newspaper"></i> Блог</a></li>
           <li><a href="faq.html"><i class="fas fa-question-circle"></i> FAQ</a></li>
           <li><a href="reviews.html"><i class="fas fa-star"></i> Відгуки</a></li>
           <li><a href="contacts.html"><i class="fas fa-envelope"></i> Контакти</a></li>
@@ -38,35 +38,52 @@
   </header>
 
   <main>
-    <div class="hero-section">
-      <div class="hero-content">
-        <div class="hero-badge"><i class="fas fa-map-pin"></i> Карпати та не тільки</div>
-        <h1 class="hero-title">Відкрий <span class="highlight">рідний край</span> разом із нами</h1>
-        <p class="hero-subtitle">Мандрівки, здорове життя, дружнє коло. Долучайся до клубу «Рідня» — досліджуй маршрути, місця слави УПА, отримуй позитивні емоції.</p>
-        <div class="hero-buttons">
-          <a href="trips.html" class="btn-hero-primary"><i class="fas fa-calendar-alt"></i> Дивитись маршрути</a>
-          <a href="contacts.html" class="btn-hero-secondary"><i class="fas fa-user-plus"></i> Приєднатися до клубу</a>
-        </div>
+    <section class="section active">
+      <div class="section-header">
+        <span class="section-label">Читай</span>
+        <h2 class="section-title">Блог клубу</h2>
+        <p class="section-subtitle">Новини, звіти з походів, історії учасників</p>
       </div>
-    </div>
-    <div class="about-club-container">
-      <div class="about-club">
-        <div class="about-club-image">
-          <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=600&h=400&fit=crop" alt="Клуб Рідня в горах" loading="lazy">
-        </div>
-        <div class="about-club-text">
-          <h3>Хто ми?</h3>
-          <p>Клуб мандрівників «Рідня» створений благодійним фондом громад «Рідня». Ми об’єднуємо людей, які люблять природу, історію та активний відпочинок.</p>
-          <ul class="about-features">
-            <li><i class="fas fa-check-circle"></i> Популяризація здорового способу життя</li>
-            <li><i class="fas fa-check-circle"></i> Маршрути місцями бойової слави УПА</li>
-            <li><i class="fas fa-check-circle"></i> Дружні походи та благодійні збори</li>
-            <li><i class="fas fa-check-circle"></i> Відкриті для всіх віком від 18 років</li>
-          </ul>
-        </div>
+
+      <div style="display: flex; justify-content: center; margin-bottom: 30px;">
+        <button class="add-trip-btn" id="addBlogBtn"><i class="fas fa-plus"></i> Додати статтю</button>
       </div>
-    </div>
+
+      <div id="blogContainer" class="blog-grid"></div>
+    </section>
   </main>
+
+  <!-- Модалка для блогу -->
+  <div class="modal-overlay" id="blogModalOverlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 id="blogModalTitle"><i class="fas fa-newspaper"></i> Нова стаття</h2>
+        <button class="modal-close" id="closeBlogModalBtn">&times;</button>
+      </div>
+      <form id="addBlogForm">
+        <div class="form-group">
+          <label for="blogTitle">Заголовок *</label>
+          <input type="text" id="blogTitle" placeholder="Назва статті" required>
+        </div>
+        <div class="form-group">
+          <label for="blogDate">Дата</label>
+          <input type="text" id="blogDate" placeholder="22.02.2026">
+        </div>
+        <div class="form-group">
+          <label for="blogText">Текст статті</label>
+          <textarea id="blogText" rows="6" placeholder="Зміст статті..."></textarea>
+        </div>
+        <div class="form-group">
+          <label for="blogImage">URL зображення</label>
+          <input type="url" id="blogImage" placeholder="https://...">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn-cancel" id="cancelBlogBtn">Скасувати</button>
+          <button type="submit" class="btn-submit"><i class="fas fa-save"></i> Зберегти</button>
+        </div>
+      </form>
+    </div>
+  </div>
 
   <footer class="main-footer">
     <div class="footer-container">

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
-  <title>РІДНЯ · Клуб мандрівників</title>
+  <title>FAQ · РІДНЯ</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&family=Manrope:wght@600;700;800&family=Montserrat:wght@600;700;800;900&display=swap" rel="stylesheet">
@@ -23,10 +23,10 @@
       <button class="mobile-menu-toggle" id="mobileMenuToggle"><i class="fas fa-bars"></i></button>
       <nav class="header-nav" id="mainNav">
         <ul>
-          <li><a href="index.html" class="active"><i class="fas fa-home"></i> Головна</a></li>
+          <li><a href="index.html"><i class="fas fa-home"></i> Головна</a></li>
           <li><a href="trips.html"><i class="fas fa-hiking"></i> Маршрути</a></li>
           <li><a href="blog.html"><i class="fas fa-newspaper"></i> Блог</a></li>
-          <li><a href="faq.html"><i class="fas fa-question-circle"></i> FAQ</a></li>
+          <li><a href="faq.html" class="active"><i class="fas fa-question-circle"></i> FAQ</a></li>
           <li><a href="reviews.html"><i class="fas fa-star"></i> Відгуки</a></li>
           <li><a href="contacts.html"><i class="fas fa-envelope"></i> Контакти</a></li>
         </ul>
@@ -38,34 +38,31 @@
   </header>
 
   <main>
-    <div class="hero-section">
-      <div class="hero-content">
-        <div class="hero-badge"><i class="fas fa-map-pin"></i> Карпати та не тільки</div>
-        <h1 class="hero-title">Відкрий <span class="highlight">рідний край</span> разом із нами</h1>
-        <p class="hero-subtitle">Мандрівки, здорове життя, дружнє коло. Долучайся до клубу «Рідня» — досліджуй маршрути, місця слави УПА, отримуй позитивні емоції.</p>
-        <div class="hero-buttons">
-          <a href="trips.html" class="btn-hero-primary"><i class="fas fa-calendar-alt"></i> Дивитись маршрути</a>
-          <a href="contacts.html" class="btn-hero-secondary"><i class="fas fa-user-plus"></i> Приєднатися до клубу</a>
+    <section class="section active">
+      <div class="section-header">
+        <span class="section-label">Допомога</span>
+        <h2 class="section-title">Часті запитання</h2>
+        <p class="section-subtitle">Все, що варто знати перед першим походом</p>
+      </div>
+      <div class="faq-list">
+        <div class="faq-item">
+          <button class="faq-question">Як приєднатися до клубу? <i class="fas fa-chevron-down"></i></button>
+          <div class="faq-answer"><p>Просто зв’яжіться з нами через форму на сторінці «Контакти» або напишіть у соцмережі. Ми додамо вас у спільноту та повідомимо про найближчі походи.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">Який рівень підготовки потрібен? <i class="fas fa-chevron-down"></i></button>
+          <div class="faq-answer"><p>У нас є маршрути різної складності: від легких прогулянок (5–10 км) до серйозних походів (30+ км). Початківцям радимо починати з легких.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">Що брати з собою в похід? <i class="fas fa-chevron-down"></i></button>
+          <div class="faq-answer"><p>Зручне взуття, дощовик, воду, перекус, ліхтарик, аптечку. Детальний список надсилаємо перед кожним походом.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">Чи є благодійні внески? <i class="fas fa-chevron-down"></i></button>
+          <div class="faq-answer"><p>Походи безкоштовні, але ми завжди раді благодійним внескам на підтримку ЗСУ та розвиток громад. Усі кошти йдуть через фонд «Рідня».</p></div>
         </div>
       </div>
-    </div>
-    <div class="about-club-container">
-      <div class="about-club">
-        <div class="about-club-image">
-          <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=600&h=400&fit=crop" alt="Клуб Рідня в горах" loading="lazy">
-        </div>
-        <div class="about-club-text">
-          <h3>Хто ми?</h3>
-          <p>Клуб мандрівників «Рідня» створений благодійним фондом громад «Рідня». Ми об’єднуємо людей, які люблять природу, історію та активний відпочинок.</p>
-          <ul class="about-features">
-            <li><i class="fas fa-check-circle"></i> Популяризація здорового способу життя</li>
-            <li><i class="fas fa-check-circle"></i> Маршрути місцями бойової слави УПА</li>
-            <li><i class="fas fa-check-circle"></i> Дружні походи та благодійні збори</li>
-            <li><i class="fas fa-check-circle"></i> Відкриті для всіх віком від 18 років</li>
-          </ul>
-        </div>
-      </div>
-    </div>
+    </section>
   </main>
 
   <footer class="main-footer">

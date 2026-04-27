@@ -1,7 +1,11 @@
 (function() {
   'use strict';
 
-  // --- Початкові дані (якщо localStorage порожній) ---
+  // ===== Ключі localStorage =====
+  const STORAGE_KEY_TRIPS = 'ridnya_trips';
+  const STORAGE_KEY_BLOG = 'ridnya_blog';
+
+  // ===== Дані маршрутів (за замовчуванням) =====
   const defaultTrips = [
     { id: '1', title:"г.Маківка 958 м. (з заходом на г.\"Захар Беркут\")", date:"2026-01-01", distance:"8 км", difficulty:"легка", duration:"1 день", guide:"Петро Маковський", report:"виконано", mapUrl:null, notes:"", image:"https://vidviday.ua/storage/media/tour/1321/162495238960dace458b87e-1200x1200.jpg", isTraditional: false },
     { id: '2', title:"г. Пікуй 1408,3 м (старт з с.Білосовиця, або с.Гусне)", date:"2026-02-01", distance:"10 км", difficulty:"легка", duration:"1 день", guide:"Валерій Бурлака", report:"виконано", mapUrl:"https://uk.mapy.cz/s/gurefacuro", notes:"", image:"https://upload.wikimedia.org/wikipedia/commons/0/0c/%D0%9F%D1%96%D1%81%D0%BB%D1%8F_%D0%B3%D1%80%D0%BE%D0%B7%D0%B8.jpg", isTraditional: false },
@@ -22,26 +26,55 @@
     { id: '17', title:"хребтом Укерня + Аршиця (старт і фініш с.Мислівка)", date:"", distance:"44 км", difficulty:"середня", duration:"2-3 дні", guide:"Надія Рудик", report:"", mapUrl:"https://uk.mapy.cz/s/cekuvecocu", notes:"", image:"https://karpatium.com.ua/rails/active_storage/blobs/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBa3dMIiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--60e1f186c4456f0063117e98dbf5077fc79602c7/%D0%B0%D1%80%D1%88%D0%B8%D1%86%D1%8F.jpeg", isTraditional: false }
   ];
 
-  // --- Ініціалізація даних у localStorage ---
-  let trips = [];
-  const STORAGE_KEY = 'ridnya_trips';
-  let editingId = null; // ID маршруту, що редагується
-
-  function loadTrips() {
-    const stored = localStorage.getItem(STORAGE_KEY);
-    if (stored) {
-      trips = JSON.parse(stored);
-    } else {
-      trips = [...defaultTrips];
-      saveTrips();
+  const defaultBlog = [
+    {
+      id: 'b1',
+      title: 'Як ми підкорили Говерлу взимку',
+      date: '10.01.2026',
+      text: 'Зимове сходження на найвищу точку України — це незабутньо. Ділимось враженнями та порадами.',
+      image: ''
+    },
+    {
+      id: 'b2',
+      title: 'Місцями слави УПА: похід на Маківку',
+      date: '22.02.2026',
+      text: 'Історичний маршрут, який нагадує про героїчне минуле. Фото та враження.',
+      image: ''
+    },
+    {
+      id: 'b3',
+      title: 'Традиційний весняний похід на Лопату',
+      date: '05.03.2026',
+      text: 'Щороку ми відкриваємо сезон на горі Лопата. Приєднуйтесь!',
+      image: ''
     }
+  ];
+
+  // ===== ЗМІННІ =====
+  let trips = [];
+  let blogPosts = [];
+  let editingTripId = null;
+  let editingBlogId = null;
+  let currentFilter = 'all';
+
+  // ===== DOM-елементи (загальні) =====
+  const mobileToggle = document.getElementById('mobileMenuToggle');
+  const mainNav = document.getElementById('mainNav');
+
+  // ===== МОБІЛЬНЕ МЕНЮ =====
+  if (mobileToggle) {
+    mobileToggle.addEventListener('click', () => {
+      mainNav.classList.toggle('active');
+      const icon = mobileToggle.querySelector('i');
+      if (mainNav.classList.contains('active')) {
+        icon.classList.replace('fa-bars', 'fa-times');
+      } else {
+        icon.classList.replace('fa-times', 'fa-bars');
+      }
+    });
   }
 
-  function saveTrips() {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(trips));
-  }
-
-  // --- DOM елементи ---
+  // ===== ЛОГІКА МАРШРУТІВ =====
   const container = document.getElementById('cardsContainer');
   const visibleSpan = document.getElementById('visibleCount');
   const filterBtns = document.querySelectorAll('.filter-btn');
@@ -50,34 +83,18 @@
   const closeModalBtn = document.getElementById('closeModalBtn');
   const cancelBtn = document.getElementById('cancelBtn');
   const form = document.getElementById('addTripForm');
-  const modalTitle = document.querySelector('.modal-header h2');
+  const modalTitle = document.getElementById('modalTitle');
 
-  // Поля форми
-  const titleInput = document.getElementById('title');
-  const dateInput = document.getElementById('date');
-  const distanceInput = document.getElementById('distance');
-  const difficultySelect = document.getElementById('difficulty');
-  const durationInput = document.getElementById('duration');
-  const guideInput = document.getElementById('guide');
-  const mapUrlInput = document.getElementById('mapUrl');
-  const notesInput = document.getElementById('notes');
-  const imageInput = document.getElementById('image');
-  const isCompletedCheck = document.getElementById('isCompleted');
-  const isTraditionalCheck = document.getElementById('isTraditional');
-
-  // Мобільне меню
-  const mobileToggle = document.getElementById('mobileMenuToggle');
-  const mainNav = document.getElementById('mainNav');
-  if (mobileToggle) {
-    mobileToggle.addEventListener('click', function() {
-      mainNav.classList.toggle('active');
-      const icon = this.querySelector('i');
-      icon.classList.toggle('fa-bars');
-      icon.classList.toggle('fa-times');
-    });
+  function loadTrips() {
+    const stored = localStorage.getItem(STORAGE_KEY_TRIPS);
+    trips = stored ? JSON.parse(stored) : [...defaultTrips];
+    if (!stored) saveTrips();
   }
 
-  // --- Функції форматування ---
+  function saveTrips() {
+    localStorage.setItem(STORAGE_KEY_TRIPS, JSON.stringify(trips));
+  }
+
   function formatDate(dateStr) {
     if (!dateStr) return '—';
     let formatted = dateStr.replace(/\//g, '.');
@@ -88,27 +105,13 @@
     return formatted;
   }
 
-  function parseTitle(fullTitle) {
-    const match = fullTitle.match(/^(.*?)\s*\((.*?)\)\s*$/);
-    if (match) {
-      return { main: match[1].trim(), sub: match[2].trim() };
-    }
-    return { main: fullTitle, sub: '' };
-  }
-
-  // --- Рендер карток ---
-  let currentFilter = 'all';
-
   function renderCards() {
-    const filtered = trips.filter(t => {
-      if (currentFilter === 'all') return true;
-      return t.difficulty === currentFilter;
-    });
-
-    visibleSpan.textContent = filtered.length;
+    if (!container) return;
+    const filtered = trips.filter(t => currentFilter === 'all' || t.difficulty === currentFilter);
+    if (visibleSpan) visibleSpan.textContent = filtered.length;
 
     if (filtered.length === 0) {
-      container.innerHTML = `<div style="text-align:center; padding:40px; color:#2e5e2e;"><i class="fas fa-map-signs" style="font-size:2.5rem; opacity:0.6; margin-bottom:12px;"></i><p>Немає маршрутів</p></div>`;
+      container.innerHTML = `<div style="text-align:center; padding:40px; color:#0057b7;"><i class="fas fa-map-signs" style="font-size:2.5rem; opacity:0.6;"></i><p>Немає маршрутів</p></div>`;
       return;
     }
 
@@ -118,33 +121,31 @@
       const diffClass = trip.difficulty === 'легка' ? 'difficulty-легка' : (trip.difficulty === 'середня' ? 'difficulty-середня' : 'difficulty-вище');
       const isCompleted = trip.report && trip.report.includes('виконано');
       const mapLink = trip.mapUrl ? `<a href="${trip.mapUrl}" target="_blank" class="route-link"><i class="fas fa-map-location-dot"></i> mapy.cz</a>` : '';
-      
-      const { main, sub } = parseTitle(trip.title);
-      
-      const noteHtml = trip.notes ? `
-        <span class="note-icon">
-          <i class="fas fa-exclamation"></i>
-          <span class="tooltip-text">${trip.notes}</span>
-        </span>
-      ` : '';
 
-      const imageUrl = trip.image || 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=400&h=250&fit=crop';
+      const titleParsed = trip.title.match(/^(.*?)(\(.*\))$/);
+      const mainTitle = titleParsed ? titleParsed[1].trim() : trip.title;
+      const subTitle = titleParsed ? titleParsed[2].trim() : '';
+
+      const noteHtml = trip.notes ? `<span class="note-icon"><i class="fas fa-exclamation-circle"></i><span class="tooltip-text">${trip.notes}</span></span>` : '';
+      const imageUrl = trip.image || '';
 
       html += `
         <div class="trip-card" data-id="${trip.id}">
-          <div class="card-image" style="background-image: url('${imageUrl}');"></div>
+          <div class="card-image" style="background-image: url('${imageUrl}');">
+            ${!imageUrl ? '<i class="fas fa-mountain fallback-icon"></i>' : ''}
+          </div>
           <div class="card-content">
             <div class="card-header">
               <div style="flex:1;">
-                <div class="title-main">${main}</div>
-                ${sub ? `<div class="title-sub">${sub}</div>` : ''}
+                <div class="title-main">${mainTitle}</div>
+                ${subTitle ? `<div class="title-sub">${subTitle}</div>` : ''}
               </div>
               <div class="difficulty-badge ${diffClass}">${trip.difficulty}</div>
             </div>
             <div class="meta-grid">
-              <div class="meta-item"><i class="far fa-calendar"></i> ${dateFormatted}</div>
-              <div class="meta-item"><i class="fas fa-arrows-left-right"></i> ${trip.distance}</div>
-              <div class="meta-item"><i class="far fa-clock"></i> ${trip.duration}</div>
+              <span><i class="far fa-calendar"></i> ${dateFormatted}</span>
+              <span><i class="fas fa-arrows-left-right"></i> ${trip.distance}</span>
+              <span><i class="far fa-clock"></i> ${trip.duration}</span>
             </div>
             ${mapLink}
             <div class="card-footer">
@@ -166,135 +167,264 @@
 
     container.innerHTML = html;
 
-    // Додаємо обробники подій для кнопок редагування та видалення
-    document.querySelectorAll('.edit-btn').forEach(btn => {
+    document.querySelectorAll('#cardsContainer .edit-btn').forEach(btn => {
       btn.addEventListener('click', (e) => {
         e.stopPropagation();
-        const id = btn.dataset.id;
-        openEditModal(id);
+        openEditTripModal(btn.dataset.id);
       });
     });
 
-    document.querySelectorAll('.delete-btn').forEach(btn => {
+    document.querySelectorAll('#cardsContainer .delete-btn').forEach(btn => {
       btn.addEventListener('click', (e) => {
         e.stopPropagation();
-        const id = btn.dataset.id;
-        deleteTrip(id);
+        if (confirm('Ви впевнені, що хочете видалити цей маршрут?')) {
+          trips = trips.filter(t => t.id !== btn.dataset.id);
+          saveTrips();
+          renderCards();
+        }
       });
     });
   }
 
-  // --- Відкриття модалки для редагування ---
-  function openEditModal(id) {
+  function openEditTripModal(id) {
     const trip = trips.find(t => t.id === id);
     if (!trip) return;
-
-    editingId = id;
+    editingTripId = id;
     modalTitle.innerHTML = '<i class="fas fa-pen"></i> Редагувати маршрут';
-    
-    // Заповнюємо форму
-    titleInput.value = trip.title || '';
-    dateInput.value = trip.date || '';
-    distanceInput.value = trip.distance || '';
-    difficultySelect.value = trip.difficulty || 'легка';
-    durationInput.value = trip.duration || '';
-    guideInput.value = trip.guide || '';
-    mapUrlInput.value = trip.mapUrl || '';
-    notesInput.value = trip.notes || '';
-    imageInput.value = trip.image || '';
-    isCompletedCheck.checked = trip.report && trip.report.includes('виконано');
-    isTraditionalCheck.checked = trip.isTraditional || false;
-
-    modalOverlay.classList.add('active');
+    document.getElementById('title').value = trip.title || '';
+    document.getElementById('date').value = trip.date || '';
+    document.getElementById('distance').value = trip.distance || '';
+    document.getElementById('difficulty').value = trip.difficulty || 'легка';
+    document.getElementById('duration').value = trip.duration || '';
+    document.getElementById('guide').value = trip.guide || '';
+    document.getElementById('mapUrl').value = trip.mapUrl || '';
+    document.getElementById('notes').value = trip.notes || '';
+    document.getElementById('image').value = trip.image || '';
+    document.getElementById('isCompleted').checked = trip.report && trip.report.includes('виконано');
+    document.getElementById('isTraditional').checked = trip.isTraditional || false;
+    if (modalOverlay) modalOverlay.classList.add('active');
   }
 
-  // --- Видалення маршруту ---
-  function deleteTrip(id) {
-    if (confirm('Ви впевнені, що хочете видалити цей маршрут?')) {
-      trips = trips.filter(t => t.id !== id);
+  function openAddTripModal() {
+    editingTripId = null;
+    modalTitle.innerHTML = '<i class="fas fa-mountain"></i> Новий маршрут';
+    if (form) form.reset();
+    document.getElementById('difficulty').value = 'легка';
+    if (modalOverlay) modalOverlay.classList.add('active');
+  }
+
+  function closeTripModal() {
+    if (modalOverlay) modalOverlay.classList.remove('active');
+    editingTripId = null;
+  }
+
+  if (addTripBtn) addTripBtn.addEventListener('click', openAddTripModal);
+  if (closeModalBtn) closeModalBtn.addEventListener('click', closeTripModal);
+  if (cancelBtn) cancelBtn.addEventListener('click', closeTripModal);
+  if (modalOverlay) modalOverlay.addEventListener('click', (e) => { if (e.target === modalOverlay) closeTripModal(); });
+
+  if (form) {
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const title = document.getElementById('title').value.trim();
+      if (!title) { alert('Назва маршруту обовʼязкова'); return; }
+
+      const tripData = {
+        title,
+        date: document.getElementById('date').value.trim(),
+        distance: document.getElementById('distance').value.trim() || '? км',
+        difficulty: document.getElementById('difficulty').value,
+        duration: document.getElementById('duration').value.trim() || '1 день',
+        guide: document.getElementById('guide').value.trim() || '—',
+        report: document.getElementById('isCompleted').checked ? 'виконано' : '',
+        mapUrl: document.getElementById('mapUrl').value.trim() || null,
+        notes: document.getElementById('notes').value.trim(),
+        image: document.getElementById('image').value.trim() || '',
+        isTraditional: document.getElementById('isTraditional').checked
+      };
+
+      if (editingTripId) {
+        const index = trips.findIndex(t => t.id === editingTripId);
+        if (index !== -1) trips[index] = { ...trips[index], ...tripData };
+      } else {
+        trips.push({ id: Date.now().toString(), ...tripData });
+      }
       saveTrips();
       renderCards();
-    }
-  }
-
-  // --- Фільтрація ---
-  function setActiveFilter(activeBtn) {
-    filterBtns.forEach(btn => btn.classList.remove('active'));
-    activeBtn.classList.add('active');
-    currentFilter = activeBtn.dataset.filter;
-    renderCards();
+      closeTripModal();
+    });
   }
 
   filterBtns.forEach(btn => {
-    btn.addEventListener('click', function() { setActiveFilter(this); });
+    btn.addEventListener('click', () => {
+      filterBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentFilter = btn.dataset.filter;
+      renderCards();
+    });
   });
 
-  // --- Модальне вікно ---
-  function openAddModal() {
-    editingId = null;
-    modalTitle.innerHTML = '<i class="fas fa-mountain"></i> Новий маршрут';
-    form.reset();
-    difficultySelect.value = 'легка';
-    modalOverlay.classList.add('active');
+  // ===== ЛОГІКА БЛОГУ =====
+  const blogContainer = document.getElementById('blogContainer');
+  const addBlogBtn = document.getElementById('addBlogBtn');
+  const blogModalOverlay = document.getElementById('blogModalOverlay');
+  const closeBlogModalBtn = document.getElementById('closeBlogModalBtn');
+  const cancelBlogBtn = document.getElementById('cancelBlogBtn');
+  const blogForm = document.getElementById('addBlogForm');
+  const blogModalTitle = document.getElementById('blogModalTitle');
+
+  function loadBlog() {
+    const stored = localStorage.getItem(STORAGE_KEY_BLOG);
+    blogPosts = stored ? JSON.parse(stored) : [...defaultBlog];
+    if (!stored) saveBlog();
   }
 
-  function closeModal() {
-    modalOverlay.classList.remove('active');
-    editingId = null;
+  function saveBlog() {
+    localStorage.setItem(STORAGE_KEY_BLOG, JSON.stringify(blogPosts));
   }
 
-  addTripBtn.addEventListener('click', openAddModal);
-  closeModalBtn.addEventListener('click', closeModal);
-  cancelBtn.addEventListener('click', closeModal);
-  modalOverlay.addEventListener('click', (e) => {
-    if (e.target === modalOverlay) closeModal();
-  });
-
-  // --- Збереження (додавання або оновлення) ---
-  form.addEventListener('submit', (e) => {
-    e.preventDefault();
-
-    const title = titleInput.value.trim();
-    if (!title) {
-      alert('Назва маршруту обовʼязкова');
+  function renderBlog() {
+    if (!blogContainer) return;
+    if (blogPosts.length === 0) {
+      blogContainer.innerHTML = `<div style="text-align:center; padding:40px; color:#0057b7;"><i class="fas fa-newspaper" style="font-size:2.5rem; opacity:0.6;"></i><p>Немає статей</p></div>`;
       return;
     }
 
-    const tripData = {
-      title: title,
-      date: dateInput.value.trim(),
-      distance: distanceInput.value.trim() || '? км',
-      difficulty: difficultySelect.value,
-      duration: durationInput.value.trim() || '1 день',
-      guide: guideInput.value.trim() || '—',
-      report: isCompletedCheck.checked ? 'виконано' : '',
-      mapUrl: mapUrlInput.value.trim() || null,
-      notes: notesInput.value.trim(),
-      image: imageInput.value.trim() || 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=400&h=250&fit=crop',
-      isTraditional: isTraditionalCheck.checked
-    };
+    let html = '';
+    blogPosts.forEach(post => {
+      const imageHtml = post.image
+        ? `<img src="${post.image}" alt="${post.title}" style="width:100%; height:160px; object-fit:cover;">`
+        : `<div class="blog-card-img"><i class="fas fa-image"></i></div>`;
 
-    if (editingId) {
-      // Оновлення існуючого
-      const index = trips.findIndex(t => t.id === editingId);
-      if (index !== -1) {
-        trips[index] = { ...trips[index], ...tripData };
-      }
-    } else {
-      // Новий маршрут
-      const newTrip = {
-        id: Date.now().toString(),
-        ...tripData
-      };
-      trips.push(newTrip);
+      html += `
+        <article class="blog-card" data-id="${post.id}">
+          <div class="blog-card-actions">
+            <button class="edit-btn" data-id="${post.id}" title="Редагувати"><i class="fas fa-pen"></i></button>
+            <button class="delete-btn" data-id="${post.id}" title="Видалити"><i class="fas fa-trash"></i></button>
+          </div>
+          ${imageHtml}
+          <div class="blog-card-body">
+            <span class="blog-date">${post.date || ''}</span>
+            <h4>${post.title}</h4>
+            <p>${post.text}</p>
+            <a href="#">Читати далі →</a>
+          </div>
+        </article>
+      `;
+    });
+
+    blogContainer.innerHTML = html;
+
+    document.querySelectorAll('#blogContainer .edit-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        openEditBlogModal(btn.dataset.id);
+      });
+    });
+
+    document.querySelectorAll('#blogContainer .delete-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (confirm('Видалити цю статтю?')) {
+          blogPosts = blogPosts.filter(p => p.id !== btn.dataset.id);
+          saveBlog();
+          renderBlog();
+        }
+      });
+    });
+  }
+
+  function openAddBlogModal() {
+    editingBlogId = null;
+    blogModalTitle.innerHTML = '<i class="fas fa-newspaper"></i> Нова стаття';
+    if (blogForm) blogForm.reset();
+    if (blogModalOverlay) blogModalOverlay.classList.add('active');
+  }
+
+  function openEditBlogModal(id) {
+    const post = blogPosts.find(p => p.id === id);
+    if (!post) return;
+    editingBlogId = id;
+    blogModalTitle.innerHTML = '<i class="fas fa-pen"></i> Редагувати статтю';
+    document.getElementById('blogTitle').value = post.title || '';
+    document.getElementById('blogDate').value = post.date || '';
+    document.getElementById('blogText').value = post.text || '';
+    document.getElementById('blogImage').value = post.image || '';
+    if (blogModalOverlay) blogModalOverlay.classList.add('active');
+  }
+
+  function closeBlogModal() {
+    if (blogModalOverlay) blogModalOverlay.classList.remove('active');
+    editingBlogId = null;
+  }
+
+  if (addBlogBtn) addBlogBtn.addEventListener('click', openAddBlogModal);
+  if (closeBlogModalBtn) closeBlogModalBtn.addEventListener('click', closeBlogModal);
+  if (cancelBlogBtn) cancelBlogBtn.addEventListener('click', closeBlogModal);
+  if (blogModalOverlay) blogModalOverlay.addEventListener('click', (e) => { if (e.target === blogModalOverlay) closeBlogModal(); });
+ 
+  // Закриття по Escape для обох модалок
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    if (blogModalOverlay && blogModalOverlay.classList.contains('active')) {
+      closeBlogModal();
+    } else if (modalOverlay && modalOverlay.classList.contains('active')) {
+      closeTripModal();
     }
+  }
+});
 
-    saveTrips();
-    renderCards();
-    closeModal();
+  if (blogForm) {
+    blogForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const title = document.getElementById('blogTitle').value.trim();
+      if (!title) { alert('Заголовок обовʼязковий'); return; }
+
+      const postData = {
+        title,
+        date: document.getElementById('blogDate').value.trim(),
+        text: document.getElementById('blogText').value.trim(),
+        image: document.getElementById('blogImage').value.trim()
+      };
+
+      if (editingBlogId) {
+        const index = blogPosts.findIndex(p => p.id === editingBlogId);
+        if (index !== -1) blogPosts[index] = { ...blogPosts[index], ...postData };
+      } else {
+        blogPosts.push({ id: 'b' + Date.now().toString(), ...postData });
+      }
+      saveBlog();
+      renderBlog();
+      closeBlogModal();
+    });
+  }
+
+  // ===== FAQ акордеон =====
+  document.querySelectorAll('.faq-question').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const item = btn.parentElement;
+      item.classList.toggle('open');
+      const icon = btn.querySelector('i');
+      if (icon) {
+        icon.classList.toggle('fa-chevron-down');
+        icon.classList.toggle('fa-chevron-up');
+      }
+    });
   });
 
-  // --- Ініціалізація ---
+  // ===== Контактна форма =====
+  const contactForm = document.getElementById('contactForm');
+  if (contactForm) {
+    contactForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      alert('Дякуємо! Ми зв’яжемося з вами найближчим часом.');
+      contactForm.reset();
+    });
+  }
+
+  // ===== ІНІЦІАЛІЗАЦІЯ =====
   loadTrips();
   renderCards();
+  loadBlog();
+  renderBlog();
 })();
