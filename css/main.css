@@ -59,7 +59,6 @@ body {
   position: relative;
   /* Новий безпечний фон замість складного колажу */
   background-color: #f4f6f9;
-  background-image: url('../images/img1.jpg');
   background-size: cover;
   background-position: center;
   background-attachment: scroll;
