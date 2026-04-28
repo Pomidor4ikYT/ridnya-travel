@@ -8,19 +8,26 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&family=Manrope:wght@600;700;800&family=Montserrat:wght@600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/home.css">
 </head>
 <body>
+  <!-- Хедер -->
   <header class="main-header">
     <div class="header-container">
       <a href="index.html" class="header-logo">
-        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSF_iwSxss_IqdaPmPkANopDAR_VPWjW6_KxA&s" alt="РІДНЯ логотип">
+<div class="header-logo-icon">
+  <img src="images/logo.png" alt="БФ Рідня" style="width:100%; height:100%; object-fit:contain;">
+</div>
         <div class="header-logo-text">
           <span class="header-logo-title">РІДНЯ</span>
           <span class="header-logo-sub">Клуб мандрівників</span>
         </div>
       </a>
-      <button class="mobile-menu-toggle" id="mobileMenuToggle"><i class="fas fa-bars"></i></button>
+      <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Меню">
+        <i class="fas fa-bars"></i>
+      </button>
       <nav class="header-nav" id="mainNav">
         <ul>
           <li><a href="index.html" class="active"><i class="fas fa-home"></i> Головна</a></li>
@@ -29,7 +36,7 @@
           <li><a href="gallery.html"><i class="fas fa-images"></i> Галерея</a></li>
           <li><a href="contacts.html"><i class="fas fa-envelope"></i> Контакти</a></li>
           <li class="has-dropdown">
-            <a href="#"><i class="fas fa-ellipsis-h"></i> Більше</a>
+            <a href="javascript:void(0)"><i class="fas fa-ellipsis-h"></i> Більше</a>
             <ul class="dropdown-menu">
               <li><a href="gear.html"><i class="fas fa-campground"></i> Спорядження</a></li>
               <li><a href="faq.html"><i class="fas fa-question-circle"></i> FAQ</a></li>
@@ -39,31 +46,46 @@
         </ul>
       </nav>
       <div class="header-actions">
-        <a href="#" class="btn-support"><i class="fas fa-heart"></i> Підтримати</a>
+        <a href="contacts.html#donate" class="btn-support"><i class="fas fa-heart"></i> Підтримати</a>
       </div>
     </div>
   </header>
 
   <main>
-    <div class="hero-section">
+    <!-- Герой секція -->
+    <section class="hero-section" id="hero">
+      <div class="hero-overlay"></div>
       <div class="hero-content">
+<div class="hero-org-icon">
+  <img src="images/logo.png" alt="БФ Рідня" style="width:100%; height:100%; object-fit:contain;">
+</div>
         <div class="hero-badge"><i class="fas fa-map-pin"></i> Карпати та не тільки</div>
         <h1 class="hero-title">Відкрий <span class="highlight">рідний край</span> разом із нами</h1>
+        <p class="hero-motto">ПОКИ ПРИ СИЛІ — МАНДРУЙ!</p>
         <p class="hero-subtitle">Мандрівки, здорове життя, дружнє коло. Долучайся до клубу «Рідня» — досліджуй маршрути, місця слави УПА, отримуй позитивні емоції.</p>
         <div class="hero-buttons">
           <a href="trips.html" class="btn-hero-primary"><i class="fas fa-calendar-alt"></i> Дивитись маршрути</a>
-          <a href="contacts.html" class="btn-hero-secondary"><i class="fas fa-user-plus"></i> Приєднатися до клубу</a>
+          <a href="contacts.html" class="btn-hero-secondary"><i class="fas fa-user-plus"></i> Приєднатися</a>
         </div>
       </div>
-    </div>
-    <div class="about-club-container">
+    </section>
+
+    <!-- Фотострічка -->
+    <section class="photo-strip reveal">
+      <div class="photo-strip-item"><img src="images/img2.jpg" alt="Похід" loading="lazy"></div>
+      <div class="photo-strip-item"><img src="images/img3.jpg" alt="Краєвид" loading="lazy"></div>
+      <div class="photo-strip-item"><img src="images/img4.jpg" alt="Гори" loading="lazy"></div>
+    </section>
+
+    <!-- Про клуб -->
+    <section class="about-club-container reveal">
       <div class="about-club">
         <div class="about-club-image">
-          <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=600&h=400&fit=crop" alt="Клуб Рідня в горах" loading="lazy">
+          <img src="images/img5.jpg" alt="Клуб Рідня в горах" loading="lazy">
         </div>
-        <div class="about-club-text">
+        <div class="about-club-text glass-card">
           <h3>Хто ми?</h3>
-          <p>Клуб мандрівників «Рідня» створений благодійним фондом громад «Рідня». Ми об’єднуємо людей, які люблять природу, історію та активний відпочинок.</p>
+          <p>Клуб мандрівників «Рідня» створений благодійним фондом громад «Рідня». Ми об'єднуємо людей, які люблять природу, історію та активний відпочинок.</p>
           <ul class="about-features">
             <li><i class="fas fa-check-circle"></i> Популяризація здорового способу життя</li>
             <li><i class="fas fa-check-circle"></i> Маршрути місцями бойової слави УПА</li>
@@ -72,33 +94,133 @@
           </ul>
         </div>
       </div>
-    </div>
+    </section>
+
+    <!-- Статистика -->
+    <section class="stats-section reveal">
+      <div class="stats-grid">
+        <div class="stat-card"><div class="stat-number" data-target="17">0</div><div class="stat-label">маршрутів</div></div>
+        <div class="stat-card"><div class="stat-number" data-target="10">0</div><div class="stat-label">провідників</div></div>
+        <div class="stat-card"><div class="stat-number" data-target="100">0</div><div class="stat-label">учасників</div></div>
+        <div class="stat-card"><div class="stat-number" data-target="5">0</div><div class="stat-label">років разом</div></div>
+        <div class="stat-card"><div class="stat-number" data-target="35">0</div><div class="stat-label">проведених походів</div></div>
+        <div class="stat-card"><div class="stat-number" data-target="1200">0</div><div class="stat-label">пройдених км</div></div>
+      </div>
+    </section>
+
+    <!-- Переваги -->
+    <section class="advantages-section reveal">
+      <div class="section-header">
+        <span class="section-label">Чому ми?</span>
+        <h2 class="section-title">Наші цінності</h2>
+      </div>
+      <div class="advantages-grid">
+        <div class="advantage-card glass-card">
+          <i class="fas fa-heart-circle-check"></i>
+          <h4>Безпека</h4>
+          <p>Досвідчені провідники, аптечки та перевірені маршрути.</p>
+        </div>
+        <div class="advantage-card glass-card">
+          <i class="fas fa-users"></i>
+          <h4>Спільнота</h4>
+          <p>Дружнє коло однодумців, які підтримають у поході.</p>
+        </div>
+        <div class="advantage-card glass-card">
+          <i class="fas fa-leaf"></i>
+          <h4>Екологічність</h4>
+          <p>Ми за чисту природу та відповідальний туризм.</p>
+        </div>
+        <div class="advantage-card glass-card">
+          <i class="fas fa-hand-holding-heart"></i>
+          <h4>Благодійність</h4>
+          <p>Частина внесків іде на підтримку ЗСУ.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Відгуки -->
+    <section class="testimonials-section reveal">
+      <div class="section-header">
+        <span class="section-label">Враження</span>
+        <h2 class="section-title">Що кажуть мандрівники</h2>
+      </div>
+      <div class="testimonials-grid">
+        <div class="testimonial-card glass-card">
+          <div class="testimonial-stars">★★★★★</div>
+          <p>«Неймовірна атмосфера! Вперше пішла в гори і закохалася. Дякую «Рідні» за організацію та підтримку.»</p>
+          <span class="testimonial-author">— Олена, 28 років</span>
+        </div>
+        <div class="testimonial-card glass-card">
+          <div class="testimonial-stars">★★★★★</div>
+          <p>«Ходимо з клубом уже два роки. Чудові маршрути, гарна компанія, а головне — спільна справа для перемоги.»</p>
+          <span class="testimonial-author">— Андрій, 45 років</span>
+        </div>
+        <div class="testimonial-card glass-card">
+          <div class="testimonial-stars">★★★★★</div>
+          <p>«Дізнався багато нового про історію УПА. Маршрути продумані, провідники — справжні професіонали.»</p>
+          <span class="testimonial-author">— Ігор, 33 роки</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Заклик до дії -->
+    <section class="cta-section reveal">
+      <div class="cta-content">
+        <h2>Готовий до пригод?</h2>
+        <p>Обирай маршрут, пакуй наплічник і вирушай із «Ріднею»!</p>
+        <a href="trips.html" class="btn-hero-primary"><i class="fas fa-hiking"></i> Переглянути маршрути</a>
+      </div>
+    </section>
   </main>
 
+  <!-- Футер -->
   <footer class="main-footer">
     <div class="footer-container">
       <div class="footer-top">
         <div class="footer-logo">
-          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSF_iwSxss_IqdaPmPkANopDAR_VPWjW6_KxA&s" alt="РІДНЯ логотип">
+          <div class="header-logo-icon footer-logo-icon"><i class="fas fa-mountain"></i></div>
           <div><strong>Благодійний фонд «Рідня»</strong><p>Клуб мандрівників</p></div>
         </div>
         <div class="footer-social">
-          <a href="#"><i class="fab fa-facebook-f"></i></a>
-          <a href="#"><i class="fab fa-instagram"></i></a>
-          <a href="#"><i class="fab fa-youtube"></i></a>
+          <a href="https://www.facebook.com/bfridnya" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+          <a href="https://www.instagram.com/fond_ridnya" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+          <a href="https://www.youtube.com/channel/UCr67AbASZGqx4RefbKaIRSQ" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
         </div>
       </div>
       <div class="footer-middle">
-        <div class="footer-nav"><h4>Навігація</h4><ul><li><a href="index.html">Головна</a></li><li><a href="trips.html">Маршрути</a></li><li><a href="blog.html">Блог</a></li><li><a href="faq.html">FAQ</a></li></ul></div>
-        <div class="footer-nav"><h4>Про клуб</h4><ul><li><a href="reviews.html">Відгуки</a></li><li><a href="contacts.html">Контакти</a></li><li><a href="#">Підтримати фонд</a></li></ul></div>
-        <div class="footer-nav"><h4>Контакти</h4><ul><li><i class="fas fa-map-marker-alt"></i> м. Стрий, вул. Незалежності, 8</li><li><i class="fas fa-phone"></i> +380 50 370 16 40</li><li><i class="fas fa-envelope"></i> mgastryi2026@gmail.com</li></ul></div>
+        <div class="footer-nav">
+          <h4>Навігація</h4>
+          <ul>
+            <li><a href="index.html">Головна</a></li>
+            <li><a href="trips.html">Маршрути</a></li>
+            <li><a href="blog.html">Блог</a></li>
+            <li><a href="faq.html">FAQ</a></li>
+          </ul>
+        </div>
+        <div class="footer-nav">
+          <h4>Про клуб</h4>
+          <ul>
+            <li><a href="reviews.html">Відгуки</a></li>
+            <li><a href="contacts.html">Контакти</a></li>
+            <li><a href="contacts.html#donate">Підтримати фонд</a></li>
+          </ul>
+        </div>
+        <div class="footer-nav">
+          <h4>Контакти</h4>
+          <ul>
+            <li><i class="fas fa-map-marker-alt"></i> м. Стрий, вул. Незалежності, 8</li>
+            <li><i class="fas fa-phone"></i> +380 50 370 16 40</li>
+            <li><i class="fas fa-envelope"></i> mgastryi2026@gmail.com</li>
+          </ul>
+        </div>
       </div>
       <div class="footer-bottom">
-        <p>&copy; 2026 Благодійний фонд «Рідня». Усі права захищено.</p>
+        <p>&copy; 2026 Благодійний фонд «Рідня».</p>
         <p>Розроблено з <i class="fas fa-heart"></i> для громад</p>
       </div>
     </div>
   </footer>
-  <script src="script.js"></script>
+
+  <script src="js/main.js"></script>
 </body>
 </html>

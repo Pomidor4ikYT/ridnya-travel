@@ -1,0 +1,153 @@
+/* Стилі карток маршрутів */
+.trip-card {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--gray-200);
+  transition: all var(--transition);
+  display: flex;
+  flex-direction: column;
+}
+.trip-card:hover {
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-6px);
+}
+.card-image {
+  width: 100%;
+  height: 220px;
+  background-size: cover;
+  background-position: center;
+  background-color: var(--gray-200);
+  position: relative;
+}
+.card-image .fallback-icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 3rem;
+  color: var(--gray-400);
+}
+.card-content {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+.card-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.title-main {
+  font-family: 'Manrope', sans-serif;
+  font-weight: 700;
+  font-size: 1rem;
+  line-height: 1.4;
+  color: var(--gray-900);
+}
+.title-sub {
+  font-size: 0.75rem;
+  color: var(--gray-500);
+  margin-top: 4px;
+}
+.difficulty-badge {
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: 20px;
+  text-transform: uppercase;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.difficulty-легка { background: #e8f5e9; color: #2e7d32; }
+.difficulty-середня { background: #fff8e1; color: #f57f17; }
+.difficulty-вище { background: #ffebee; color: #b71c1c; }
+.meta-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  margin: 12px 0;
+  background: var(--gray-50);
+  padding: 10px 14px;
+  border-radius: var(--radius);
+  font-size: 0.8rem;
+  color: var(--gray-600);
+}
+.meta-grid i { color: var(--blue); margin-right: 4px; }
+.route-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--blue);
+  font-weight: 600;
+  font-size: 0.85rem;
+  text-decoration: none;
+  margin: 8px 0;
+  transition: color 0.2s;
+}
+.route-link:hover { color: var(--blue-dark); text-decoration: underline; }
+.card-footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: auto;
+  padding-top: 14px;
+  border-top: 1px solid var(--gray-100);
+}
+.guide { font-weight: 600; font-size: 0.85rem; color: var(--gray-700); }
+.completed-badge, .traditional-badge {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.7rem;
+  font-weight: 700;
+}
+.completed-badge { background: #c8e6c9; color: #1b5e20; }
+.traditional-badge { background: #a5d6a7; color: #1b5e20; margin-left: 8px; }
+.card-actions {
+  display: flex;
+  gap: 6px;
+  margin-left: 12px;
+}
+.card-actions button {
+  background: none;
+  border: 1px solid var(--gray-300);
+  border-radius: 50%;
+  width: 34px;
+  height: 34px;
+  cursor: pointer;
+  color: var(--gray-500);
+  transition: all var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.card-actions button:hover {
+  background: var(--blue-light);
+  color: var(--blue);
+  border-color: var(--blue);
+}
+.note-icon {
+  position: relative;
+  margin-left: 8px;
+  color: var(--gray-500);
+}
+.tooltip-text {
+  visibility: hidden;
+  background: black;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  position: absolute;
+  bottom: 125%;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  z-index: 10;
+}
+.note-icon:hover .tooltip-text { visibility: visible; }

@@ -1,0 +1,325 @@
+/* Герой */
+.hero-section {
+  position: relative;
+  min-height: 560px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: var(--white);
+  padding: 100px 24px;
+  background: linear-gradient(135deg, #001a3a 0%, #003366 40%, #001a2e 100%), url('../images/img1.jpg');
+  background-size: cover;
+  background-position: center;
+  background-blend-mode: overlay;
+  border-radius: 0 0 60px 60px;
+  margin: 0 20px;
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+  animation: fadeInUp 1s ease;
+}
+.hero-overlay {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: linear-gradient(180deg, rgba(0,20,50,0.55) 0%, rgba(0,15,40,0.7) 100%);
+  z-index: 1;
+}
+.hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: 800px;
+  margin: 0 auto;
+}
+.hero-org-icon {
+  width: 90px;
+  height: 90px;
+  margin: 0 auto 20px;
+  border-radius: 30px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  animation: floatIcon 4s ease-in-out infinite;
+}
+.hero-org-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.hero-org-icon .fallback-icon {
+  width: 100%;
+  height: 100%;
+  background: var(--blue-light);
+  color: var(--blue);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+}
+@keyframes floatIcon {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255,255,255,0.12);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,0.2);
+  padding: 8px 20px;
+  border-radius: 30px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 24px;
+}
+.hero-badge i { color: var(--yellow); }
+.hero-title {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 900;
+  font-size: clamp(2.4rem, 5vw, 3.8rem);
+  line-height: 1.15;
+  margin-bottom: 16px;
+  text-shadow: 0 2px 20px rgba(0,0,0,0.4);
+}
+.hero-title .highlight { color: var(--yellow); }
+.hero-motto {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 2rem;
+  letter-spacing: 4px;
+  color: var(--yellow);
+  margin-bottom: 28px;
+  text-shadow: 0 2px 12px rgba(0,0,0,0.4);
+  text-transform: uppercase;
+  animation: mottoPulse 3s ease-in-out infinite;
+}
+@keyframes mottoPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+.hero-subtitle {
+  font-size: 1.2rem;
+  color: rgba(255,255,255,0.85);
+  margin-bottom: 40px;
+}
+.hero-buttons {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* Фотострічка */
+.photo-strip {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  max-width: 960px;
+  margin: -60px auto 0;
+  padding: 0 24px;
+  position: relative;
+  z-index: 3;
+}
+.photo-strip-item {
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  aspect-ratio: 1/1;
+  box-shadow: var(--shadow-md);
+  transition: all var(--transition);
+  background: var(--gray-200);
+}
+.photo-strip-item:hover {
+  transform: translateY(-8px);
+  box-shadow: var(--shadow-lg);
+}
+.photo-strip-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Про клуб */
+.about-club-container {
+  padding: 60px 24px 80px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.about-club {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+  align-items: center;
+}
+.about-club-image {
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+  aspect-ratio: 4/3;
+  transition: transform 0.3s;
+}
+.about-club-image:hover { transform: scale(1.02); }
+.about-club-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.about-club-text h3 {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 2rem;
+  margin-bottom: 20px;
+  color: var(--gray-900);
+}
+.about-club-text p {
+  color: var(--gray-600);
+  margin-bottom: 24px;
+  font-size: 1.05rem;
+}
+.about-features {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.about-features li {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-weight: 600;
+  color: var(--gray-700);
+  font-size: 1rem;
+}
+.about-features li i {
+  color: var(--blue);
+  font-size: 1.4rem;
+  width: 24px;
+  text-align: center;
+}
+
+/* Статистика */
+.stats-section {
+  max-width: 1000px;
+  margin: 60px auto;
+  padding: 0 24px;
+}
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+.stat-card {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  padding: 36px 20px;
+  text-align: center;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--gray-200);
+  transition: all var(--transition);
+}
+.stat-card:hover {
+  box-shadow: var(--shadow-md);
+  border-color: var(--blue-light);
+  transform: translateY(-4px);
+}
+.stat-number {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 900;
+  font-size: 2.8rem;
+  color: var(--blue);
+  line-height: 1.2;
+}
+.stat-label {
+  color: var(--gray-500);
+  font-weight: 500;
+  font-size: 1rem;
+  margin-top: 8px;
+}
+
+/* Переваги */
+.advantages-section {
+  padding: 60px 24px 80px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.advantages-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 28px;
+  margin-top: 40px;
+}
+.advantage-card {
+  text-align: center;
+  padding: 32px 24px;
+  transition: transform 0.3s;
+}
+.advantage-card:hover { transform: translateY(-6px); }
+.advantage-card i {
+  font-size: 2.6rem;
+  color: var(--blue);
+  margin-bottom: 16px;
+}
+.advantage-card h4 {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 1.2rem;
+  margin-bottom: 12px;
+}
+.advantage-card p {
+  color: var(--gray-600);
+  font-size: 0.95rem;
+}
+
+/* Відгуки на головній */
+.testimonials-section {
+  padding: 40px 24px 80px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.testimonials-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 28px;
+  margin-top: 40px;
+}
+.testimonial-card { padding: 32px; }
+.testimonial-stars {
+  color: var(--yellow);
+  margin-bottom: 12px;
+  font-size: 1.2rem;
+}
+.testimonial-author {
+  font-weight: 600;
+  color: var(--gray-500);
+  display: block;
+  margin-top: 16px;
+  font-size: 0.9rem;
+}
+
+/* CTA */
+.cta-section {
+  background: linear-gradient(135deg, #001a3a, #003366);
+  color: white;
+  text-align: center;
+  padding: 80px 24px;
+  margin: 60px 20px;
+  border-radius: var(--radius-xl);
+}
+.cta-section h2 { font-size: 2.2rem; margin-bottom: 16px; }
+.cta-section p { font-size: 1.1rem; opacity: 0.9; margin-bottom: 28px; }
+
+/* Адаптивність */
+@media (max-width: 768px) {
+  .about-club { grid-template-columns: 1fr; }
+  .hero-section { border-radius: 0 0 40px 40px; margin: 0 12px; padding: 80px 20px; min-height: 420px; }
+  .hero-title { font-size: 2rem; }
+  .hero-motto { font-size: 1.4rem; letter-spacing: 2px; }
+  .cta-section { margin: 40px 12px; }
+  .stats-grid { grid-template-columns: repeat(2, 1fr); }
+  .photo-strip { margin-top: -40px; }
+}
+@media (max-width: 480px) {
+  .hero-section { margin: 0 6px; border-radius: 0 0 30px 30px; min-height: 380px; }
+  .hero-title { font-size: 1.6rem; }
+  .hero-motto { font-size: 1.1rem; letter-spacing: 1px; }
+  .stats-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
+  .stat-number { font-size: 2rem; }
+}
