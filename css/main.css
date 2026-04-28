@@ -62,7 +62,7 @@ body {
   background-image: url('../images/img1.jpg');
   background-size: cover;
   background-position: center;
-  background-attachment: fixed;
+  background-attachment: scroll;
 }
 
 /* Легке світле накладення, щоб текст було читати */
