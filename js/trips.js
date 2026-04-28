@@ -92,17 +92,18 @@
               <span><i class="far fa-clock"></i> ${trip.duration}</span>
             </div>
             ${mapLink}
-            <div class="card-footer">
-              <div class="guide"><i class="fas fa-user-hiking"></i> ${trip.guide}</div>
-              <div>
-                ${isCompleted ? '<span class="completed-badge"><i class="fas fa-check-circle"></i> виконано</span>' : ''}
-                ${trip.isTraditional ? '<span class="traditional-badge"><i class="fas fa-leaf"></i> традиційний</span>' : ''}
-                ${noteHtml}
-                <span class="card-actions">
-                  <button class="edit-btn" data-id="${trip.id}"><i class="fas fa-pen"></i></button>
-                  <button class="delete-btn" data-id="${trip.id}"><i class="fas fa-trash"></i></button>
-                </span>
-              </div>
+  <div class="card-footer">
+    <div class="guide"><i class="fas fa-user-hiking"></i> ${trip.guide}</div>
+    <div class="badges-container">
+      ${isCompleted ? '<span class="completed-badge"><i class="fas fa-check-circle"></i> виконано</span>' : ''}
+      ${trip.isTraditional ? '<span class="traditional-badge"><i class="fas fa-leaf"></i> традиційний</span>' : ''}
+      ${noteHtml}
+    </div>
+    <span class="card-actions">
+      <button class="edit-btn" data-id="${trip.id}"><i class="fas fa-pen"></i></button>
+      <button class="delete-btn" data-id="${trip.id}"><i class="fas fa-trash"></i></button>
+    </span>
+  </div>
             </div>
           </div>
         </div>`;
