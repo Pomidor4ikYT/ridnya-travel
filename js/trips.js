@@ -7,158 +7,80 @@
   const TRIP_APPS_KEY = 'ridnya_trip_applications';
   const LEADER_APPS_KEY = 'ridnya_leader_applications';
 
-  // 17 маршрутів із надійними локальними фото (images/img1.jpg тощо)
   const defaultTrips = [
-    { id: '1', title: "г.Маківка 958 м. (з заходом на г.\"Захар Беркут\")", date: "2026-01-01", distance: "8 км", difficulty: "легка", duration: "1 день", guide: "Петро Маковський", report: "виконано", mapUrl: null, notes: "", image: "images/img1.jpg", isTraditional: false },
-    { id: '2', title: "г. Пікуй 1408,3 м (старт з с.Білосовиця, або с.Гусне)", date: "2026-02-01", distance: "10 км", difficulty: "легка", duration: "1 день", guide: "Валерій Бурлака", report: "виконано", mapUrl: "https://uk.mapy.cz/s/gurefacuro", notes: "", image: "images/img2.jpg", isTraditional: false },
-    { id: '3', title: "г.Лопата 1210,9м., г.Кудрявець 1242м. (старт з м.Сколе)", date: "2026-02-15", distance: "16 км", difficulty: "легка", duration: "1 день", guide: "Олег Дашко", report: "", mapUrl: "https://uk.mapy.cz/s/pubadohabo", notes: "", image: "images/img3.jpg", isTraditional: true },
-    { id: '4', title: "Навколо Славського (Рожанка - В.Верх)", date: "2026-03-01", distance: "21 км", difficulty: "легка", duration: "1-2 дні", guide: "Володимир Коколюс", report: "", mapUrl: "https://mapy.cz/s/dobojobozu", notes: "", image: "images/img4.jpg", isTraditional: false },
-    { id: '5', title: "г.Кукул, г.Велика Козьмеська, г.Говерла (старт с.Завоєля)", date: "18-19.04.2026", distance: "35 км", difficulty: "середня", duration: "2-3 дні", guide: "Олег Дашко", report: "", mapUrl: "https://uk.mapy.cz/s/celemebeze", notes: "", image: "images/img5.jpg", isTraditional: false },
-    { id: '6', title: "Цицька, Великий Верх (старт і фініш смт. Воловець)", date: "02-03.05.2026", distance: "24 км", difficulty: "легка", duration: "1-2 дні", guide: "Олег Дашко", report: "", mapUrl: "https://mapy.com/s/cahucugobe", notes: "", image: "images/img6.jpg", isTraditional: false },
-    { id: '7', title: "г.Ключ 929 м. (старт з с.Труханів)", date: "2026-06-01", distance: "10-12 км", difficulty: "легка", duration: "1 день", guide: "Василь Дмитришин", report: "виконано", mapUrl: null, notes: "багато варіантів", image: "images/img7.jpg", isTraditional: false },
-    { id: '8', title: "г. Велика Сивуля 1836,6 м, г. Ігровець (старт с.Стара Гута)", date: "19-21.06.2026", distance: "40 км", difficulty: "вище середньої", duration: "2-3 дні", guide: "Петро Маковський", report: "", mapUrl: "https://uk.mapy.cz/s/nesopepumu", notes: "", image: "images/img8.jpg", isTraditional: false },
-    { id: '9', title: "г.Яворина 1131 м. (Похід \"Горами нашої слави\")", date: "11-12.07.2026", distance: "30 км", difficulty: "середня", duration: "2 дні", guide: "Богдан Сидорак", report: "", mapUrl: "https://uk.mapy.cz/s/badepupuvu", notes: "масове сходження", image: "images/img9.jpg", isTraditional: true },
-    { id: '10', title: "Кичера 2025. (через водоспад Гуркало)", date: "", distance: "15-16 км", difficulty: "середня", duration: "2 дні", guide: "Богдан Сидорак", report: "", mapUrl: null, notes: "багато варіантів", image: "images/img10.jpg", isTraditional: true },
-    { id: '11', title: "Похід на Близниці (старт і фініш с.Кваси)", date: "01-02.08.2026", distance: "28 км", difficulty: "середня", duration: "2 дні", guide: "Валерій Бурлака", report: "", mapUrl: "https://mapy.com/s/badopogohu", notes: "", image: "images/img11.jpg", isTraditional: false },
-    { id: '12', title: "г.Яйко-Ілемське 1680 м. (старт з с.Мислівка)", date: "15-16.08.2026", distance: "30 км", difficulty: "середня", duration: "2 дні", guide: "Валерій Бурлака", report: "", mapUrl: "https://uk.mapy.cz/s/bohevajodo", notes: "", image: "images/img1.jpg", isTraditional: false },
-    { id: '13', title: "Скельні масиви Сколівських Бескидів", date: "26-27.09.2026", distance: "27,5 км", difficulty: "легка", duration: "1-2 дні", guide: "Володимир Коколюс", report: "виконано", mapUrl: "https://uk.mapy.cz/s/galezadaku", notes: "", image: "images/img2.jpg", isTraditional: false },
-    { id: '14', title: "Пікуяна (старт і фініш - в.Гусне)", date: "", distance: "20 км", difficulty: "легка", duration: "1 день", guide: "Лука Павлюк", report: "", mapUrl: "https://uk.mapy.cz/s/komerovuse", notes: "масове сходження", image: "images/img3.jpg", isTraditional: false },
-    { id: '15', title: "г.Менчул 1501 м (з с.Лумшори)", date: "2026-10-10", distance: "18 км", difficulty: "середня", duration: "1 день", guide: "Олег Дашко", report: "", mapUrl: null, notes: "", image: "images/img4.jpg", isTraditional: false },
-    { id: '16', title: "хр.Писаний Камінь (з с.Буковець)", date: "2026-11-01", distance: "22 км", difficulty: "середня", duration: "2 дні", guide: "Валерій Бурлака", report: "", mapUrl: "https://mapy.cz/s/abcdef", notes: "", image: "images/img5.jpg", isTraditional: false },
-    { id: '17', title: "г.Петрос 2020 м (з с.Кваси)", date: "2026-12-05", distance: "26 км", difficulty: "вище середньої", duration: "2 дні", guide: "Петро Маковський", report: "", mapUrl: "https://uk.mapy.cz/s/ghijkl", notes: "", image: "images/img6.jpg", isTraditional: false }
+    { id: '1', title: "г.Маківка 958 м. (з заходом на г.\"Захар Беркут\")", date: "2026-01-01", distance: "8 км", difficulty: "легка", duration: "1 день", guide: "Петро Маковський", report: "виконано", mapUrl: null, notes: "", image: "https://vidviday.ua/storage/media/tour/1321/162495238960dace458b87e-1200x1200.jpg", isTraditional: false },
+    { id: '2', title: "г. Пікуй 1408,3 м (старт з с.Білосовиця, або с.Гусне)", date: "2026-02-01", distance: "10 км", difficulty: "легка", duration: "1 день", guide: "Валерій Бурлака", report: "виконано", mapUrl: "https://uk.mapy.cz/s/gurefacuro", notes: "", image: "https://alp.com.ua/content/uploads/images/pkui-2.jpeg", isTraditional: false },
+    { id: '3', title: "г.Лопата 1210,9м., г.Кудрявець 1242м. (старт з м.Сколе)", date: "2026-02-15", distance: "16 км", difficulty: "легка", duration: "1 день", guide: "Олег Дашко", report: "", mapUrl: "https://uk.mapy.cz/s/pubadohabo", notes: "", image: "https://skolebeskydy-park.in.ua/wp-content/uploads/2023/01/SAM_4941-scaled.jpg", isTraditional: true },
+    { id: '4', title: "Навколо Славського (Рожанка - В.Верх)", date: "2026-03-01", distance: "21 км", difficulty: "легка", duration: "1-2 дні", guide: "Володимир Коколюс", report: "", mapUrl: "https://mapy.cz/s/dobojobozu", notes: "", image: "https://mashapasha.com/wp-content/uploads/2014/11/slavskoe_peshkom_2.jpg", isTraditional: false },
+    { id: '5', title: "г.Кукул, г.Велика Козьмеська, г.Говерла (старт с.Завоєля)", date: "18-19.04.2026", distance: "35 км", difficulty: "середня", duration: "2-3 дні", guide: "Олег Дашко", report: "", mapUrl: "https://uk.mapy.cz/s/celemebeze", notes: "", image: "https://karpatium.com.ua/rails/active_storage/blobs/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBa0lIIiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--e9a7a5897607f1f82ebbdb0a2b775a64c0557823/%D0%B3%D0%BE%D0%B2%D0%B5%D1%80%D0%BB%D0%B0-%D0%B3%D0%BE%D1%80%D0%B0.jpeg", isTraditional: false },
+    { id: '6', title: "Цицька, Великий Верх (старт і фініш смт. Воловець)", date: "02-03.05.2026", distance: "24 км", difficulty: "легка", duration: "1-2 дні", guide: "Олег Дашко", report: "", mapUrl: "https://mapy.com/s/cahucugobe", notes: "", image: "https://karpatium.com.ua/rails/active_storage/blobs/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBb01NIiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--5333777e4ca98cbb8a305bc015cd6a4f0264a9c6/%D0%B2%D0%B5%D0%BB%D0%B8%D0%BA%D0%B8%D0%B8%CC%86%20%D0%B2%D0%B5%D1%80%D1%85.jpeg", isTraditional: false },
+    { id: '7', title: "г.Ключ 929 м. (старт з с.Труханів)", date: "2026-06-01", distance: "10-12 км", difficulty: "легка", duration: "1 день", guide: "Василь Дмитришин", report: "виконано", mapUrl: null, notes: "багато варіантів", image: "https://upload.wikimedia.org/wikipedia/commons/8/8d/Kljucmontenegro.jpg", isTraditional: false },
+    { id: '8', title: "г. Велика Сивуля 1836,6 м, г. Ігровець (старт с.Стара Гута)", date: "19-21.06.2026", distance: "40 км", difficulty: "вище середньої", duration: "2-3 дні", guide: "Петро Маковський", report: "", mapUrl: "https://uk.mapy.cz/s/nesopepumu", notes: "", image: "https://upload.wikimedia.org/wikipedia/commons/c/c6/%D0%94%D0%BE%D1%80%D0%BE%D0%B3%D0%B0_%D0%BD%D0%B0_%D0%A1%D0%B8%D0%B2%D1%83%D0%BB%D1%96.jpg", isTraditional: false },
+    { id: '9', title: "г.Яворина 1131 м. (Похід \"Горами нашої слави\")", date: "11-12.07.2026", distance: "30 км", difficulty: "середня", duration: "2 дні", guide: "Богдан Сидорак", report: "", mapUrl: "https://uk.mapy.cz/s/badepupuvu", notes: "масове сходження", image: "https://vpohid.com.ua/static/photos/5111.jpg", isTraditional: true },
+    { id: '10', title: "Кичера 2025. (через водоспад Гуркало)", date: "", distance: "15-16 км", difficulty: "середня", duration: "2 дні", guide: "Богдан Сидорак", report: "", mapUrl: null, notes: "багато варіантів", image: "https://hatarizba.com.ua/wp-content/uploads/2018/01/biloberizka-gora-kychera-3.jpg", isTraditional: true },
+    { id: '11', title: "Похід на Близниці (старт і фініш с.Кваси)", date: "01-02.08.2026", distance: "28 км", difficulty: "середня", duration: "2 дні", guide: "Валерій Бурлака", report: "", mapUrl: "https://mapy.com/s/badopogohu", notes: "", image: "https://karpaty.love/uploads/posts/2018-02/1519386501_blyznytsia-22.jpg", isTraditional: false },
+    { id: '12', title: "г.Яйко-Ілемське 1680 м. (старт з с.Мислівка)", date: "15-16.08.2026", distance: "30 км", difficulty: "середня", duration: "2 дні", guide: "Валерій Бурлака", report: "", mapUrl: "https://uk.mapy.cz/s/bohevajodo", notes: "", image: "https://upload.wikimedia.org/wikipedia/commons/2/2f/Yaiko-Ilemske_RB.jpg", isTraditional: false },
+    { id: '13', title: "Скельні масиви Сколівських Бескидів", date: "26-27.09.2026", distance: "27,5 км", difficulty: "легка", duration: "1-2 дні", guide: "Володимир Коколюс", report: "виконано", mapUrl: "https://uk.mapy.cz/s/galezadaku", notes: "", image: "https://kuluarpohod.com/wp-content/uploads/2024/05/800x_mg_8988rer-800x600.jpg", isTraditional: false },
+    { id: '14', title: "Пікуяна (старт і фініш - в.Гусне)", date: "", distance: "20 км", difficulty: "легка", duration: "1 день", guide: "Лука Павлюк", report: "", mapUrl: "https://uk.mapy.cz/s/komerovuse", notes: "масове сходження", image: "https://tourinform.org.ua/wp-content/uploads/2018/05/borzava.jpg", isTraditional: false },
+    { id: '15', title: "г.Менчул 1501 м (з с.Лумшори)", date: "2026-10-10", distance: "18 км", difficulty: "середня", duration: "1 день", guide: "Олег Дашко", report: "", mapUrl: null, notes: "", image: "https://karpatium.com.ua/rails/active_storage/blobs/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBcVFCIiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--c65672302195e2a6e189640c86537f701723caaf/menchul.jpg", isTraditional: false },
+    { id: '16', title: "хр.Писаний Камінь (з с.Буковець)", date: "2026-11-01", distance: "22 км", difficulty: "середня", duration: "2 дні", guide: "Валерій Бурлака", report: "", mapUrl: "https://mapy.cz/s/abcdef", notes: "", image: "https://karpatium.com.ua/rails/active_storage/blobs/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBaE1HIiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--e6822aedcc48f9d43803b6128544171730e1f7dd/%D0%BF%D0%B8%D1%81%D0%B0%D0%BD%D0%BD%D0%B8%D0%B8%CC%86-%D0%BA%D0%B0%D0%BC%D1%96%D0%BD%D1%8C.jpeg", isTraditional: false },
+    { id: '17', title: "г.Петрос 2020 м (з с.Кваси)", date: "2026-12-05", distance: "26 км", difficulty: "вище середньої", duration: "2 дні", guide: "Петро Маковський", report: "", mapUrl: "https://uk.mapy.cz/s/ghijkl", notes: "", image: "https://we.org.ua/wp-content/uploads/2015/03/211.jpg", isTraditional: false }
   ];
 
-  const defaultMembers = [
-    { id: 'm1', name: 'Петро Маковський', rating: 5 },
-    { id: 'm2', name: 'Валерій Бурлака', rating: 4 },
-    { id: 'm3', name: 'Олег Дашко', rating: 5 },
-    { id: 'm4', name: 'Володимир Коколюс', rating: 4 },
-    { id: 'm5', name: 'Богдан Сидорак', rating: 3 }
-  ];
+  // Зібрати всіх унікальних провідників
+  const uniqueGuides = [...new Map(defaultTrips.map(t => [t.guide, { name: t.guide, rating: 4 }])).values()];
+  const defaultMembers = uniqueGuides.map((guide, idx) => ({ id: 'm' + (idx + 1), name: guide.name, rating: guide.rating }));
 
   let trips = [];
   let members = [];
-  let currentFilter = 'all';
   let editingTripId = null;
+  let currentSort = 'date';
+  let sortAscending = true;
 
   function loadData() {
-    try {
-      const stored = localStorage.getItem(STORAGE_KEY);
-      trips = stored ? JSON.parse(stored) : [...defaultTrips];
-    } catch { trips = [...defaultTrips]; }
-    try {
-      const storedMembers = localStorage.getItem(MEMBERS_KEY);
-      members = storedMembers ? JSON.parse(storedMembers) : [...defaultMembers];
-    } catch { members = [...defaultMembers]; }
+    try { trips = localStorage.getItem(STORAGE_KEY) ? JSON.parse(localStorage.getItem(STORAGE_KEY)) : [...defaultTrips]; } catch { trips = [...defaultTrips]; }
+    try { members = localStorage.getItem(MEMBERS_KEY) ? JSON.parse(localStorage.getItem(MEMBERS_KEY)) : [...defaultMembers]; } catch { members = [...defaultMembers]; }
   }
   function saveData() { localStorage.setItem(STORAGE_KEY, JSON.stringify(trips)); }
   function saveMembers() { localStorage.setItem(MEMBERS_KEY, JSON.stringify(members)); }
   function checkAdmin() { return prompt('Введіть пароль адміністратора:') === ADMIN_PASSWORD; }
 
-  // Красива модалка для запису на похід
-  function openTripApplyModal(tripId, tripTitle) {
-    const modal = document.createElement('div');
-    modal.className = 'modal-overlay active';
-    modal.innerHTML = `
-      <div class="modal" style="max-width: 480px;">
-        <div class="modal-header">
-          <h2><i class="fas fa-hiking"></i> Запис на похід</h2>
-          <button class="modal-close">&times;</button>
-        </div>
-        <div class="modal-body" style="padding: 24px;">
-          <p style="margin-bottom: 16px;"><strong>${escapeHtml(tripTitle)}</strong></p>
-          <form id="applyTripForm">
-            <div class="form-group"><label>Ваше ім'я та прізвище *</label><input type="text" id="applyName" required placeholder="Іван Петренко"></div>
-            <div class="form-group"><label>Номер телефону *</label><input type="tel" id="applyPhone" required placeholder="+380 50 123 45 67"></div>
-            <div class="form-group"><label>Коментар (необов'язково)</label><textarea id="applyComment" rows="2" placeholder="Додаткова інформація..."></textarea></div>
-            <div class="modal-footer" style="margin-top: 20px;">
-              <button type="button" class="btn-cancel" id="cancelApplyBtn">Скасувати</button>
-              <button type="submit" class="btn-submit"><i class="fas fa-paper-plane"></i> Надіслати заявку</button>
-            </div>
-          </form>
-        </div>
-      </div>
-    `;
-    document.body.appendChild(modal);
-    const closeModal = () => modal.remove();
-    modal.querySelector('.modal-close').addEventListener('click', closeModal);
-    modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
-    document.getElementById('cancelApplyBtn').addEventListener('click', closeModal);
-    document.getElementById('applyTripForm').addEventListener('submit', (e) => {
-      e.preventDefault();
-      const name = document.getElementById('applyName').value.trim();
-      const phone = document.getElementById('applyPhone').value.trim();
-      const comment = document.getElementById('applyComment').value.trim();
-      if (!name || !phone) { alert('Заповніть ім\'я та телефон'); return; }
-      const apps = JSON.parse(localStorage.getItem(TRIP_APPS_KEY) || '[]');
-      apps.push({ id: Date.now(), tripId, tripTitle, userName: name, phone, comment, date: new Date().toLocaleString() });
-      localStorage.setItem(TRIP_APPS_KEY, JSON.stringify(apps));
-      alert(`Дякуємо, ${name}! Вашу заявку на похід "${tripTitle}" передано адміністратору.`);
-      closeModal();
-    });
-  }
-
-  // Красива модалка для запису до лідера
-  function openLeaderApplyModal(leaderId, leaderName) {
-    const modal = document.createElement('div');
-    modal.className = 'modal-overlay active';
-    modal.innerHTML = `
-      <div class="modal" style="max-width: 480px;">
-        <div class="modal-header">
-          <h2><i class="fas fa-users"></i> Записатись до лідера</h2>
-          <button class="modal-close">&times;</button>
-        </div>
-        <div class="modal-body" style="padding: 24px;">
-          <p style="margin-bottom: 16px;">Лідер: <strong>${escapeHtml(leaderName)}</strong></p>
-          <form id="applyLeaderForm">
-            <div class="form-group"><label>Ваше ім'я та прізвище *</label><input type="text" id="applyLeaderName" required placeholder="Іван Петренко"></div>
-            <div class="form-group"><label>Номер телефону *</label><input type="tel" id="applyLeaderPhone" required placeholder="+380 50 123 45 67"></div>
-            <div class="form-group"><label>Коментар (необов'язково)</label><textarea id="applyLeaderComment" rows="2" placeholder="Чому хочете приєднатись?"></textarea></div>
-            <div class="modal-footer" style="margin-top: 20px;">
-              <button type="button" class="btn-cancel" id="cancelLeaderBtn">Скасувати</button>
-              <button type="submit" class="btn-submit"><i class="fas fa-paper-plane"></i> Надіслати заявку</button>
-            </div>
-          </form>
-        </div>
-      </div>
-    `;
-    document.body.appendChild(modal);
-    const closeModal = () => modal.remove();
-    modal.querySelector('.modal-close').addEventListener('click', closeModal);
-    modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
-    document.getElementById('cancelLeaderBtn').addEventListener('click', closeModal);
-    document.getElementById('applyLeaderForm').addEventListener('submit', (e) => {
-      e.preventDefault();
-      const name = document.getElementById('applyLeaderName').value.trim();
-      const phone = document.getElementById('applyLeaderPhone').value.trim();
-      const comment = document.getElementById('applyLeaderComment').value.trim();
-      if (!name || !phone) { alert('Заповніть ім\'я та телефон'); return; }
-      const apps = JSON.parse(localStorage.getItem(LEADER_APPS_KEY) || '[]');
-      apps.push({ id: Date.now(), leaderId, leaderName, userName: name, phone, comment, date: new Date().toLocaleString() });
-      localStorage.setItem(LEADER_APPS_KEY, JSON.stringify(apps));
-      alert(`Дякуємо, ${name}! Вашу заявку до лідера "${leaderName}" передано адміністратору.`);
-      closeModal();
-    });
+  function sortTrips(tripsArray, sortType, ascending) {
+    const sorted = [...tripsArray];
+    if (sortType === 'date') {
+      sorted.sort((a, b) => {
+        const dateA = a.date || '9999-12-31';
+        const dateB = b.date || '9999-12-31';
+        return ascending ? dateA.localeCompare(dateB) : dateB.localeCompare(dateA);
+      });
+    } else if (sortType === 'difficulty') {
+      const order = { 'легка': 1, 'середня': 2, 'вище середньої': 3 };
+      sorted.sort((a, b) => {
+        const diffA = order[a.difficulty] || 0;
+        const diffB = order[b.difficulty] || 0;
+        return ascending ? diffA - diffB : diffB - diffA;
+      });
+    } else if (sortType === 'distance') {
+      sorted.sort((a, b) => {
+        const distA = parseFloat(a.distance) || 0;
+        const distB = parseFloat(b.distance) || 0;
+        return ascending ? distA - distB : distB - distA;
+      });
+    }
+    return sorted;
   }
 
   function renderTrips() {
     const container = document.getElementById('cardsContainer');
     if (!container) return;
-    let filtered = trips.filter(t => {
-      if (currentFilter === 'all') return true;
-      if (currentFilter === 'planned') return !(t.report && t.report.includes('виконано'));
-      return t.difficulty === currentFilter;
-    });
+    let filtered = [...trips];
     const searchInput = document.getElementById('searchInput');
     if (searchInput && searchInput.value.trim()) {
       const q = searchInput.value.trim().toLowerCase();
       filtered = filtered.filter(t => t.title.toLowerCase().includes(q) || (t.guide && t.guide.toLowerCase().includes(q)));
     }
-    const sortBy = document.getElementById('sortBy');
-    if (sortBy && sortBy.value !== 'default') {
-      if (sortBy.value === 'date') filtered.sort((a,b) => (a.date||'').localeCompare(b.date||''));
-      else if (sortBy.value === 'difficulty') { const order = { 'легка':1, 'середня':2, 'вище середньої':3 }; filtered.sort((a,b) => (order[a.difficulty]||0) - (order[b.difficulty]||0)); }
-      else if (sortBy.value === 'distance') filtered.sort((a,b) => parseFloat(a.distance) - parseFloat(b.distance));
+    if (currentSort !== 'default') {
+      filtered = sortTrips(filtered, currentSort, sortAscending);
     }
     const countSpan = document.getElementById('visibleCount');
     if (countSpan) countSpan.textContent = filtered.length;
@@ -168,26 +90,42 @@
     }
     container.innerHTML = filtered.map(trip => {
       const isCompleted = trip.report && trip.report.includes('виконано');
-      const showJoinBtn = !isCompleted;
       const diffClass = `difficulty-${trip.difficulty === 'легка' ? 'легка' : trip.difficulty === 'середня' ? 'середня' : 'вище-середньої'}`;
       const imageUrl = trip.image && trip.image.trim() !== '' ? trip.image : 'https://placehold.co/600x400?text=Немає+фото';
+      const mapLink = trip.mapUrl ? `<a href="${trip.mapUrl}" target="_blank" rel="noopener" class="route-link"><i class="fas fa-map-location-dot"></i> Маршрут на карті</a>` : '';
+      
+      // Розбиваємо заголовок на основну частину та дужки (якщо є)
+      let mainTitle = trip.title;
+      let subTitle = '';
+      const parenMatch = trip.title.match(/^(.*?)(\([^)]+\))$/);
+      if (parenMatch) {
+        mainTitle = parenMatch[1].trim();
+        subTitle = parenMatch[2].trim();
+      }
+      
+      const actionButton = isCompleted
+        ? `<span class="completed-badge"><i class="fas fa-check-circle"></i> Вже пройдено</span>`
+        : `<button class="join-trip-btn" data-id="${trip.id}" data-title="${escapeHtml(trip.title)}"><i class="fas fa-user-plus"></i> Записатись</button>`;
+      
       return `
         <div class="trip-card" data-id="${trip.id}">
           <div class="card-image" style="background-image:url('${imageUrl}');"></div>
           <div class="card-content">
             <div class="card-header">
-              <div class="title-main">${escapeHtml(trip.title)}</div>
+              <div class="title-main">${escapeHtml(mainTitle)}</div>
               <div class="difficulty-badge ${diffClass}">${trip.difficulty}</div>
             </div>
+            ${subTitle ? `<div class="title-sub">${escapeHtml(subTitle)}</div>` : ''}
             <div class="meta-grid">
               <span><i class="far fa-calendar"></i> ${trip.date || '—'}</span>
               <span><i class="fas fa-arrows-left-right"></i> ${trip.distance}</span>
               <span><i class="far fa-clock"></i> ${trip.duration}</span>
             </div>
+            ${mapLink}
             <div class="card-footer">
               <div class="guide"><i class="fas fa-user-hiking"></i> ${escapeHtml(trip.guide)}</div>
               <div class="card-actions">
-                ${showJoinBtn ? `<button class="join-trip-btn" data-id="${trip.id}" data-title="${escapeHtml(trip.title)}"><i class="fas fa-user-plus"></i> Записатись</button>` : ''}
+                ${actionButton}
                 <button class="edit-btn" data-id="${trip.id}"><i class="fas fa-pen"></i></button>
                 <button class="delete-btn" data-id="${trip.id}"><i class="fas fa-trash"></i></button>
               </div>
@@ -220,6 +158,41 @@
           renderTrips();
         }
       });
+    });
+  }
+
+  function openTripApplyModal(tripId, tripTitle) {
+    const modal = document.createElement('div');
+    modal.className = 'modal-overlay active';
+    modal.innerHTML = `
+      <div class="modal" style="max-width: 480px;">
+        <div class="modal-header"><h2><i class="fas fa-hiking"></i> Запис на похід</h2><button class="modal-close">&times;</button></div>
+        <div class="modal-body" style="padding: 24px;">
+          <p style="margin-bottom: 16px;"><strong>${escapeHtml(tripTitle)}</strong></p>
+          <form id="applyTripForm">
+            <div class="form-group"><label>Ім'я та прізвище *</label><input type="text" id="applyName" required placeholder="Іван Петренко"></div>
+            <div class="form-group"><label>Телефон *</label><input type="tel" id="applyPhone" required placeholder="+380 50 123 45 67"></div>
+            <div class="form-group"><label>Коментар</label><textarea id="applyComment" rows="2"></textarea></div>
+            <div class="modal-footer"><button type="button" class="btn-cancel" id="cancelApplyBtn">Скасувати</button><button type="submit" class="btn-submit"><i class="fas fa-paper-plane"></i> Надіслати</button></div>
+          </form>
+        </div>
+      </div>`;
+    document.body.appendChild(modal);
+    const closeModal = () => modal.remove();
+    modal.querySelector('.modal-close').addEventListener('click', closeModal);
+    modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+    document.getElementById('cancelApplyBtn').addEventListener('click', closeModal);
+    document.getElementById('applyTripForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const name = document.getElementById('applyName').value.trim();
+      const phone = document.getElementById('applyPhone').value.trim();
+      const comment = document.getElementById('applyComment').value.trim();
+      if (!name || !phone) { alert('Заповніть ім\'я та телефон'); return; }
+      const apps = JSON.parse(localStorage.getItem(TRIP_APPS_KEY) || '[]');
+      apps.push({ id: Date.now(), tripId, tripTitle, userName: name, phone, comment, date: new Date().toLocaleString() });
+      localStorage.setItem(TRIP_APPS_KEY, JSON.stringify(apps));
+      alert(`Дякуємо, ${name}! Вашу заявку передано адміністратору.`);
+      closeModal();
     });
   }
 
@@ -271,6 +244,41 @@
     });
   }
 
+  function openLeaderApplyModal(leaderId, leaderName) {
+    const modal = document.createElement('div');
+    modal.className = 'modal-overlay active';
+    modal.innerHTML = `
+      <div class="modal" style="max-width: 480px;">
+        <div class="modal-header"><h2><i class="fas fa-users"></i> Записатись до лідера</h2><button class="modal-close">&times;</button></div>
+        <div class="modal-body" style="padding: 24px;">
+          <p style="margin-bottom: 16px;">Лідер: <strong>${escapeHtml(leaderName)}</strong></p>
+          <form id="applyLeaderForm">
+            <div class="form-group"><label>Ім'я та прізвище *</label><input type="text" id="applyLeaderName" required placeholder="Іван Петренко"></div>
+            <div class="form-group"><label>Телефон *</label><input type="tel" id="applyLeaderPhone" required placeholder="+380 50 123 45 67"></div>
+            <div class="form-group"><label>Коментар</label><textarea id="applyLeaderComment" rows="2"></textarea></div>
+            <div class="modal-footer"><button type="button" class="btn-cancel" id="cancelLeaderBtn">Скасувати</button><button type="submit" class="btn-submit">Надіслати</button></div>
+          </form>
+        </div>
+      </div>`;
+    document.body.appendChild(modal);
+    const closeModal = () => modal.remove();
+    modal.querySelector('.modal-close').addEventListener('click', closeModal);
+    modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+    document.getElementById('cancelLeaderBtn').addEventListener('click', closeModal);
+    document.getElementById('applyLeaderForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const name = document.getElementById('applyLeaderName').value.trim();
+      const phone = document.getElementById('applyLeaderPhone').value.trim();
+      const comment = document.getElementById('applyLeaderComment').value.trim();
+      if (!name || !phone) { alert('Заповніть ім\'я та телефон'); return; }
+      const apps = JSON.parse(localStorage.getItem(LEADER_APPS_KEY) || '[]');
+      apps.push({ id: Date.now(), leaderId, leaderName, userName: name, phone, comment, date: new Date().toLocaleString() });
+      localStorage.setItem(LEADER_APPS_KEY, JSON.stringify(apps));
+      alert(`Дякуємо, ${name}! Вашу заявку до лідера "${leaderName}" передано адміністратору.`);
+      closeModal();
+    });
+  }
+
   function openTripModal(id = null) {
     const modal = document.getElementById('tripModalOverlay');
     const titleElem = document.getElementById('tripModalTitle');
@@ -303,6 +311,28 @@
   function closeTripModal() {
     document.getElementById('tripModalOverlay').classList.remove('active');
     editingTripId = null;
+  }
+
+  function resetAll() {
+    const searchInput = document.getElementById('searchInput');
+    if (searchInput) {
+      searchInput.value = '';
+      const clearBtn = document.getElementById('clearSearch');
+      if (clearBtn) clearBtn.style.display = 'none';
+    }
+    currentSort = 'date';
+    sortAscending = true;
+    const sortSelect = document.getElementById('sortSelect');
+    if (sortSelect) sortSelect.value = 'date';
+    const sortDirBtn = document.getElementById('sortDirectionBtn');
+    if (sortDirBtn) {
+      const icon = sortDirBtn.querySelector('i');
+      if (icon) {
+        icon.className = 'fas fa-arrow-up-wide-short';
+        icon.title = 'За зростанням';
+      }
+    }
+    renderTrips();
   }
 
   function init() {
@@ -342,15 +372,6 @@
       closeTripModal();
     });
 
-    document.querySelectorAll('.filter-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        currentFilter = btn.dataset.filter;
-        renderTrips();
-      });
-    });
-
     const searchInput = document.getElementById('searchInput');
     const clearSearch = document.getElementById('clearSearch');
     if (searchInput) {
@@ -364,8 +385,32 @@
       clearSearch.style.display = 'none';
       renderTrips();
     });
-    const sortBy = document.getElementById('sortBy');
-    if (sortBy) sortBy.addEventListener('change', renderTrips);
+
+    const sortSelect = document.getElementById('sortSelect');
+    const sortDirBtn = document.getElementById('sortDirectionBtn');
+    if (sortSelect) {
+      sortSelect.addEventListener('change', (e) => {
+        currentSort = e.target.value;
+        renderTrips();
+      });
+    }
+    if (sortDirBtn) {
+      sortDirBtn.addEventListener('click', () => {
+        sortAscending = !sortAscending;
+        const icon = sortDirBtn.querySelector('i');
+        if (sortAscending) {
+          icon.className = 'fas fa-arrow-up-wide-short';
+          icon.title = 'За зростанням';
+        } else {
+          icon.className = 'fas fa-arrow-down-wide-short';
+          icon.title = 'За спаданням';
+        }
+        renderTrips();
+      });
+    }
+
+    const resetBtn = document.getElementById('resetFiltersBtn');
+    if (resetBtn) resetBtn.addEventListener('click', resetAll);
 
     document.getElementById('viewTripAppsBtn')?.addEventListener('click', viewTripApplications);
     document.getElementById('viewLeaderAppsBtn')?.addEventListener('click', viewLeaderApplications);
@@ -373,12 +418,7 @@
 
   function escapeHtml(str) {
     if (!str) return '';
-    return str.replace(/[&<>]/g, function(m) {
-      if (m === '&') return '&amp;';
-      if (m === '<') return '&lt;';
-      if (m === '>') return '&gt;';
-      return m;
-    });
+    return str.replace(/[&<>]/g, m => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;' }[m] || m));
   }
 
   document.addEventListener('DOMContentLoaded', init);
