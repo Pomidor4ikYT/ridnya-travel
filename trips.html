@@ -2,23 +2,20 @@
 <html lang="uk">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
   <title>Маршрути · РІДНЯ</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&family=Manrope:wght@600;700;800&family=Montserrat:wght@600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;500;600;700&family=Manrope:wght@600;700;800&family=Montserrat:wght@600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link rel="stylesheet" href="css/main.css">
-  <link rel="stylesheet" href="css/components.css">
   <link rel="stylesheet" href="css/trips.css">
 </head>
 <body class="page-trips">
   <header class="main-header">
     <div class="header-container">
       <a href="index.html" class="header-logo">
-        <div class="header-logo-icon">
-  <img src="images/logo.jpg" alt="БФ Рідня" style="width:100%; height:100%; object-fit:contain;">
-</div>
+        <div class="header-logo-icon"><img src="images/logo.jpg" alt="БФ Рідня"></div>
         <div class="header-logo-text">
           <span class="header-logo-title">РІДНЯ</span>
           <span class="header-logo-sub">Клуб мандрівників</span>
@@ -43,138 +40,82 @@
         </ul>
       </nav>
       <div class="header-actions">
-        <a href="contacts.html#donate" class="btn-support"><i class="fas fa-heart"></i> Підтримати</a>
+        <a href="https://secure.wayforpay.com/payment/s6bdf0263be8c" class="btn-support"><i class="fas fa-heart"></i> Підтримати</a>
       </div>
     </div>
   </header>
 
   <main>
-    <section class="section active">
-      <div class="section-header">
-        <span class="section-label">Мандруй</span>
-        <h2 class="section-title">Заплановані походи</h2>
-        <p class="section-subtitle">Обирай маршрут до душі — від легких прогулянок до серйозних вершин</p>
-      </div>
-
-      <!-- Панель пошуку та сортування -->
-      <div class="search-sort-bar">
-        <div class="search-box">
-          <i class="fas fa-search"></i>
-          <input type="text" id="searchInput" placeholder="Пошук за назвою, провідником...">
-          <button id="clearSearch" class="clear-btn" style="display:none;"><i class="fas fa-times"></i></button>
-        </div>
-        <div class="sort-options">
-          <label for="sortBy"><i class="fas fa-sort-amount-down"></i></label>
-          <select id="sortBy">
-            <option value="default">За замовчуванням</option>
-            <option value="date">За датою</option>
-            <option value="difficulty">За складністю</option>
-            <option value="distance">За протяжністю</option>
-          </select>
-        </div>
-      </div>
-
-      <!-- Фільтри та кнопка додавання -->
-      <div class="legend-bar">
-        <div class="filter-group">
-          <button class="filter-btn active" data-filter="all"><i class="fas fa-list"></i> Усі</button>
-          <button class="filter-btn" data-filter="легка"><i class="fas fa-leaf"></i> Легка</button>
-          <button class="filter-btn" data-filter="середня"><i class="fas fa-tree"></i> Середня</button>
-          <button class="filter-btn" data-filter="вище середньої"><i class="fas fa-mountain"></i> Вище сер.</button>
-        </div>
-        <div style="display:flex; gap:12px; align-items:center;">
-          <div class="stats-tag"><i class="fas fa-eye"></i> <span id="visibleCount">17</span> маршрутів</div>
-          <button class="add-trip-btn" id="addTripBtn"><i class="fas fa-plus"></i> Додати</button>
-        </div>
-      </div>
-
-      <!-- Сітка карток -->
-      <div id="cardsContainer" class="cards-container"></div>
-    </section>
-  </main>
-
-  <!-- Модальне вікно для маршруту -->
-  <div class="modal-overlay" id="modalOverlay">
-    <div class="modal">
-      <div class="modal-header">
-        <h2 id="modalTitle"><i class="fas fa-mountain"></i> Новий маршрут</h2>
-        <button class="modal-close" id="closeModalBtn">&times;</button>
-      </div>
-      <form id="addTripForm">
-        <div class="form-group">
-          <label>Назва *</label>
-          <input type="text" id="title" placeholder="г. Говерла 2061 м" required>
-        </div>
-        <div class="form-row">
-          <div class="form-group">
-            <label>Дата</label>
-            <input type="text" id="date" placeholder="15.06.2026">
-          </div>
-          <div class="form-group">
-            <label>Протяжність</label>
-            <input type="text" id="distance" placeholder="12 км">
-          </div>
-        </div>
-        <div class="form-row">
-          <div class="form-group">
-            <label>Складність</label>
-            <select id="difficulty">
-              <option value="легка">Легка</option>
-              <option value="середня">Середня</option>
-              <option value="вище середньої">Вище сер.</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label>Тривалість</label>
-            <input type="text" id="duration" placeholder="1 день">
-          </div>
-        </div>
-        <div class="form-group">
-          <label>Провідник</label>
-          <input type="text" id="guide" placeholder="Ім'я Прізвище">
-        </div>
-        <div class="form-group">
-          <label>Посилання на карту</label>
-          <input type="url" id="mapUrl" placeholder="https://uk.mapy.cz/s/...">
-        </div>
-        <div class="form-group">
-          <label>Примітка</label>
-          <input type="text" id="notes" placeholder="масове сходження">
-        </div>
-        <div class="form-group">
-          <label>URL зображення</label>
-          <input type="url" id="image" placeholder="https://...">
-        </div>
-        <div class="form-group checkbox-group">
-          <label><input type="checkbox" id="isCompleted"> Виконано</label>
-          <label><input type="checkbox" id="isTraditional"> Традиційний маршрут</label>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn-cancel" id="cancelBtn">Скасувати</button>
-          <button type="submit" class="btn-submit"><i class="fas fa-save"></i> Зберегти</button>
-        </div>
-      </form>
+    <div class="section-header">
+      <span class="section-label">Мандруй</span>
+      <h2 class="section-title">Заплановані походи</h2>
+      <p class="section-subtitle">Обирай маршрут до душі — від легких прогулянок до серйозних вершин</p>
     </div>
-  </div>
+
+    <div class="search-sort-bar">
+      <div class="search-box">
+        <i class="fas fa-search"></i>
+        <input type="text" id="searchInput" placeholder="Пошук за назвою, провідником...">
+        <button id="clearSearch" class="clear-btn" style="display:none;"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="sort-options">
+        <label for="sortBy"><i class="fas fa-sort-amount-down"></i></label>
+        <select id="sortBy">
+          <option value="default">За замовчуванням</option>
+          <option value="date">За датою</option>
+          <option value="difficulty">За складністю</option>
+          <option value="distance">За протяжністю</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="legend-bar">
+      <div class="filter-group">
+        <button class="filter-btn active" data-filter="all"><i class="fas fa-list"></i> Усі</button>
+        <button class="filter-btn" data-filter="легка"><i class="fas fa-leaf"></i> Легка</button>
+        <button class="filter-btn" data-filter="середня"><i class="fas fa-tree"></i> Середня</button>
+        <button class="filter-btn" data-filter="вище середньої"><i class="fas fa-mountain"></i> Вище сер.</button>
+        <button class="filter-btn" data-filter="planned"><i class="fas fa-calendar-week"></i> Заплановані</button>
+      </div>
+      <div style="display:flex; gap:12px; align-items:center;">
+        <div class="stats-tag"><i class="fas fa-eye"></i> <span id="visibleCount">17</span> маршрутів</div>
+        <button class="add-trip-btn" id="addTripBtn"><i class="fas fa-plus"></i> Додати</button>
+        <button id="viewTripAppsBtn" class="add-trip-btn" style="background:#6c757d;"><i class="fas fa-clipboard-list"></i> Заявки на походи</button>
+      </div>
+    </div>
+
+    <div id="cardsContainer" class="cards-container"></div>
+
+    <!-- Блок учасників та рейтингу -->
+    <div class="members-section">
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap;">
+        <div>
+          <span class="section-label">Команда</span>
+          <h3 style="font-size:1.6rem; font-weight:800;">Наші учасники та лідери</h3>
+          <p>Рейтинг зірочок, який редагує адмін. Приєднуйтесь до лідера в похід!</p>
+        </div>
+        <button id="viewLeaderAppsBtn" class="admin-apps-btn"><i class="fas fa-users"></i> Заявки лідерам</button>
+      </div>
+      <div id="membersContainer" class="members-grid"></div>
+    </div>
+  </main>
 
   <footer class="main-footer">
     <div class="footer-container">
       <div class="footer-top">
-<div class="footer-logo">
-  <div class="header-logo-icon footer-logo-icon">
-    <img src="images/logo.jpg" alt="БФ Рідня" style="width:100%; height:100%; object-fit:contain;">
-  </div>
-  <div><strong>Благодійний фонд «Рідня»</strong><p>Клуб мандрівників</p></div>
-</div>
+        <div class="footer-logo">
+          <div class="header-logo-icon footer-logo-icon"><img src="images/logo.jpg" alt="БФ Рідня"></div>
+          <div><strong>Благодійний фонд «Рідня»</strong><p>Клуб мандрівників</p></div>
+        </div>
         <div class="footer-social">
-          <a href="https://www.facebook.com/bfridnya" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
-          <a href="https://www.instagram.com/fond_ridnya" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-          <a href="https://www.youtube.com/channel/UCr67AbASZGqx4RefbKaIRSQ" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+          <a href="https://www.facebook.com/bfridnya"><i class="fab fa-facebook-f"></i></a>
+          <a href="https://www.instagram.com/fond_ridnya"><i class="fab fa-instagram"></i></a>
+          <a href="https://www.youtube.com/channel/UCr67AbASZGqx4RefbKaIRSQ"><i class="fab fa-youtube"></i></a>
         </div>
       </div>
       <div class="footer-middle">
         <div class="footer-nav"><h4>Навігація</h4><ul><li><a href="index.html">Головна</a></li><li><a href="trips.html">Маршрути</a></li><li><a href="blog.html">Блог</a></li><li><a href="faq.html">FAQ</a></li></ul></div>
-        <div class="footer-nav"><h4>Про клуб</h4><ul><li><a href="reviews.html">Відгуки</a></li><li><a href="contacts.html">Контакти</a></li><li><a href="contacts.html#donate">Підтримати фонд</a></li></ul></div>
+        <div class="footer-nav"><h4>Про клуб</h4><ul><li><a href="reviews.html">Відгуки</a></li><li><a href="contacts.html">Контакти</a></li><li><a href="https://secure.wayforpay.com/payment/s6bdf0263be8c">Підтримати фонд</a></li></ul></div>
         <div class="footer-nav"><h4>Контакти</h4><ul><li><i class="fas fa-map-marker-alt"></i> м. Стрий, вул. Незалежності, 8</li><li><i class="fas fa-phone"></i> +380 50 370 16 40</li><li><i class="fas fa-envelope"></i> mgastryi2026@gmail.com</li></ul></div>
       </div>
       <div class="footer-bottom">
@@ -183,6 +124,42 @@
       </div>
     </div>
   </footer>
+
+  <!-- Модальне вікно для маршруту -->
+  <div class="modal-overlay" id="tripModalOverlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 id="tripModalTitle"><i class="fas fa-hiking"></i> Новий маршрут</h2>
+        <button class="modal-close" id="closeTripModalBtn">&times;</button>
+      </div>
+      <form id="addTripForm">
+        <div class="form-group">
+          <label>Назва *</label>
+          <input type="text" id="tripTitle" placeholder="Назва маршруту" required>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Дата</label><input type="date" id="tripDate"></div>
+          <div class="form-group"><label>Протяжність</label><input type="text" id="tripDistance" placeholder="8 км"></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Складність</label><select id="tripDifficulty"><option value="легка">Легка</option><option value="середня">Середня</option><option value="вище середньої">Вище середньої</option></select></div>
+          <div class="form-group"><label>Тривалість</label><input type="text" id="tripDuration" placeholder="1 день"></div>
+        </div>
+        <div class="form-group"><label>Провідник</label><input type="text" id="tripGuide" placeholder="Ім'я"></div>
+        <div class="form-group"><label>URL карти (mapy.cz)</label><input type="url" id="tripMapUrl" placeholder="https://mapy.cz/..."></div>
+        <div class="form-group"><label>Примітки</label><textarea id="tripNotes" rows="2"></textarea></div>
+        <div class="form-group"><label>URL зображення</label><input type="url" id="tripImage" placeholder="https://..."></div>
+        <div class="checkbox-group">
+          <label><input type="checkbox" id="tripIsCompleted"> <i class="fas fa-check-circle"></i> Виконано</label>
+          <label><input type="checkbox" id="tripIsTraditional"> <i class="fas fa-leaf"></i> Традиційний</label>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn-cancel" id="cancelTripBtn">Скасувати</button>
+          <button type="submit" class="btn-submit"><i class="fas fa-save"></i> Зберегти</button>
+        </div>
+      </form>
+    </div>
+  </div>
 
   <script src="js/main.js"></script>
   <script src="js/trips.js"></script>
