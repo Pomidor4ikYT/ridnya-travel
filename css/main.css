@@ -545,3 +545,61 @@ main {
   overflow: hidden;
   background: white;
 }
+/* ========== ДЕКОРАТИВНИЙ КОЛАЖ (більші фото) ========== */
+#bgCollage {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+  overflow: visible;
+}
+
+.collage-img {
+  position: absolute;
+  border-radius: 20px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.2);
+  border: 2px solid rgba(255, 255, 255, 0.6);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  animation: collageFloat 6s ease-in-out infinite;
+  opacity: 0.75;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  z-index: 0;
+}
+
+.collage-img:hover {
+  opacity: 0.95;
+  transform: scale(1.02);
+}
+
+.collage-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(0.98) contrast(1.02);
+  display: block;
+}
+
+@keyframes collageFloat {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-8px); }
+}
+
+/* Адаптивність для планшетів */
+@media (max-width: 1024px) {
+  .collage-img {
+    opacity: 0.65;
+    width: 10vw !important;
+  }
+}
+
+/* Адаптивність для мобільних */
+@media (max-width: 768px) {
+  .collage-img {
+    opacity: 0.5;
+    width: 14vw !important;
+  }
+}
