@@ -1,9 +1,12 @@
+/* blog.css – кнопка "Читати далі" строго внизу */
+
 .blog-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
   gap: 28px;
   padding: 0 24px;
 }
+
 .blog-card {
   background: var(--white);
   border-radius: var(--radius-lg);
@@ -12,16 +15,22 @@
   border: 1px solid var(--gray-200);
   transition: all var(--transition);
   position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%; /* всі картки однакової висоти в межах рядка */
 }
+
 .blog-card:hover {
   box-shadow: var(--shadow-lg);
   transform: translateY(-6px);
 }
+
 .blog-card img {
   width: 100%;
   height: 220px;
   object-fit: cover;
 }
+
 .blog-card-img {
   width: 100%;
   height: 220px;
@@ -32,15 +41,22 @@
   font-size: 3rem;
   color: var(--gray-400);
 }
+
 .blog-card-body {
   padding: 24px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* голова зверху, кнопка знизу */
 }
+
 .blog-date {
   font-size: 0.8rem;
   color: var(--gray-500);
   display: block;
   margin-bottom: 10px;
 }
+
 .blog-card-body h4 {
   font-family: 'Montserrat', sans-serif;
   font-weight: 700;
@@ -48,6 +64,7 @@
   margin-bottom: 12px;
   color: var(--gray-900);
 }
+
 .blog-card-body p {
   font-size: 0.95rem;
   color: var(--gray-600);
@@ -58,13 +75,42 @@
   overflow: hidden;
   line-clamp: 3;
 }
-.blog-card-body a {
+
+/* Головне правило – кнопка завжди внизу */
+.read-more-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--blue-light);
   color: var(--blue);
+  padding: 8px 20px;
+  border-radius: 40px;
   font-weight: 600;
+  font-size: 0.85rem;
   text-decoration: none;
-  font-size: 0.9rem;
+  transition: all 0.3s ease;
+  border: 1px solid transparent;
+  align-self: flex-start;
+  margin-top: auto; /* дублюємо для надійності */
 }
-.blog-card-body a:hover { text-decoration: underline; }
+
+.read-more-link:hover {
+  background: var(--blue);
+  color: white;
+  gap: 12px;
+  transform: translateX(4px);
+  box-shadow: 0 4px 12px rgba(0,87,183,0.2);
+}
+
+.read-more-link i {
+  font-size: 0.8rem;
+  transition: transform 0.2s;
+}
+
+.read-more-link:hover i {
+  transform: translateX(3px);
+}
+
 .blog-card-actions {
   position: absolute;
   top: 12px;
@@ -73,6 +119,7 @@
   gap: 6px;
   z-index: 5;
 }
+
 .blog-card-actions button {
   background: rgba(255,255,255,0.9);
   border: none;
@@ -87,7 +134,107 @@
   justify-content: center;
   box-shadow: var(--shadow-sm);
 }
+
 .blog-card-actions button:hover {
   background: var(--blue);
   color: white;
+}
+
+/* Стилі модалки (без змін) */
+.blog-detail-modal .modal-body {
+  max-height: 65vh;
+  overflow-y: auto;
+}
+
+.blog-detail-date {
+  display: inline-block;
+  background: var(--blue-light);
+  color: var(--blue);
+  padding: 6px 14px;
+  border-radius: 30px;
+  font-size: 0.8rem;
+  margin: 12px 0 16px;
+}
+
+.blog-detail-image {
+  margin: 20px 0;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+}
+
+.blog-detail-image img {
+  width: 100%;
+  max-height: 400px;
+  object-fit: cover;
+  display: block;
+}
+
+.blog-detail-content {
+  line-height: 1.7;
+  color: var(--gray-800);
+  font-size: 1rem;
+}
+
+.blog-detail-content h3,
+.blog-detail-content h4 {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  margin: 1.2em 0 0.5em;
+  color: var(--gray-900);
+}
+
+.blog-detail-content p {
+  margin-bottom: 1em;
+}
+
+.blog-detail-content ul,
+.blog-detail-content ol {
+  margin: 0.8em 0 1em 1.8em;
+}
+
+.blog-detail-content li {
+  margin-bottom: 0.3em;
+}
+
+.blog-detail-content a {
+  color: var(--blue);
+  text-decoration: none;
+  border-bottom: 1px dotted var(--blue);
+}
+
+.blog-detail-content a:hover {
+  color: var(--blue-dark);
+  border-bottom-style: solid;
+}
+
+.blog-detail-content strong,
+.blog-detail-content b {
+  font-weight: 700;
+  color: var(--gray-900);
+}
+
+.blog-detail-content blockquote {
+  background: var(--gray-100);
+  border-left: 4px solid var(--yellow);
+  margin: 1.2em 0;
+  padding: 0.8em 1.2em;
+  border-radius: 16px;
+  font-style: italic;
+}
+.blog-card-body .read-more-link {
+  display: inline-flex;
+  margin-top: 8px;
+  align-self: flex-start;
+}
+.blog-card-body {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+/* Кнопка "Читати далі" ліворуч під датою */
+.blog-card-body .read-more-link {
+  display: inline-flex;
+  margin-top: 8px;
+  align-self: flex-start;
 }

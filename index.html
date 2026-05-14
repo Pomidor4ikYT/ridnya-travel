@@ -63,7 +63,6 @@
     </section>
 
     <div class="content-sections">
-      <!-- Хто ми? -->
       <div class="content-card reveal">
         <div class="about-club-text-only">
           <h3>Хто ми?</h3>
@@ -79,7 +78,6 @@
         </div>
       </div>
 
-      <!-- Статистика -->
       <div class="content-card reveal">
         <div class="stats-grid">
           <div class="stat-item"><span class="stat-number" data-target="17">0</span><span class="stat-label">маршрутів</span></div>
@@ -91,12 +89,8 @@
         </div>
       </div>
 
-      <!-- Переваги -->
       <div class="content-card reveal">
-        <div class="section-header">
-          <span class="section-label">Чому ми?</span>
-          <h2 class="section-title">Наші цінності</h2>
-        </div>
+        <div class="section-header"><span class="section-label">Чому ми?</span><h2 class="section-title">Наші цінності</h2></div>
         <div class="advantages-grid">
           <div class="advantage-card"><i class="fas fa-heart-circle-check"></i><h4>Безпека</h4><p>Кожен маршрут перевірений досвідченими провідниками, маємо аптечки та супровід.</p></div>
           <div class="advantage-card"><i class="fas fa-users"></i><h4>Спільнота</h4><p>Дружня атмосфера, спільні вечори біля ватри та підтримка на кожному кроці.</p></div>
@@ -105,12 +99,8 @@
         </div>
       </div>
 
-      <!-- Відгуки -->
       <div class="content-card reveal">
-        <div class="section-header">
-          <span class="section-label">Відгуки</span>
-          <h2 class="section-title">Що кажуть мандрівники</h2>
-        </div>
+        <div class="section-header"><span class="section-label">Відгуки</span><h2 class="section-title">Що кажуть мандрівники</h2></div>
         <div class="testimonials-grid">
           <div class="testimonial-card"><div class="testimonial-stars">★★★★★</div><p>«Неймовірна атмосфера! Вперше пішла в гори і закохалася. Дякую «Рідні» за організацію та підтримку.»</p><span class="testimonial-author">— Олена, 28 років</span></div>
           <div class="testimonial-card"><div class="testimonial-stars">★★★★★</div><p>«Ходимо з клубом уже два роки. Чудові маршрути, гарна компанія, а головне — спільна справа для перемоги.»</p><span class="testimonial-author">— Андрій, 45 років</span></div>
@@ -120,36 +110,31 @@
     </div>
   </main>
 
-  <footer class="main-footer">...</footer>
+  <footer class="main-footer">
+    <div class="footer-container">
+      <div class="footer-top">
+<!-- Замінено блок footer-logo -->
+<div class="footer-logo">
+  <div class="header-logo-icon footer-logo-icon">
+    <img src="images/logo.jpg" alt="БФ Рідня" style="width:100%; height:100%; object-fit:contain;">
+  </div>
+  <div><strong>Благодійний фонд «Рідня»</strong><p>Клуб мандрівників</p></div>
+</div>
+        <div class="footer-social">
+          <a href="https://www.facebook.com/bfridnya"><i class="fab fa-facebook-f"></i></a>
+          <a href="https://www.instagram.com/fond_ridnya"><i class="fab fa-instagram"></i></a>
+          <a href="https://www.youtube.com/channel/UCr67AbASZGqx4RefbKaIRSQ"><i class="fab fa-youtube"></i></a>
+        </div>
+      </div>
+      <div class="footer-middle">
+        <div class="footer-nav"><h4>Навігація</h4><ul><li><a href="index.html">Головна</a></li><li><a href="trips.html">Маршрути</a></li><li><a href="blog.html">Блог</a></li><li><a href="faq.html">FAQ</a></li></ul></div>
+        <div class="footer-nav"><h4>Про клуб</h4><ul><li><a href="reviews.html">Відгуки</a></li><li><a href="contacts.html">Контакти</a></li><li><a href="https://secure.wayforpay.com/payment/s6bdf0263be8c">Підтримати фонд</a></li></ul></div>
+        <div class="footer-nav"><h4>Контакти</h4><ul><li><i class="fas fa-map-marker-alt"></i> м. Стрий, вул. Незалежності, 8</li><li><i class="fas fa-phone"></i> +380 50 370 16 40</li><li><i class="fas fa-envelope"></i> mgastryi2026@gmail.com</li></ul></div>
+      </div>
+      <div class="footer-bottom"><p>&copy; 2026 Благодійний фонд «Рідня».</p><p>Розроблено з <i class="fas fa-heart"></i> для громад</p></div>
+    </div>
+  </footer>
+
   <script src="js/main.js"></script>
-  <script>
-    // Анімація лічильників статистики
-    function animateStats() {
-      const statNumbers = document.querySelectorAll('.stat-number[data-target]');
-      if (!statNumbers.length) return;
-      const observer = new IntersectionObserver(entries => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            const el = entry.target;
-            const target = parseInt(el.getAttribute('data-target'));
-            let current = 0;
-            const step = target / 60;
-            const timer = setInterval(() => {
-              current += step;
-              if (current >= target) {
-                el.textContent = target;
-                clearInterval(timer);
-              } else {
-                el.textContent = Math.floor(current);
-              }
-            }, 20);
-            observer.unobserve(el);
-          }
-        });
-      }, { threshold: 0.5 });
-      statNumbers.forEach(el => observer.observe(el));
-    }
-    document.addEventListener('DOMContentLoaded', animateStats);
-  </script>
 </body>
 </html>

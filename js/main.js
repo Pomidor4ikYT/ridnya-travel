@@ -43,10 +43,58 @@
     });
   }
 
+  // Анімація лічильників статистики (тільки на головній)
+  function initStatsCounter() {
+    const statNumbers = document.querySelectorAll('.stat-number[data-target]');
+    if (!statNumbers.length) return;
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const el = entry.target;
+          const target = parseInt(el.getAttribute('data-target'));
+          let current = 0;
+          const step = target / 60;
+          const timer = setInterval(() => {
+            current += step;
+            if (current >= target) {
+              el.textContent = target;
+              clearInterval(timer);
+            } else {
+              el.textContent = Math.floor(current);
+            }
+          }, 20);
+          observer.unobserve(el);
+        }
+      });
+    }, { threshold: 0.5 });
+    statNumbers.forEach(el => observer.observe(el));
+  }
+
+  // FAQ акордеон
+  function initFaqAccordion() {
+    const faqQuestions = document.querySelectorAll('.faq-question');
+    if (!faqQuestions.length) return;
+    faqQuestions.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const item = btn.closest('.faq-item');
+        if (item) {
+          item.classList.toggle('open');
+          const icon = btn.querySelector('i:last-child');
+          if (icon) {
+            icon.classList.toggle('fa-chevron-down');
+            icon.classList.toggle('fa-chevron-up');
+          }
+        }
+      });
+    });
+  }
+
   // Запуск всього
   document.addEventListener('DOMContentLoaded', () => {
     initMobileMenu();
     initScrollReveal();
     initSmoothScroll();
+    initStatsCounter();
+    initFaqAccordion();
   });
 })();
