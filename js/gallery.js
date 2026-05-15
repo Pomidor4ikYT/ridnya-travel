@@ -9,7 +9,6 @@
 
   let albums = [];
   let editingAlbumId = null;
-  let currentViewAlbum = null; // для перегляду альбому
 
   function loadData() { 
     try { 
@@ -23,7 +22,6 @@
   function checkAdmin() { return prompt('Введіть пароль адміністратора:') === ADMIN_PASSWORD; }
   function escapeHtml(str) { if (!str) return ''; return str.replace(/[&<>]/g, m => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;' }[m] || m)); }
 
-  // ========== ВІДОБРАЖЕННЯ АЛЬБОМІВ ==========
   function renderAlbums() {
     const container = document.getElementById('galleryContainer');
     if (!container) return;
@@ -40,19 +38,16 @@
         <div class="album-info">
           <h4>${escapeHtml(album.title)}</h4>
           <span>${album.photos.length} фото</span>
-          <button class="edit-album-btn" data-id="${album.id}" style="display:block; margin-top:8px; background:var(--blue-light); border:none; border-radius:20px; padding:4px 12px; font-size:0.7rem; cursor:pointer;"><i class="fas fa-pen"></i> Редагувати назву</button>
         </div>
       </div>
     `).join('');
 
-    // Відкриття альбому для перегляду
     document.querySelectorAll('.album-card').forEach(card => {
       card.addEventListener('click', (e) => {
-        if (e.target.closest('.album-delete') || e.target.closest('.edit-album-btn')) return;
+        if (e.target.closest('.album-delete')) return;
         openAlbumView(card.dataset.id);
       });
     });
-    // Видалення альбому
     document.querySelectorAll('.album-delete').forEach(btn => {
       btn.addEventListener('click', (e) => {
         e.stopPropagation();
@@ -63,32 +58,12 @@
         }
       });
     });
-    // Редагування назви альбому
-    document.querySelectorAll('.edit-album-btn').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        if (!checkAdmin()) return;
-        const id = btn.dataset.id;
-        const album = albums.find(a => a.id === id);
-        if (album) {
-          const newTitle = prompt('Нова назва альбому:', album.title);
-          if (newTitle && newTitle.trim()) {
-            album.title = newTitle.trim();
-            saveData();
-            renderAlbums();
-          }
-        }
-      });
-    });
   }
 
-  // ========== ПЕРЕГЛЯД АЛЬБОМУ З МОЖЛИВІСТЮ РЕДАГУВАННЯ ФОТО ==========
   function openAlbumView(albumId) {
     const album = albums.find(a => a.id === albumId);
     if (!album) return;
-    currentViewAlbum = album;
 
-    const isAdmin = checkAdmin(); // перевіряємо один раз
     const modal = document.createElement('div');
     modal.className = 'modal-overlay active';
     modal.innerHTML = `
@@ -98,9 +73,9 @@
           <button class="modal-close">&times;</button>
         </div>
         <div class="modal-body" style="padding: 20px; overflow-y: auto; max-height: 60vh;">
-          <div style="margin-bottom: 16px; display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
-            ${isAdmin ? `<button id="addPhotoBtn" class="add-trip-btn" style="background:var(--blue); color:white;"><i class="fas fa-plus"></i> Додати фото</button>` : ''}
-            ${isAdmin ? `<button id="changeCoverBtn" class="add-trip-btn" style="background:var(--gray-600);"><i class="fas fa-image"></i> Змінити обкладинку</button>` : ''}
+          <div id="adminControls" style="margin-bottom: 16px; display: none; gap: 10px; flex-wrap: wrap; align-items: center;">
+            <button id="addPhotoBtn" class="add-trip-btn" style="background:var(--blue); color:white;"><i class="fas fa-plus"></i> Додати фото</button>
+            <button id="changeCoverBtn" class="add-trip-btn" style="background:var(--gray-600);"><i class="fas fa-image"></i> Змінити обкладинку</button>
           </div>
           <div id="albumPhotosGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 16px;"></div>
         </div>
@@ -116,7 +91,37 @@
     modal.querySelector('.close-modal-btn').addEventListener('click', closeModal);
     modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
 
-    // Відображення сітки фото
+    const adminControls = modal.querySelector('#adminControls');
+    let isAdmin = false;
+
+    // Функція для показу кнопок адміна після успішного введення пароля
+    const showAdminControls = () => {
+      if (checkAdmin()) {
+        isAdmin = true;
+        adminControls.style.display = 'flex';
+        renderPhotos(); // перерендерити фото з кнопками редагування
+      } else {
+        alert('Невірний пароль');
+      }
+    };
+
+    // При наведенні на область кнопок або окремий клік на будь-яке місце в модалці не показуємо адмін-панель одразу.
+    // Додамо окрему кнопку "Увійти як адмін" або спростимо: натискання на додати фото/змінити обкладинку викличе перевірку.
+    // Але щоб не захаращувати, додамо невелику кнопку "Адмін" в заголовку. Простіше: при натисканні на будь-яку кнопку редагування спочатку запитаємо пароль.
+    // Тому кнопки редагування не будуть видимі доти, доки адмін не введе пароль. Але це незручно. Зробимо так: покажемо кнопку "Режим редагування" або просто при натисканні на кнопку "Додати фото" (яка видима всім?) – ні, краще приховати кнопки спочатку, але додати кнопку "Увійти як адмін".
+
+    // Додамо в modal-header невелику кнопку "Адмін" або замок.
+    const header = modal.querySelector('.modal-header');
+    const adminBtn = document.createElement('button');
+    adminBtn.innerHTML = '<i class="fas fa-lock"></i> Адмін';
+    adminBtn.className = 'admin-access-btn';
+    adminBtn.style.cssText = 'background:var(--blue-light); border:none; border-radius:30px; padding:4px 12px; margin-left:auto; font-size:0.7rem; cursor:pointer;';
+    adminBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      showAdminControls();
+    });
+    header.appendChild(adminBtn);
+
     const grid = modal.querySelector('#albumPhotosGrid');
     function renderPhotos() {
       if (!grid) return;
@@ -131,7 +136,6 @@
           ` : ''}
         </div>
       `).join('');
-      // Події для редагування/видалення фото
       if (isAdmin) {
         grid.querySelectorAll('.edit-photo-btn').forEach(btn => {
           btn.addEventListener('click', (e) => {
@@ -159,9 +163,12 @@
     }
     renderPhotos();
 
-    // Додавання фото
-    if (isAdmin) {
-      modal.querySelector('#addPhotoBtn').addEventListener('click', () => {
+    // Обробники для кнопок, які стають видимими після входу адміна
+    const addPhotoBtn = modal.querySelector('#addPhotoBtn');
+    const changeCoverBtn = modal.querySelector('#changeCoverBtn');
+    if (addPhotoBtn) {
+      addPhotoBtn.addEventListener('click', () => {
+        if (!isAdmin) { showAdminControls(); return; }
         const newUrl = prompt('Введіть URL нового фото:');
         if (newUrl && newUrl.trim()) {
           album.photos.push(newUrl.trim());
@@ -169,21 +176,22 @@
           renderPhotos();
         }
       });
-      // Зміна обкладинки
-      modal.querySelector('#changeCoverBtn').addEventListener('click', () => {
+    }
+    if (changeCoverBtn) {
+      changeCoverBtn.addEventListener('click', () => {
+        if (!isAdmin) { showAdminControls(); return; }
         const newCover = prompt('Введіть URL нової обкладинки альбому:', album.cover);
         if (newCover && newCover.trim()) {
           album.cover = newCover.trim();
           saveData();
-          // Оновити відображення альбомів на головній
-          renderAlbums();
+          renderAlbums(); // Оновлюємо головну галерею
         }
       });
     }
   }
 
-  // ========== СТВОРЕННЯ/РЕДАГУВАННЯ АЛЬБОМУ (заголовок) ==========
   function openAlbumModal(id = null) {
+    if (!checkAdmin()) return;
     const form = document.getElementById('addAlbumForm');
     const modal = document.getElementById('albumModalOverlay');
     const modalTitle = document.getElementById('albumModalTitle');
@@ -209,14 +217,11 @@
     editingAlbumId = null;
   }
 
-  // ========== ІНІЦІАЛІЗАЦІЯ ==========
   function init() {
     loadData();
     renderAlbums();
 
-    document.getElementById('addAlbumBtn')?.addEventListener('click', () => {
-      if (checkAdmin()) openAlbumModal();
-    });
+    document.getElementById('addAlbumBtn')?.addEventListener('click', () => openAlbumModal());
     document.getElementById('closeAlbumModalBtn')?.addEventListener('click', closeAlbumModal);
     document.getElementById('cancelAlbumBtn')?.addEventListener('click', closeAlbumModal);
     document.getElementById('albumModalOverlay')?.addEventListener('click', (e) => {
