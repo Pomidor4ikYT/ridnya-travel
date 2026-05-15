@@ -71,7 +71,7 @@
       <h3>Підсумки та поради</h3>
       <ol><li>Не економте на взутті.</li><li>Рухайтеся повільно, але впевнено.</li><li>Беріть запасні рукавиці та шкарпетки.</li><li>Пийте гарячі напої кожні 40 хвилин.</li></ol>
       <p>Детальний звіт на <a href="https://www.youtube.com/channel/UCr67AbASZGqx4RefbKaIRSQ" target="_blank">YouTube</a> та <a href="https://www.facebook.com/bfridnya" target="_blank">Facebook</a>. До зустрічі на вершинах!</p>`,
-      image: 'https://images.unsplash.com/photo-1587923623987-9e6f3d8c2b8f?w=800'
+      image: 'https://splav.lviv.ua/foto/big/hoverla-winter.jpg'
     },
     {
       id: 'b2',
@@ -87,7 +87,7 @@
       <h3>Як підготуватися</h3>
       <ul><li>Зручне трекінгове взуття</li><li>Дощовик</li><li>Фотоапарат</li><li>Вода та перекус</li><li>Нотатник для історій</li></ul>
       <p>Запрошуємо на наступний похід «Стежками УПА на <strong>Яйко-Ілемське</strong>». Реєстрація на сторінці <a href="contacts.html" target="_blank">Контакти</a>. Візьміть синьо-жовтий прапор!</p>`,
-      image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800'
+      image: 'https://karpatium.com.ua/rails/active_storage/blobs/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBdG9DIiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--21c10b132ed3f73f42821cd909e65e11a3e64592/%D0%B3%D0%BE%D1%80%D0%B0-%D0%BC%D0%B0%D0%BA%D1%96%D0%B2%D0%BA%D0%B0-%D0%BC%D0%B5%D0%BC%D0%BE%D1%80%D1%96%D0%B0%D0%BB.jpeg'
     },
     {
       id: 'b3',
@@ -101,7 +101,7 @@
       <h3>Поради</h3>
       <ol><li>Багатошаровий одяг</li><li>Дощовик навіть у сонце</li><li>Фотоапарат для квітів</li><li>Трекінгові палиці</li><li>Запас води 1,5 л</li></ol>
       <p>Більше фото в альбомі <a href="gallery.html" target="_blank">«Наші мандрівки 2026»</a>. Наступного тижня — похід на <strong>Кукул</strong>!</p>`,
-      image: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=800'
+      image: 'https://vidviday.ua/storage/media/tour/10897/hora-lopata.jpg'
     },
     {
       id: 'b4',

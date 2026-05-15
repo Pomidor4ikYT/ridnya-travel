@@ -206,23 +206,6 @@
   font-size: 1.2rem;
 }
 
-/* Адаптив */
-@media (max-width: 768px) {
-  .hero-modern-content {
-    padding: 40px 20px;
-  }
-  .hero-motto {
-    font-size: 1.8rem;
-  }
-  .hero-buttons {
-    flex-direction: column;
-    align-items: center;
-  }
-  .content-card {
-    padding: 30px 20px;
-  }
-}
-
 /* Додаємо бракуючі стилі для головної */
 .stats-grid {
   display: grid;
@@ -280,4 +263,39 @@
 @media (max-width: 768px) {
   .stats-grid { gap: 12px; }
   .stat-number { font-size: 1.8rem; }
+}
+/* Адаптивність для головної */
+@media (max-width: 600px) {
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 12px !important;
+  }
+  .stat-number {
+    font-size: 1.6rem !important;
+  }
+  .stat-label {
+    font-size: 0.75rem !important;
+  }
+  .stat-item {
+    padding: 12px 8px !important;
+  }
+  .advantages-grid, .testimonials-grid {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+  .content-card {
+    padding: 24px 16px !important;
+  }
+  .hero-modern-content {
+    padding: 30px 20px !important;
+  }
+  .hero-motto {
+    font-size: 1.6rem !important;
+  }
+  .hero-subtitle {
+    font-size: 1rem !important;
+  }
+  .hero-description {
+    font-size: 0.85rem !important;
+  }
 }
