@@ -1,7 +1,7 @@
 (function() {
   'use strict';
 
-  const ADMIN_PASSWORD = 'ridnya2026';
+  // ========== КОНСТАНТИ ТА ДАНІ ==========
   const STORAGE_KEY = 'ridnya_trips';
   const MEMBERS_KEY = 'ridnya_members';
   const TRIP_APPS_KEY = 'ridnya_trip_applications';
@@ -27,7 +27,6 @@
     { id: '17', title: "г.Петрос 2020 м (з с.Кваси)", date: "2026-12-05", distance: "26 км", difficulty: "вище середньої", duration: "2 дні", guide: "Петро Маковський", report: "", mapUrl: "https://uk.mapy.cz/s/ghijkl", notes: "", image: "https://we.org.ua/wp-content/uploads/2015/03/211.jpg", isTraditional: false }
   ];
 
-  // Зібрати всіх унікальних провідників
   const uniqueGuides = [...new Map(defaultTrips.map(t => [t.guide, { name: t.guide, rating: 4 }])).values()];
   const defaultMembers = uniqueGuides.map((guide, idx) => ({ id: 'm' + (idx + 1), name: guide.name, rating: guide.rating }));
 
@@ -36,6 +35,78 @@
   let editingTripId = null;
   let currentSort = 'date';
   let sortAscending = true;
+  let selectedDate = null;
+  let flatpickrInstance = null;
+
+  // ========== ДОПОМІЖНІ ФУНКЦІЇ ==========
+  function getAllTripDates() {
+    const dates = [];
+    trips.forEach(trip => {
+      if (!trip.date) return;
+      const tripDate = trip.date.trim();
+      const yyyyMmDd = /^\d{4}-\d{2}-\d{2}$/;
+      if (yyyyMmDd.test(tripDate)) {
+        dates.push(tripDate);
+      } else {
+        const rangePattern = /^(\d{1,2})-(\d{1,2})\.(\d{2})\.(\d{4})$/;
+        const match = tripDate.match(rangePattern);
+        if (match) {
+          let day1 = parseInt(match[1]);
+          let day2 = parseInt(match[2]);
+          let month = parseInt(match[3]);
+          let year = parseInt(match[4]);
+          for (let d = day1; d <= day2; d++) {
+            let dateStr = `${year}-${String(month).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+            dates.push(dateStr);
+          }
+        }
+      }
+    });
+    return [...new Set(dates)];
+  }
+
+  function isTripOnDate(trip, dateStr) {
+    if (!dateStr) return true;
+    if (!trip.date) return false;
+    const tripDate = trip.date.trim();
+    const yyyyMmDd = /^\d{4}-\d{2}-\d{2}$/;
+    if (yyyyMmDd.test(tripDate)) {
+      return tripDate === dateStr;
+    }
+    const rangePattern = /^(\d{1,2})-(\d{1,2})\.(\d{2})\.(\d{4})$/;
+    const match = tripDate.match(rangePattern);
+    if (match) {
+      let day1 = parseInt(match[1]);
+      let day2 = parseInt(match[2]);
+      let month = parseInt(match[3]);
+      let year = parseInt(match[4]);
+      let selected = new Date(dateStr);
+      selected.setHours(0,0,0,0);
+      let start = new Date(year, month-1, day1);
+      let end = new Date(year, month-1, day2);
+      start.setHours(0,0,0,0);
+      end.setHours(0,0,0,0);
+      return selected >= start && selected <= end;
+    }
+    return false;
+  }
+
+  function showNotification(message, isSuccess = true) {
+    const notification = document.createElement('div');
+    notification.className = 'custom-notification';
+    notification.innerHTML = `
+      <div class="notification-content">
+        <i class="fas ${isSuccess ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i>
+        <p>${escapeHtml(message)}</p>
+      </div>
+    `;
+    document.body.appendChild(notification);
+    setTimeout(() => notification.classList.add('show'), 10);
+    setTimeout(() => {
+      notification.classList.remove('show');
+      setTimeout(() => notification.remove(), 300);
+    }, 3500);
+  }
 
   function loadData() {
     try { trips = localStorage.getItem(STORAGE_KEY) ? JSON.parse(localStorage.getItem(STORAGE_KEY)) : [...defaultTrips]; } catch { trips = [...defaultTrips]; }
@@ -43,31 +114,65 @@
   }
   function saveData() { localStorage.setItem(STORAGE_KEY, JSON.stringify(trips)); }
   function saveMembers() { localStorage.setItem(MEMBERS_KEY, JSON.stringify(members)); }
-  function checkAdmin() { return prompt('Введіть пароль адміністратора:') === ADMIN_PASSWORD; }
 
   function sortTrips(tripsArray, sortType, ascending) {
     const sorted = [...tripsArray];
     if (sortType === 'date') {
       sorted.sort((a, b) => {
-        const dateA = a.date || '9999-12-31';
-        const dateB = b.date || '9999-12-31';
-        return ascending ? dateA.localeCompare(dateB) : dateB.localeCompare(dateA);
+        const da = a.date || '9999-12-31';
+        const db = b.date || '9999-12-31';
+        return ascending ? da.localeCompare(db) : db.localeCompare(da);
       });
     } else if (sortType === 'difficulty') {
       const order = { 'легка': 1, 'середня': 2, 'вище середньої': 3 };
-      sorted.sort((a, b) => {
-        const diffA = order[a.difficulty] || 0;
-        const diffB = order[b.difficulty] || 0;
-        return ascending ? diffA - diffB : diffB - diffA;
-      });
+      sorted.sort((a, b) => (order[a.difficulty]||0) - (order[b.difficulty]||0));
+      if (!ascending) sorted.reverse();
     } else if (sortType === 'distance') {
-      sorted.sort((a, b) => {
-        const distA = parseFloat(a.distance) || 0;
-        const distB = parseFloat(b.distance) || 0;
-        return ascending ? distA - distB : distB - distA;
-      });
+      sorted.sort((a, b) => (parseFloat(a.distance)||0) - (parseFloat(b.distance)||0));
+      if (!ascending) sorted.reverse();
     }
     return sorted;
+  }
+
+  function initFlatpickr() {
+    const input = document.getElementById('dateFilterInput');
+    if (!input) return;
+    if (typeof flatpickr === 'undefined') {
+      setTimeout(initFlatpickr, 500);
+      return;
+    }
+    if (flatpickrInstance) flatpickrInstance.destroy();
+    flatpickrInstance = flatpickr(input, {
+      dateFormat: "Y-m-d",
+      allowInput: false,
+      disableMobile: true,
+      locale: "uk",
+      onChange: function(selectedDates, dateStr) {
+        selectedDate = dateStr;
+        renderTrips();
+      },
+      onDayCreate: function(dObj, dStr, fp, dayElem) {
+        let year, month, day;
+        if (dObj instanceof Date) {
+          year = dObj.getFullYear();
+          month = String(dObj.getMonth() + 1).padStart(2, '0');
+          day = String(dObj.getDate()).padStart(2, '0');
+        } else if (dayElem && dayElem.dateObj && dayElem.dateObj instanceof Date) {
+          year = dayElem.dateObj.getFullYear();
+          month = String(dayElem.dateObj.getMonth() + 1).padStart(2, '0');
+          day = String(dayElem.dateObj.getDate()).padStart(2, '0');
+        } else {
+          return;
+        }
+        const dateKey = `${year}-${month}-${day}`;
+        const allDates = getAllTripDates();
+        if (allDates.includes(dateKey)) {
+          dayElem.classList.add('has-trip');
+        }
+      }
+    });
+    const icon = document.querySelector('.date-filter i');
+    if (icon) icon.addEventListener('click', () => flatpickrInstance.open());
   }
 
   function renderTrips() {
@@ -78,6 +183,9 @@
     if (searchInput && searchInput.value.trim()) {
       const q = searchInput.value.trim().toLowerCase();
       filtered = filtered.filter(t => t.title.toLowerCase().includes(q) || (t.guide && t.guide.toLowerCase().includes(q)));
+    }
+    if (selectedDate) {
+      filtered = filtered.filter(t => isTripOnDate(t, selectedDate));
     }
     if (currentSort !== 'default') {
       filtered = sortTrips(filtered, currentSort, sortAscending);
@@ -93,8 +201,6 @@
       const diffClass = `difficulty-${trip.difficulty === 'легка' ? 'легка' : trip.difficulty === 'середня' ? 'середня' : 'вище-середньої'}`;
       const imageUrl = trip.image && trip.image.trim() !== '' ? trip.image : 'https://placehold.co/600x400?text=Немає+фото';
       const mapLink = trip.mapUrl ? `<a href="${trip.mapUrl}" target="_blank" rel="noopener" class="route-link"><i class="fas fa-map-location-dot"></i> Маршрут на карті</a>` : '';
-      
-      // Розбиваємо заголовок на основну частину та дужки (якщо є)
       let mainTitle = trip.title;
       let subTitle = '';
       const parenMatch = trip.title.match(/^(.*?)(\([^)]+\))$/);
@@ -102,34 +208,22 @@
         mainTitle = parenMatch[1].trim();
         subTitle = parenMatch[2].trim();
       }
-      
       const actionButton = isCompleted
         ? `<span class="completed-badge"><i class="fas fa-check-circle"></i> Вже пройдено</span>`
         : `<button class="join-trip-btn" data-id="${trip.id}" data-title="${escapeHtml(trip.title)}"><i class="fas fa-user-plus"></i> Записатись</button>`;
-      
+      const adminButtons = window.isAdmin ? `
+        <button class="edit-btn" data-id="${trip.id}"><i class="fas fa-pen"></i></button>
+        <button class="delete-btn" data-id="${trip.id}"><i class="fas fa-trash"></i></button>
+      ` : '';
       return `
         <div class="trip-card" data-id="${trip.id}">
           <div class="card-image" style="background-image:url('${imageUrl}');"></div>
           <div class="card-content">
-            <div class="card-header">
-              <div class="title-main">${escapeHtml(mainTitle)}</div>
-              <div class="difficulty-badge ${diffClass}">${trip.difficulty}</div>
-            </div>
+            <div class="card-header"><div class="title-main">${escapeHtml(mainTitle)}</div><div class="difficulty-badge ${diffClass}">${trip.difficulty}</div></div>
             ${subTitle ? `<div class="title-sub">${escapeHtml(subTitle)}</div>` : ''}
-            <div class="meta-grid">
-              <span><i class="far fa-calendar"></i> ${trip.date || '—'}</span>
-              <span><i class="fas fa-arrows-left-right"></i> ${trip.distance}</span>
-              <span><i class="far fa-clock"></i> ${trip.duration}</span>
-            </div>
+            <div class="meta-grid"><span><i class="far fa-calendar"></i> ${trip.date || '—'}</span><span><i class="fas fa-arrows-left-right"></i> ${trip.distance}</span><span><i class="far fa-clock"></i> ${trip.duration}</span></div>
             ${mapLink}
-            <div class="card-footer">
-              <div class="guide"><i class="fas fa-user-hiking"></i> ${escapeHtml(trip.guide)}</div>
-              <div class="card-actions">
-                ${actionButton}
-                <button class="edit-btn" data-id="${trip.id}"><i class="fas fa-pen"></i></button>
-                <button class="delete-btn" data-id="${trip.id}"><i class="fas fa-trash"></i></button>
-              </div>
-            </div>
+            <div class="card-footer"><div class="guide"><i class="fas fa-user-hiking"></i> ${escapeHtml(trip.guide)}</div><div class="card-actions">${actionButton}${adminButtons}</div></div>
           </div>
         </div>`;
     }).join('');
@@ -137,28 +231,42 @@
   }
 
   function attachTripEvents() {
+    // Кнопка "Записатись"
     document.querySelectorAll('.join-trip-btn').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        openTripApplyModal(btn.dataset.id, btn.dataset.title);
-      });
+      btn.removeEventListener('click', handleJoinClick);
+      btn.addEventListener('click', handleJoinClick);
     });
-    document.querySelectorAll('.edit-btn').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        if (checkAdmin()) openTripModal(btn.dataset.id);
+    // Кнопки для адміна
+    if (window.isAdmin) {
+      document.querySelectorAll('.edit-btn').forEach(btn => {
+        btn.removeEventListener('click', handleEditClick);
+        btn.addEventListener('click', handleEditClick);
       });
-    });
-    document.querySelectorAll('.delete-btn').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        if (checkAdmin() && confirm('Видалити маршрут?')) {
-          trips = trips.filter(t => t.id !== btn.dataset.id);
-          saveData();
-          renderTrips();
-        }
+      document.querySelectorAll('.delete-btn').forEach(btn => {
+        btn.removeEventListener('click', handleDeleteClick);
+        btn.addEventListener('click', handleDeleteClick);
       });
-    });
+    }
+  }
+
+  function handleJoinClick(e) {
+    e.stopPropagation();
+    const btn = e.currentTarget;
+    openTripApplyModal(btn.dataset.id, btn.dataset.title);
+  }
+
+  function handleEditClick(e) {
+    e.stopPropagation();
+    openTripModal(e.currentTarget.dataset.id);
+  }
+
+  function handleDeleteClick(e) {
+    e.stopPropagation();
+    if (confirm('Видалити маршрут?')) {
+      trips = trips.filter(t => t.id !== e.currentTarget.dataset.id);
+      saveData();
+      renderTrips();
+    }
   }
 
   function openTripApplyModal(tripId, tripTitle) {
@@ -167,16 +275,11 @@
     modal.innerHTML = `
       <div class="modal" style="max-width: 480px;">
         <div class="modal-header"><h2><i class="fas fa-hiking"></i> Запис на похід</h2><button class="modal-close">&times;</button></div>
-        <div class="modal-body" style="padding: 24px;">
-          <p style="margin-bottom: 16px;"><strong>${escapeHtml(tripTitle)}</strong></p>
-          <form id="applyTripForm">
-            <div class="form-group"><label>Ім'я та прізвище *</label><input type="text" id="applyName" required placeholder="Іван Петренко"></div>
-            <div class="form-group"><label>Телефон *</label><input type="tel" id="applyPhone" required placeholder="+380 50 123 45 67"></div>
-            <div class="form-group"><label>Коментар</label><textarea id="applyComment" rows="2"></textarea></div>
-            <div class="modal-footer"><button type="button" class="btn-cancel" id="cancelApplyBtn">Скасувати</button><button type="submit" class="btn-submit"><i class="fas fa-paper-plane"></i> Надіслати</button></div>
-          </form>
-        </div>
-      </div>`;
+        <div class="modal-body" style="padding: 24px;"><p style="margin-bottom: 16px;"><strong>${escapeHtml(tripTitle)}</strong></p>
+        <form id="applyTripForm"><div class="form-group"><label>Ім'я та прізвище *</label><input type="text" id="applyName" required placeholder="Іван Петренко"></div>
+        <div class="form-group"><label>Телефон *</label><input type="tel" id="applyPhone" required placeholder="+380 50 123 45 67"></div>
+        <div class="form-group"><label>Коментар</label><textarea id="applyComment" rows="2"></textarea></div>
+        <div class="modal-footer"><button type="button" class="btn-cancel" id="cancelApplyBtn">Скасувати</button><button type="submit" class="btn-submit"><i class="fas fa-paper-plane"></i> Надіслати</button></div></form></div></div>`;
     document.body.appendChild(modal);
     const closeModal = () => modal.remove();
     modal.querySelector('.modal-close').addEventListener('click', closeModal);
@@ -187,60 +290,15 @@
       const name = document.getElementById('applyName').value.trim();
       const phone = document.getElementById('applyPhone').value.trim();
       const comment = document.getElementById('applyComment').value.trim();
-      if (!name || !phone) { alert('Заповніть ім\'я та телефон'); return; }
+      if (!name || !phone) {
+        showNotification('Будь ласка, заповніть ім\'я та телефон', false);
+        return;
+      }
       const apps = JSON.parse(localStorage.getItem(TRIP_APPS_KEY) || '[]');
-      apps.push({ id: Date.now(), tripId, tripTitle, userName: name, phone, comment, date: new Date().toLocaleString() });
+      apps.push({ id: Date.now(), tripId, tripTitle, userName: name, phone, comment, date: new Date().toLocaleString(), status: 'pending' });
       localStorage.setItem(TRIP_APPS_KEY, JSON.stringify(apps));
-      alert(`Дякуємо, ${name}! Вашу заявку передано адміністратору.`);
+      showNotification('✅ Вашу заявку прийнято! Очікуйте зворотного зв\'язку на пошту або телефон.', true);
       closeModal();
-    });
-  }
-
-  function viewTripApplications() {
-    if (!checkAdmin()) return;
-    const apps = JSON.parse(localStorage.getItem(TRIP_APPS_KEY) || '[]');
-    if (!apps.length) { alert('Немає заявок на походи.'); return; }
-    let msg = 'ЗАЯВКИ НА ПОХОДИ:\n\n';
-    apps.forEach((a, idx) => { msg += `${idx+1}. ${a.userName} (тел: ${a.phone})\n   Похід: ${a.tripTitle}\n   Коментар: ${a.comment || '—'}\n   Дата: ${a.date}\n\n`; });
-    alert(msg);
-  }
-
-  function viewLeaderApplications() {
-    if (!checkAdmin()) return;
-    const apps = JSON.parse(localStorage.getItem(LEADER_APPS_KEY) || '[]');
-    if (!apps.length) { alert('Немає заявок до лідерів.'); return; }
-    let msg = 'ЗАЯВКИ ДО ЛІДЕРІВ:\n\n';
-    apps.forEach((a, idx) => { msg += `${idx+1}. ${a.userName} (тел: ${a.phone})\n   Лідер: ${a.leaderName}\n   Коментар: ${a.comment || '—'}\n   Дата: ${a.date}\n\n`; });
-    alert(msg);
-  }
-
-  function renderMembers() {
-    const container = document.getElementById('membersContainer');
-    if (!container) return;
-    container.innerHTML = members.map(m => `
-      <div class="member-card">
-        <div class="member-name">${escapeHtml(m.name)}</div>
-        <div class="member-rating">${'★'.repeat(m.rating)}${'☆'.repeat(5-m.rating)}</div>
-        <button class="rating-edit" data-id="${m.id}"><i class="fas fa-star"></i> Змінити рейтинг</button>
-        <button class="btn-join-leader" data-id="${m.id}" data-name="${escapeHtml(m.name)}"><i class="fas fa-hand-peace"></i> Записатись до лідера</button>
-      </div>
-    `).join('');
-    document.querySelectorAll('.rating-edit').forEach(btn => {
-      btn.addEventListener('click', () => {
-        if (!checkAdmin()) return;
-        const newRating = prompt('Новий рейтинг (1-5):');
-        if (newRating && newRating >= 1 && newRating <= 5) {
-          const member = members.find(m => m.id === btn.dataset.id);
-          if (member) member.rating = parseInt(newRating);
-          saveMembers();
-          renderMembers();
-        }
-      });
-    });
-    document.querySelectorAll('.btn-join-leader').forEach(btn => {
-      btn.addEventListener('click', () => {
-        openLeaderApplyModal(btn.dataset.id, btn.dataset.name);
-      });
     });
   }
 
@@ -250,16 +308,11 @@
     modal.innerHTML = `
       <div class="modal" style="max-width: 480px;">
         <div class="modal-header"><h2><i class="fas fa-users"></i> Записатись до лідера</h2><button class="modal-close">&times;</button></div>
-        <div class="modal-body" style="padding: 24px;">
-          <p style="margin-bottom: 16px;">Лідер: <strong>${escapeHtml(leaderName)}</strong></p>
-          <form id="applyLeaderForm">
-            <div class="form-group"><label>Ім'я та прізвище *</label><input type="text" id="applyLeaderName" required placeholder="Іван Петренко"></div>
-            <div class="form-group"><label>Телефон *</label><input type="tel" id="applyLeaderPhone" required placeholder="+380 50 123 45 67"></div>
-            <div class="form-group"><label>Коментар</label><textarea id="applyLeaderComment" rows="2"></textarea></div>
-            <div class="modal-footer"><button type="button" class="btn-cancel" id="cancelLeaderBtn">Скасувати</button><button type="submit" class="btn-submit">Надіслати</button></div>
-          </form>
-        </div>
-      </div>`;
+        <div class="modal-body" style="padding: 24px;"><p style="margin-bottom: 16px;">Лідер: <strong>${escapeHtml(leaderName)}</strong></p>
+        <form id="applyLeaderForm"><div class="form-group"><label>Ім'я та прізвище *</label><input type="text" id="applyLeaderName" required placeholder="Іван Петренко"></div>
+        <div class="form-group"><label>Телефон *</label><input type="tel" id="applyLeaderPhone" required placeholder="+380 50 123 45 67"></div>
+        <div class="form-group"><label>Коментар</label><textarea id="applyLeaderComment" rows="2"></textarea></div>
+        <div class="modal-footer"><button type="button" class="btn-cancel" id="cancelLeaderBtn">Скасувати</button><button type="submit" class="btn-submit">Надіслати</button></div></form></div></div>`;
     document.body.appendChild(modal);
     const closeModal = () => modal.remove();
     modal.querySelector('.modal-close').addEventListener('click', closeModal);
@@ -270,16 +323,56 @@
       const name = document.getElementById('applyLeaderName').value.trim();
       const phone = document.getElementById('applyLeaderPhone').value.trim();
       const comment = document.getElementById('applyLeaderComment').value.trim();
-      if (!name || !phone) { alert('Заповніть ім\'я та телефон'); return; }
+      if (!name || !phone) {
+        showNotification('Будь ласка, заповніть ім\'я та телефон', false);
+        return;
+      }
       const apps = JSON.parse(localStorage.getItem(LEADER_APPS_KEY) || '[]');
-      apps.push({ id: Date.now(), leaderId, leaderName, userName: name, phone, comment, date: new Date().toLocaleString() });
+      apps.push({ id: Date.now(), leaderId, leaderName, userName: name, phone, comment, date: new Date().toLocaleString(), status: 'pending' });
       localStorage.setItem(LEADER_APPS_KEY, JSON.stringify(apps));
-      alert(`Дякуємо, ${name}! Вашу заявку до лідера "${leaderName}" передано адміністратору.`);
+      showNotification('✅ Вашу заявку прийнято! Очікуйте зворотного зв\'язку від лідера.', true);
       closeModal();
     });
   }
 
+  function renderMembers() {
+    const container = document.getElementById('membersContainer');
+    if (!container) return;
+    container.innerHTML = members.map(m => `
+      <div class="member-card"><div class="member-name">${escapeHtml(m.name)}</div>
+      <div class="member-rating">${'★'.repeat(m.rating)}${'☆'.repeat(5-m.rating)}</div>
+      <button class="rating-edit admin-only" data-id="${m.id}" style="${window.isAdmin ? '' : 'display:none'}"><i class="fas fa-star"></i> Змінити рейтинг</button>
+      <button class="btn-join-leader" data-id="${m.id}" data-name="${escapeHtml(m.name)}"><i class="fas fa-hand-peace"></i> Записатись до лідера</button></div>
+    `).join('');
+    if (window.isAdmin) {
+      document.querySelectorAll('.rating-edit').forEach(btn => {
+        btn.removeEventListener('click', handleRatingEdit);
+        btn.addEventListener('click', handleRatingEdit);
+      });
+    }
+    document.querySelectorAll('.btn-join-leader').forEach(btn => {
+      btn.removeEventListener('click', handleLeaderJoin);
+      btn.addEventListener('click', handleLeaderJoin);
+    });
+  }
+
+  function handleRatingEdit(e) {
+    const newRating = prompt('Новий рейтинг (1-5):');
+    if (newRating && newRating >= 1 && newRating <= 5) {
+      const member = members.find(m => m.id === e.currentTarget.dataset.id);
+      if (member) member.rating = parseInt(newRating);
+      saveMembers();
+      renderMembers();
+    }
+  }
+
+  function handleLeaderJoin(e) {
+    const btn = e.currentTarget;
+    openLeaderApplyModal(btn.dataset.id, btn.dataset.name);
+  }
+
   function openTripModal(id = null) {
+    if (!window.isAdmin) return;
     const modal = document.getElementById('tripModalOverlay');
     const titleElem = document.getElementById('tripModalTitle');
     const form = document.getElementById('addTripForm');
@@ -320,6 +413,10 @@
       const clearBtn = document.getElementById('clearSearch');
       if (clearBtn) clearBtn.style.display = 'none';
     }
+    if (flatpickrInstance) {
+      flatpickrInstance.clear();
+      selectedDate = null;
+    }
     currentSort = 'date';
     sortAscending = true;
     const sortSelect = document.getElementById('sortSelect');
@@ -339,8 +436,11 @@
     loadData();
     renderTrips();
     renderMembers();
+    initFlatpickr();
 
-    document.getElementById('addTripBtn')?.addEventListener('click', () => { if (checkAdmin()) openTripModal(); });
+    if (window.isAdmin) {
+      document.getElementById('addTripBtn')?.addEventListener('click', () => openTripModal());
+    }
     document.getElementById('closeTripModalBtn')?.addEventListener('click', closeTripModal);
     document.getElementById('cancelTripBtn')?.addEventListener('click', closeTripModal);
     document.getElementById('tripModalOverlay')?.addEventListener('click', (e) => { if (e.target === e.currentTarget) closeTripModal(); });
@@ -349,71 +449,39 @@
       const title = document.getElementById('tripTitle').value.trim();
       if (!title) { alert('Назва обов\'язкова'); return; }
       const data = {
-        title,
-        date: document.getElementById('tripDate').value,
-        distance: document.getElementById('tripDistance').value || '? км',
-        difficulty: document.getElementById('tripDifficulty').value,
-        duration: document.getElementById('tripDuration').value || '1 день',
-        guide: document.getElementById('tripGuide').value || '—',
-        report: document.getElementById('tripIsCompleted').checked ? 'виконано' : '',
-        mapUrl: document.getElementById('tripMapUrl').value || null,
-        notes: document.getElementById('tripNotes').value,
-        image: document.getElementById('tripImage').value,
-        isTraditional: document.getElementById('tripIsTraditional').checked
+        title, date: document.getElementById('tripDate').value, distance: document.getElementById('tripDistance').value || '? км',
+        difficulty: document.getElementById('tripDifficulty').value, duration: document.getElementById('tripDuration').value || '1 день',
+        guide: document.getElementById('tripGuide').value || '—', report: document.getElementById('tripIsCompleted').checked ? 'виконано' : '',
+        mapUrl: document.getElementById('tripMapUrl').value || null, notes: document.getElementById('tripNotes').value,
+        image: document.getElementById('tripImage').value, isTraditional: document.getElementById('tripIsTraditional').checked
       };
-      if (editingTripId) {
-        const idx = trips.findIndex(t => t.id === editingTripId);
-        if (idx !== -1) trips[idx] = { ...trips[idx], ...data };
-      } else {
-        trips.push({ id: Date.now().toString(), ...data });
-      }
-      saveData();
-      renderTrips();
-      closeTripModal();
+      if (editingTripId) { const idx = trips.findIndex(t => t.id === editingTripId); if (idx !== -1) trips[idx] = { ...trips[idx], ...data }; }
+      else { trips.push({ id: Date.now().toString(), ...data }); }
+      saveData(); renderTrips(); closeTripModal();
     });
 
     const searchInput = document.getElementById('searchInput');
     const clearSearch = document.getElementById('clearSearch');
     if (searchInput) {
-      searchInput.addEventListener('input', () => {
-        if (clearSearch) clearSearch.style.display = searchInput.value ? 'flex' : 'none';
-        renderTrips();
-      });
+      searchInput.addEventListener('input', () => { if (clearSearch) clearSearch.style.display = searchInput.value ? 'flex' : 'none'; renderTrips(); });
     }
-    if (clearSearch) clearSearch.addEventListener('click', () => {
-      searchInput.value = '';
-      clearSearch.style.display = 'none';
-      renderTrips();
-    });
+    if (clearSearch) clearSearch.addEventListener('click', () => { searchInput.value = ''; clearSearch.style.display = 'none'; renderTrips(); });
 
     const sortSelect = document.getElementById('sortSelect');
     const sortDirBtn = document.getElementById('sortDirectionBtn');
-    if (sortSelect) {
-      sortSelect.addEventListener('change', (e) => {
-        currentSort = e.target.value;
-        renderTrips();
-      });
-    }
+    if (sortSelect) { sortSelect.addEventListener('change', (e) => { currentSort = e.target.value; renderTrips(); }); }
     if (sortDirBtn) {
       sortDirBtn.addEventListener('click', () => {
         sortAscending = !sortAscending;
         const icon = sortDirBtn.querySelector('i');
-        if (sortAscending) {
-          icon.className = 'fas fa-arrow-up-wide-short';
-          icon.title = 'За зростанням';
-        } else {
-          icon.className = 'fas fa-arrow-down-wide-short';
-          icon.title = 'За спаданням';
-        }
+        if (sortAscending) { icon.className = 'fas fa-arrow-up-wide-short'; icon.title = 'За зростанням'; }
+        else { icon.className = 'fas fa-arrow-down-wide-short'; icon.title = 'За спаданням'; }
         renderTrips();
       });
     }
 
     const resetBtn = document.getElementById('resetFiltersBtn');
     if (resetBtn) resetBtn.addEventListener('click', resetAll);
-
-    document.getElementById('viewTripAppsBtn')?.addEventListener('click', viewTripApplications);
-    document.getElementById('viewLeaderAppsBtn')?.addEventListener('click', viewLeaderApplications);
   }
 
   function escapeHtml(str) {

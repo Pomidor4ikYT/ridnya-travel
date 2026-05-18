@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Заявки · Адмін · РІДНЯ</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;500;600;700&family=Montserrat:wght@600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="admin.css">
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <script src="../js/admin-auth.js"></script>
+</head>
+<body>
+<div class="admin-header">
+  <h1>📋 Управління заявками</h1>
+  <div style="display: flex; gap: 12px;">
+    <a href="../index.html" class="admin-home-btn">🏠 На головну</a>
+    <button class="admin-logout" onclick="if(window.signOut) signOut();">Вийти</button>
+  </div>
+</div>
+
+    <div class="admin-tabs">
+      <button class="admin-tab active" data-tab="trips">📌 Заявки на маршрути</button>
+      <button class="admin-tab" data-tab="leaders">👥 Заявки лідерам</button>
+      <button class="admin-tab" data-tab="team">🤝 Заявки в команду</button>
+    </div>
+
+    <div id="tripsTab" class="tab-content">
+      <h2>Заявки на маршрути</h2>
+      <table class="applications-table">
+        <thead>
+          <tr><th>Дата</th><th>Ім'я</th><th>Телефон</th><th>Похід</th><th>Коментар</th><th>Статус</th><th>Дії</th></tr>
+        </thead>
+        <tbody id="tripsTableBody"></tbody>
+      </table>
+    </div>
+
+    <div id="leadersTab" class="tab-content" style="display:none;">
+      <h2>Заявки до лідерів</h2>
+      <table class="applications-table">
+        <thead>
+          <tr><th>Дата</th><th>Ім'я</th><th>Телефон</th><th>Лідер</th><th>Коментар</th><th>Статус</th><th>Дії</th></tr>
+        </thead>
+        <tbody id="leadersTableBody"></tbody>
+      </table>
+    </div>
+
+    <div id="teamTab" class="tab-content" style="display:none;">
+      <h2>Заявки в команду</h2>
+      <table class="applications-table">
+        <thead>
+          <tr><th>Дата</th><th>Ім'я</th><th>Телефон</th><th>Повідомлення</th><th>Статус</th><th>Дії</th></tr>
+        </thead>
+        <tbody id="teamTableBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <script src="../js/admin-applications.js"></script>
+</body>
+</html>

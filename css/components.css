@@ -192,16 +192,13 @@
   background: rgba(0,0,0,0.45);
   backdrop-filter: blur(6px);
   z-index: 2000;
-  display: flex;
+  display: none;
   align-items: center;
   justify-content: center;
-  visibility: hidden;
-  opacity: 0;
   transition: 0.3s;
 }
 .modal-overlay.active {
-  visibility: visible;
-  opacity: 1;
+  display: flex;
 }
 .modal {
   background: var(--white);

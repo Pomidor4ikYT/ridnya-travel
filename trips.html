@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;500;600;700&family=Manrope:wght@600;700;800&family=Montserrat:wght@600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
   <link rel="stylesheet" href="css/main.css">
   <link rel="stylesheet" href="css/trips.css">
 </head>
@@ -40,7 +41,12 @@
         </ul>
       </nav>
       <div class="header-actions">
-        <a href="https://secure.wayforpay.com/payment/s6bdf0263be8c" class="btn-support"><i class="fas fa-heart"></i> Підтримати</a>
+        <a href="https://secure.wayforpay.com/payment/s6bdf0263be8c" class="btn-support" target="_blank" rel="noopener noreferrer"><i class="fas fa-heart"></i> Підтримати</a>
+        <div class="admin-controls">
+          <a href="admin/applications.html" class="admin-only" style="display: none;"><i class="fas fa-clipboard-list"></i> Заявки</a>
+          <a href="admin/reviews.html" class="admin-only" style="display: none;"><i class="fas fa-star"></i> Відгуки</a>
+          <button id="adminLogoutBtn" class="admin-only" style="display: none;" onclick="if(window.signOut) signOut();">Вийти</button>
+        </div>
       </div>
     </div>
   </header>
@@ -52,7 +58,6 @@
       <p class="section-subtitle">Обирай маршрут до душі — від легких прогулянок до серйозних вершин</p>
     </div>
 
-    <!-- Панель пошуку та кнопок -->
     <div class="search-sort-bar">
       <div class="search-box">
         <i class="fas fa-search"></i>
@@ -60,12 +65,10 @@
         <button id="clearSearch" class="clear-btn" style="display:none;"><i class="fas fa-times"></i></button>
       </div>
       <div style="display:flex; gap:12px;">
-        <button class="add-trip-btn" id="addTripBtn"><i class="fas fa-plus"></i> Додати</button>
-        <button id="viewTripAppsBtn" class="add-trip-btn" style="background:#6c757d;"><i class="fas fa-clipboard-list"></i> Заявки на походи</button>
+        <button class="add-trip-btn admin-only" id="addTripBtn" style="display: none;"><i class="fas fa-plus"></i> Додати маршрут</button>
       </div>
     </div>
 
-    <!-- Тільки сортування (без фільтрів) + кнопка скидання -->
     <div class="legend-bar">
       <div class="sort-group">
         <span class="sort-label"><i class="fas fa-sort-amount-down-alt"></i> Сортувати:</span>
@@ -80,8 +83,12 @@
           </button>
         </div>
       </div>
+      <div class="date-filter">
+        <i class="fas fa-calendar-alt"></i>
+        <input type="text" id="dateFilterInput" placeholder="Виберіть дату">
+      </div>
       <div style="display:flex; gap:12px; align-items:center;">
-        <button id="resetFiltersBtn" class="reset-btn" title="Скинути пошук та сортування">
+        <button id="resetFiltersBtn" class="reset-btn" title="Скинути пошук, дату та сортування">
           <i class="fas fa-undo-alt"></i> Скинути
         </button>
         <div class="stats-tag"><i class="fas fa-eye"></i> <span id="visibleCount">17</span> маршрутів</div>
@@ -90,15 +97,11 @@
 
     <div id="cardsContainer" class="cards-container"></div>
 
-    <!-- Блок учасників та рейтингу -->
     <div class="members-section">
-      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap;">
-        <div>
-          <span class="section-label">Команда</span>
-          <h3 style="font-size:1.6rem; font-weight:800;">Наші учасники та лідери</h3>
-          <p>Рейтинг зірочок, який редагує адмін. Приєднуйтесь до лідера в похід!</p>
-        </div>
-        <button id="viewLeaderAppsBtn" class="admin-apps-btn"><i class="fas fa-users"></i> Заявки лідерам</button>
+      <div>
+        <span class="section-label">Команда</span>
+        <h3 style="font-size:1.6rem; font-weight:800;">Наші учасники та лідери</h3>
+        <p>Рейтинг зірочок, який редагує адмін. Приєднуйтесь до лідера в похід!</p>
       </div>
       <div id="membersContainer" class="members-grid"></div>
     </div>
@@ -126,7 +129,6 @@
     </div>
   </footer>
 
-  <!-- Модальне вікно для маршруту -->
   <div class="modal-overlay" id="tripModalOverlay">
     <div class="modal">
       <div class="modal-header">
@@ -135,31 +137,23 @@
       </div>
       <form id="addTripForm">
         <div class="form-group"><label>Назва *</label><input type="text" id="tripTitle" placeholder="Назва маршруту" required></div>
-        <div class="form-row">
-          <div class="form-group"><label>Дата</label><input type="date" id="tripDate"></div>
-          <div class="form-group"><label>Протяжність</label><input type="text" id="tripDistance" placeholder="8 км"></div>
-        </div>
-        <div class="form-row">
-          <div class="form-group"><label>Складність</label><select id="tripDifficulty"><option value="легка">Легка</option><option value="середня">Середня</option><option value="вище середньої">Вище середньої</option></select></div>
-          <div class="form-group"><label>Тривалість</label><input type="text" id="tripDuration" placeholder="1 день"></div>
-        </div>
+        <div class="form-row"><div class="form-group"><label>Дата</label><input type="date" id="tripDate"></div><div class="form-group"><label>Протяжність</label><input type="text" id="tripDistance" placeholder="8 км"></div></div>
+        <div class="form-row"><div class="form-group"><label>Складність</label><select id="tripDifficulty"><option value="легка">Легка</option><option value="середня">Середня</option><option value="вище середньої">Вище середньої</option></select></div><div class="form-group"><label>Тривалість</label><input type="text" id="tripDuration" placeholder="1 день"></div></div>
         <div class="form-group"><label>Провідник</label><input type="text" id="tripGuide" placeholder="Ім'я"></div>
         <div class="form-group"><label>URL карти (mapy.cz)</label><input type="url" id="tripMapUrl" placeholder="https://mapy.cz/..."></div>
         <div class="form-group"><label>Примітки</label><textarea id="tripNotes" rows="2"></textarea></div>
         <div class="form-group"><label>URL зображення</label><input type="url" id="tripImage" placeholder="https://..."></div>
-        <div class="checkbox-group">
-          <label><input type="checkbox" id="tripIsCompleted"> <i class="fas fa-check-circle"></i> Виконано</label>
-          <label><input type="checkbox" id="tripIsTraditional"> <i class="fas fa-leaf"></i> Традиційний</label>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn-cancel" id="cancelTripBtn">Скасувати</button>
-          <button type="submit" class="btn-submit"><i class="fas fa-save"></i> Зберегти</button>
-        </div>
+        <div class="checkbox-group"><label><input type="checkbox" id="tripIsCompleted"> <i class="fas fa-check-circle"></i> Виконано</label><label><input type="checkbox" id="tripIsTraditional"> <i class="fas fa-leaf"></i> Традиційний</label></div>
+        <div class="modal-footer"><button type="button" class="btn-cancel" id="cancelTripBtn">Скасувати</button><button type="submit" class="btn-submit"><i class="fas fa-save"></i> Зберегти</button></div>
       </form>
     </div>
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/uk.js"></script>
   <script src="js/main.js"></script>
+  <script src="js/admin-auth.js"></script>
   <script src="js/trips.js"></script>
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
 </body>
 </html>

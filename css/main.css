@@ -82,10 +82,10 @@ main {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 20px;
   max-width: 1300px;
   margin: 0 auto;
   padding: 12px 28px;
-  gap: 30px;
   flex-wrap: wrap;
 }
 
@@ -175,7 +175,14 @@ main {
   color: var(--blue);
 }
 
-.header-actions .btn-support {
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+
+.btn-support {
   background: var(--red);
   color: white;
   padding: 8px 22px;
@@ -188,20 +195,22 @@ main {
   transition: var(--transition);
 }
 
-.header-actions .btn-support:hover {
+.btn-support:hover {
   background: var(--red-dark);
   transform: translateY(-2px);
 }
 
-/* Dropdown */
+/* ========== ВИПАДАЮЧЕ МЕНЮ "БІЛЬШЕ" – ТІЛЬКИ ВНИЗ ========== */
 .has-dropdown {
   position: relative;
+  display: inline-block;
 }
 
-.dropdown-menu {
+.has-dropdown .dropdown-menu {
   position: absolute;
   top: 100%;
   left: 0;
+  right: auto;
   background: white;
   border-radius: 20px;
   box-shadow: var(--shadow-md);
@@ -260,6 +269,9 @@ main {
 .footer-logo-icon {
   width: 50px;
   height: 50px;
+  border-radius: 16px;
+  overflow: hidden;
+  background: white;
 }
 
 .footer-social a {
@@ -373,134 +385,178 @@ main {
   transform: translateY(-2px);
 }
 
-/* Модальні вікна */
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0,0,0,0.5);
-  backdrop-filter: blur(6px);
-  z-index: 2000;
+/* ===== АДМІН-ПАНЕЛЬ (стильні кнопки) ===== */
+.admin-only {
+  display: none;
+}
+
+.admin-controls {
   display: flex;
   align-items: center;
-  justify-content: center;
-  visibility: hidden;
-  opacity: 0;
-  transition: 0.3s;
-}
-
-.modal-overlay.active {
-  visibility: visible;
-  opacity: 1;
-}
-
-.modal {
-  background: white;
-  border-radius: 28px;
-  max-width: 560px;
-  width: 90%;
-  max-height: 85vh;
-  overflow-y: auto;
-  box-shadow: var(--shadow-lg);
-}
-
-.modal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20px 24px;
-  border-bottom: 1px solid var(--gray-200);
-}
-
-.modal-header h2 {
-  font-family: 'Montserrat', sans-serif;
-  font-weight: 700;
-  font-size: 1.3rem;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.modal-close {
-  background: none;
-  border: none;
-  font-size: 1.6rem;
-  cursor: pointer;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-}
-
-.modal form {
-  padding: 24px;
-}
-
-.form-group {
-  margin-bottom: 18px;
-}
-
-.form-group label {
-  display: block;
-  font-weight: 600;
-  font-size: 0.85rem;
-  margin-bottom: 6px;
-}
-
-.form-group input,
-.form-group textarea,
-.form-group select {
-  width: 100%;
-  padding: 10px 14px;
-  border: 2px solid var(--gray-200);
-  border-radius: 16px;
-  font-family: 'Inter', sans-serif;
-  font-size: 0.9rem;
-}
-
-.form-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-}
-
-.checkbox-group {
-  display: flex;
-  gap: 20px;
-  margin: 15px 0;
-}
-
-.modal-footer {
-  display: flex;
-  justify-content: flex-end;
   gap: 12px;
-  margin-top: 20px;
+  margin-left: 0;
 }
 
-.btn-cancel {
-  background: var(--gray-100);
-  border: none;
-  padding: 10px 24px;
-  border-radius: 30px;
+.admin-controls a,
+.admin-controls button {
+  white-space: nowrap;
+}
+.admin-controls button {
+  font-size: 0.85rem;
+  padding: 8px 18px;
+  border-radius: 40px;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid var(--blue);
+  color: var(--blue);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
   font-weight: 600;
-  cursor: pointer;
-}
-
-.btn-submit {
-  background: var(--blue);
-  color: white;
-  border: none;
-  padding: 10px 28px;
-  border-radius: 30px;
-  font-weight: 700;
-  cursor: pointer;
   display: inline-flex;
   align-items: center;
   gap: 8px;
+  backdrop-filter: blur(4px);
+  white-space: nowrap;
 }
 
-/* Адаптив */
+/* Стилі для адмін-кнопок у хедері (Заявки, Відгуки, Вийти) */
+.admin-controls a,
+.admin-controls button {
+  font-size: 0.85rem;
+  padding: 8px 18px;
+  border-radius: 40px;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid var(--blue);
+  color: var(--blue);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  backdrop-filter: blur(4px);
+  white-space: nowrap;
+}
+
+.admin-controls a:hover,
+.admin-controls button:hover {
+  background: var(--blue);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 87, 183, 0.25);
+}
+
+#adminLogoutBtn {
+  border-color: var(--red);
+  color: var(--red);
+}
+
+#adminLogoutBtn:hover {
+  background: var(--red);
+  color: white;
+  border-color: var(--red);
+}
+
+/* Виправлення для випадаючого меню "Більше" */
+.has-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: white;
+  border-radius: 20px;
+  box-shadow: var(--shadow-md);
+  min-width: 170px;
+  padding: 8px 0;
+  opacity: 0;
+  visibility: hidden;
+  transition: 0.2s;
+  list-style: none;
+  z-index: 1001;
+}
+
+.has-dropdown:hover .dropdown-menu {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Гарантія, що хедер на великих екранах не ламається */
+@media (min-width: 1024px) {
+  .header-container {
+    flex-wrap: nowrap;
+  }
+  .header-nav {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+  }
+  .header-nav ul {
+    justify-content: center;
+    flex-wrap: nowrap;
+  }
+  .header-actions {
+    margin-left: auto;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+}
+
+/* Стильне спливаюче повідомлення */
+.custom-notification {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.8);
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(12px);
+  border-radius: 24px;
+  padding: 24px 40px;
+  text-align: center;
+  z-index: 10000;
+  opacity: 0;
+  transition: all 0.3s ease;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+  border: 1px solid rgba(255,255,255,0.2);
+}
+
+.custom-notification.show {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.notification-content i {
+  font-size: 48px;
+  color: #4caf50;
+  margin-bottom: 16px;
+  display: block;
+}
+
+.notification-content p {
+  color: white;
+  font-size: 1.1rem;
+  margin: 0;
+  white-space: nowrap;
+}
+
+@media (max-width: 600px) {
+  .custom-notification {
+    padding: 20px 30px;
+  }
+  .notification-content p {
+    font-size: 0.9rem;
+    white-space: normal;
+    min-width: 250px;
+  }
+}
+
+/* Адаптивність */
 @media (max-width: 768px) {
   .mobile-menu-toggle {
     display: flex;
@@ -538,14 +594,8 @@ main {
     font-size: 1.3rem;
   }
 }
-.footer-logo-icon {
-  width: 50px;
-  height: 50px;
-  border-radius: 16px;
-  overflow: hidden;
-  background: white;
-}
-/* ========== ДЕКОРАТИВНИЙ КОЛАЖ (більші фото) ========== */
+
+/* ========== ДЕКОРАТИВНИЙ КОЛАЖ ========== */
 #bgCollage {
   position: fixed;
   top: 0;
@@ -584,11 +634,14 @@ main {
 }
 
 @keyframes collageFloat {
-  0%, 100% { transform: translateY(0); }
-  50%      { transform: translateY(-8px); }
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
 }
 
-/* Адаптивність для планшетів */
 @media (max-width: 1024px) {
   .collage-img {
     opacity: 0.65;
@@ -596,10 +649,38 @@ main {
   }
 }
 
-/* Адаптивність для мобільних */
 @media (max-width: 768px) {
   .collage-img {
     opacity: 0.5;
     width: 14vw !important;
   }
+}
+/* Для великих екранів - хедер в один рядок */
+@media (min-width: 1024px) {
+  .header-container {
+    flex-wrap: nowrap;
+  }
+  .header-nav {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+  }
+  .header-nav ul {
+    justify-content: center;
+  }
+  .header-actions {
+    margin-left: auto;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+}
+
+/* Гарантуємо, що admin-controls не ламають рядок */
+.admin-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-left: 0;
 }

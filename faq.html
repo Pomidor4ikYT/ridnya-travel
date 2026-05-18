@@ -37,46 +37,34 @@
           </li>
         </ul>
       </nav>
-      <div class="header-actions"><a href="https://secure.wayforpay.com/payment/s6bdf0263be8c" class="btn-support"><i class="fas fa-heart"></i> Підтримати</a></div>
+      <div class="header-actions">
+        <a href="https://secure.wayforpay.com/payment/s6bdf0263be8c" class="btn-support" target="_blank" rel="noopener noreferrer"><i class="fas fa-heart"></i> Підтримати</a>
+        <div class="admin-controls">
+          <a href="admin/applications.html" class="admin-only" style="display: none;"><i class="fas fa-clipboard-list"></i> Заявки</a>
+          <a href="admin/reviews.html" class="admin-only" style="display: none;"><i class="fas fa-star"></i> Відгуки</a>
+          <button id="adminLogoutBtn" class="admin-only" style="display: none;" onclick="if(window.signOut) signOut();">Вийти</button>
+        </div>
+      </div>
     </div>
   </header>
 
   <main>
     <section class="section active">
       <div class="section-header"><span class="section-label">Допомога</span><h2 class="section-title">Часті запитання</h2><p class="section-subtitle">Все, що варто знати перед першим походом</p></div>
-      <div class="faq-list">
-        <div class="faq-item">
-          <button class="faq-question"><span><i class="fas fa-star" style="color:var(--yellow); margin-right:8px;"></i> Правила туристичного клубу</span> <i class="fas fa-chevron-down"></i></button>
-          <div class="faq-answer">
-            <p><strong>1. Добровільне членство.</strong></p>
-            <p><strong>2. Членом може бути особа,</strong> яка дійсно любить свій край, гори, ріки, полонини, готова змінити домашній комфорт біля телевізора на вечір біля багаття, віддає перевагу пішим походам з наплічником перед комфортним пересуванням автомобілем, готова зустрічати сонце на мальовничих вершинах наших Карпат.</p>
-            <p><strong>3. Метою діяльності Клубу</strong> є задоволення творчих, національно-культурних, спортивних та інших інтересів своїх членів, створення умов для розвитку туризму в середовищі членів фонду громад «Рідня» в усіх його проявах та формах, підвищення рівня здоров'я, фізичного та духовного розвитку своїх членів.</p>
-            <p><strong>4. Основні пріоритети та завдання Клубу:</strong></p>
-            <ul><li>популяризація туризму серед членів фонду;</li><li>надання учасникам можливості набуття практичного досвіду в туристичній діяльності;</li><li>сприяння заохоченню членів до здорового способу життя та активного відпочинку;</li><li>створення можливостей подорожувати за доступними цінами;</li><li>згуртування однодумців та залучення нових учасників;</li><li>проведення маркування та розчищення занедбаних туристичних маршрутів;</li><li>набуття досвіду з виживання в складних умовах та орієнтування на місцевості.</li></ul>
-            <p><strong>5. Для виконання пріоритетних завдань Клуб має право:</strong></p>
-            <ul><li>планувати та проводити туристичні подорожі і спортивно-фізкультурні масові заходи;</li><li>надавати матеріальну, інформаційну, організаційну та інші види допомоги членам Клубу;</li><li>сформувати банк спорядження;</li><li>встановити членський внесок;</li><li>залучати сторонніх інструкторів-провідників;</li><li>розповсюджувати інформацію.</li></ul>
-            <p><strong>6. Права та обов'язки членів клубу:</strong></p>
-            <ul><li>брати участь у обговоренні мандрівок;</li><li>відповідально ставитись до здоров'я;</li><li>допомагати іншим учасникам;</li><li>дотримуватись дисципліни;</li><li>брати участь у табірній роботі;</li><li>пропонувати нові маршрути;</li><li>бути на передпохідних зустрічах;</li><li>ділитися світлинами на сторінці ФГ "Рідня".</li></ul>
-          </div>
-        </div>
-        <div class="faq-item"><button class="faq-question">Як приєднатися до клубу? <i class="fas fa-chevron-down"></i></button><div class="faq-answer"><p>Просто зв'яжіться з нами через форму на сторінці «Контакти» або напишіть у соцмережі.</p></div></div>
-        <div class="faq-item"><button class="faq-question">Який рівень підготовки потрібен? <i class="fas fa-chevron-down"></i></button><div class="faq-answer"><p>У нас є маршрути різної складності — обирайте за бажанням.</p></div></div>
-        <div class="faq-item"><button class="faq-question">Що брати з собою? <i class="fas fa-chevron-down"></i></button><div class="faq-answer"><p>Зручне взуття, дощовик, воду, перекус, ліхтарик, аптечку.</p></div></div>
-        <div class="faq-item"><button class="faq-question">Чи є благодійні внески? <i class="fas fa-chevron-down"></i></button><div class="faq-answer"><p>Походи безкоштовні, але ми раді внескам на підтримку ЗСУ.</p></div></div>
+      <div style="display: flex; justify-content: center; margin-bottom: 30px;">
+        <a href="admin/faq.html" class="add-trip-btn admin-only" style="display: none; text-decoration: none;"><i class="fas fa-plus"></i> Створити питання</a>
       </div>
+      <div class="faq-list" id="faqDynamicList"></div>
     </section>
   </main>
 
   <footer class="main-footer">
     <div class="footer-container">
       <div class="footer-top">
-<!-- Замінено блок footer-logo -->
-<div class="footer-logo">
-  <div class="header-logo-icon footer-logo-icon">
-    <img src="images/logo.jpg" alt="БФ Рідня" style="width:100%; height:100%; object-fit:contain;">
-  </div>
-  <div><strong>Благодійний фонд «Рідня»</strong><p>Клуб мандрівників</p></div>
-</div>
+        <div class="footer-logo">
+          <div class="header-logo-icon footer-logo-icon"><img src="images/logo.jpg" alt="БФ Рідня"></div>
+          <div><strong>Благодійний фонд «Рідня»</strong><p>Клуб мандрівників</p></div>
+        </div>
         <div class="footer-social">
           <a href="https://www.facebook.com/bfridnya"><i class="fab fa-facebook-f"></i></a>
           <a href="https://www.instagram.com/fond_ridnya"><i class="fab fa-instagram"></i></a>
@@ -93,5 +81,65 @@
   </footer>
 
   <script src="js/main.js"></script>
+  <script src="js/admin-auth.js"></script>
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <script>
+    (function() {
+      const FAQ_STORAGE_KEY = 'ridnya_faq';
+      function loadFaq() {
+        try {
+          const stored = localStorage.getItem(FAQ_STORAGE_KEY);
+          let items = [];
+          if (stored) {
+            items = JSON.parse(stored);
+          } else {
+            items = [
+              { id: 'f1', question: 'Правила туристичного клубу', answer: '<p><strong>1. Добровільне членство.</strong></p><p><strong>2. Членом може бути особа,</strong> яка дійсно любить свій край, гори, ріки, полонини, готова змінити домашній комфорт біля телевізора на вечір біля багаття, віддає перевагу пішим походам з наплічником перед комфортним пересуванням автомобілем, готова зустрічати сонце на мальовничих вершинах наших Карпат.</p><p><strong>3. Метою діяльності Клубу</strong> є задоволення творчих, національно-культурних, спортивних та інших інтересів своїх членів, створення умов для розвитку туризму в середовищі членів фонду громад «Рідня» в усіх його проявах та формах, підвищення рівня здоров\'я, фізичного та духовного розвитку своїх членів.</p><p><strong>4. Основні пріоритети та завдання Клубу:</strong></p><ul><li>популяризація туризму серед членів фонду;</li><li>надання учасникам можливості набуття практичного досвіду в туристичній діяльності;</li><li>сприяння заохоченню членів до здорового способу життя та активного відпочинку;</li><li>створення можливостей подорожувати за доступними цінами;</li><li>згуртування однодумців та залучення нових учасників;</li><li>проведення маркування та розчищення занедбаних туристичних маршрутів;</li><li>набуття досвіду з виживання в складних умовах та орієнтування на місцевості.</li></ul><p><strong>5. Для виконання пріоритетних завдань Клуб має право:</strong></p><ul><li>планувати та проводити туристичні подорожі і спортивно-фізкультурні масові заходи;</li><li>надавати матеріальну, інформаційну, організаційну та інші види допомоги членам Клубу;</li><li>сформувати банк спорядження;</li><li>встановити членський внесок;</li><li>залучати сторонніх інструкторів-провідників;</li><li>розповсюджувати інформацію.</li></ul><p><strong>6. Права та обов\'язки членів клубу:</strong></p><ul><li>брати участь у обговоренні мандрівок;</li><li>відповідально ставитись до здоров\'я;</li><li>допомагати іншим учасникам;</li><li>дотримуватись дисципліни;</li><li>брати участь у табірній роботі;</li><li>пропонувати нові маршрути;</li><li>бути на передпохідних зустрічах;</li><li>ділитися світлинами на сторінці ФГ "Рідня".</li></ul>' },
+              { id: 'f2', question: 'Як приєднатися до клубу?', answer: '<p>Просто зв\'яжіться з нами через форму на сторінці «Контакти» або напишіть у соцмережі.</p>' },
+              { id: 'f3', question: 'Який рівень підготовки потрібен?', answer: '<p>У нас є маршрути різної складності — обирайте за бажанням.</p>' },
+              { id: 'f4', question: 'Що брати з собою?', answer: '<p>Зручне взуття, дощовик, воду, перекус, ліхтарик, аптечку.</p>' },
+              { id: 'f5', question: 'Чи є благодійні внески?', answer: '<p>Походи безкоштовні, але ми раді внескам на підтримку ЗСУ.</p>' }
+            ];
+          }
+          const container = document.getElementById('faqDynamicList');
+          if (container && items.length) {
+            container.innerHTML = items.map(item => {
+              // Додаємо зірочку тільки для першого питання (Правила клубу)
+              const starIcon = (item.id === 'f1') ? '<i class="fas fa-star" style="color:var(--yellow); margin-right:8px;"></i> ' : '';
+              return `
+              <div class="faq-item">
+                <button class="faq-question">
+                  <span>${starIcon}${escapeHtml(item.question)}</span>
+                  <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="faq-answer">${item.answer}</div>
+              </div>
+            `}).join('');
+            document.querySelectorAll('.faq-question').forEach(btn => {
+              btn.removeEventListener('click', handleFaqClick);
+              btn.addEventListener('click', handleFaqClick);
+            });
+          }
+        } catch(e) { console.error(e); }
+      }
+      function handleFaqClick(e) {
+        const btn = e.currentTarget;
+        const item = btn.closest('.faq-item');
+        if (item) {
+          item.classList.toggle('open');
+          const icon = btn.querySelector('i:last-child');
+          if (icon) {
+            icon.classList.toggle('fa-chevron-down');
+            icon.classList.toggle('fa-chevron-up');
+          }
+        }
+      }
+      function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/[&<>]/g, m => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;' }[m] || m));
+      }
+      loadFaq();
+    })();
+  </script>
 </body>
 </html>
