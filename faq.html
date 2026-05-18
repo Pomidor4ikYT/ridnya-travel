@@ -51,9 +51,22 @@
   <main>
     <section class="section active">
       <div class="section-header"><span class="section-label">Допомога</span><h2 class="section-title">Часті запитання</h2><p class="section-subtitle">Все, що варто знати перед першим походом</p></div>
+      
+      <!-- Кнопка для адміністратора -->
       <div style="display: flex; justify-content: center; margin-bottom: 30px;">
         <a href="admin/faq.html" class="add-trip-btn admin-only" style="display: none; text-decoration: none;"><i class="fas fa-plus"></i> Створити питання</a>
       </div>
+
+      <!-- Стильний блок для створення питання (тільки для адміна) -->
+      <div id="adminCreateQuestion" class="admin-only" style="display: none; max-width: 800px; margin: 0 auto 30px; padding: 30px; background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); border-radius: 16px; box-shadow: 0 20px 40px rgba(0,0,0,0.15); border: 1px solid rgba(0,87,183,0.15);">
+        <h3 style="margin-top:0; color: #0057b7; font-weight: 700; margin-bottom: 20px;"><i class="fas fa-plus-circle"></i> Створити нове питання</h3>
+        <div style="display: flex; flex-direction: column; gap: 15px;">
+          <input type="text" id="newQuestionInput" placeholder="Введіть питання" style="width: 100%; padding: 12px 16px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 1rem;">
+          <textarea id="newAnswerInput" rows="4" placeholder="Введіть відповідь" style="width: 100%; padding: 12px 16px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 1rem; resize: vertical;"></textarea>
+          <button id="saveNewQuestionBtn" style="align-self: flex-end; background: #0057b7; color: white; border: none; padding: 12px 24px; border-radius: 30px; font-weight: 600; cursor: pointer;"><i class="fas fa-save"></i> Зберегти</button>
+        </div>
+      </div>
+
       <div class="faq-list" id="faqDynamicList"></div>
     </section>
   </main>
@@ -104,7 +117,6 @@
           const container = document.getElementById('faqDynamicList');
           if (container && items.length) {
             container.innerHTML = items.map(item => {
-              // Додаємо зірочку тільки для першого питання (Правила клубу)
               const starIcon = (item.id === 'f1') ? '<i class="fas fa-star" style="color:var(--yellow); margin-right:8px;"></i> ' : '';
               return `
               <div class="faq-item">
@@ -138,6 +150,18 @@
         if (!str) return '';
         return str.replace(/[&<>]/g, m => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;' }[m] || m));
       }
+      // Обробник для адмінської форми
+      document.getElementById('saveNewQuestionBtn')?.addEventListener('click', () => {
+        const question = document.getElementById('newQuestionInput').value.trim();
+        const answer = document.getElementById('newAnswerInput').value.trim();
+        if (!question || !answer) return;
+        const items = JSON.parse(localStorage.getItem(FAQ_STORAGE_KEY) || '[]');
+        items.push({ id: 'f' + Date.now(), question, answer: '<p>' + answer + '</p>' });
+        localStorage.setItem(FAQ_STORAGE_KEY, JSON.stringify(items));
+        loadFaq();
+        document.getElementById('newQuestionInput').value = '';
+        document.getElementById('newAnswerInput').value = '';
+      });
       loadFaq();
     })();
   </script>

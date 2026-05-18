@@ -3,61 +3,112 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Заявки · Адмін · РІДНЯ</title>
+  <title>Заявки · РІДНЯ</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;500;600;700&family=Montserrat:wght@600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;500;600;700&family=Manrope:wght@600;700;800&family=Montserrat:wght@600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-  <link rel="stylesheet" href="admin.css">
-  <script src="https://accounts.google.com/gsi/client" async defer></script>
-  <script src="../js/admin-auth.js"></script>
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="stylesheet" href="../css/admin.css">
 </head>
 <body>
-<div class="admin-header">
-  <h1>📋 Управління заявками</h1>
-  <div style="display: flex; gap: 12px;">
-    <a href="../index.html" class="admin-home-btn">🏠 На головну</a>
-    <button class="admin-logout" onclick="if(window.signOut) signOut();">Вийти</button>
-  </div>
-</div>
-
-    <div class="admin-tabs">
-      <button class="admin-tab active" data-tab="trips">📌 Заявки на маршрути</button>
-      <button class="admin-tab" data-tab="leaders">👥 Заявки лідерам</button>
-      <button class="admin-tab" data-tab="team">🤝 Заявки в команду</button>
+  <div class="admin-container">
+    <div class="admin-header">
+      <h1><i class="fas fa-clipboard-list"></i> Заявки на походи</h1>
+      <div class="header-actions">
+        <a href="../index.html" class="btn btn-outline"><i class="fas fa-home"></i> На головну</a>
+        <button id="logoutBtn" class="btn btn-outline"><i class="fas fa-sign-out-alt"></i> Вийти</button>
+      </div>
     </div>
 
-    <div id="tripsTab" class="tab-content">
-      <h2>Заявки на маршрути</h2>
-      <table class="applications-table">
-        <thead>
-          <tr><th>Дата</th><th>Ім'я</th><th>Телефон</th><th>Похід</th><th>Коментар</th><th>Статус</th><th>Дії</th></tr>
-        </thead>
-        <tbody id="tripsTableBody"></tbody>
-      </table>
-    </div>
-
-    <div id="leadersTab" class="tab-content" style="display:none;">
-      <h2>Заявки до лідерів</h2>
-      <table class="applications-table">
-        <thead>
-          <tr><th>Дата</th><th>Ім'я</th><th>Телефон</th><th>Лідер</th><th>Коментар</th><th>Статус</th><th>Дії</th></tr>
-        </thead>
-        <tbody id="leadersTableBody"></tbody>
-      </table>
-    </div>
-
-    <div id="teamTab" class="tab-content" style="display:none;">
-      <h2>Заявки в команду</h2>
-      <table class="applications-table">
-        <thead>
-          <tr><th>Дата</th><th>Ім'я</th><th>Телефон</th><th>Повідомлення</th><th>Статус</th><th>Дії</th></tr>
-        </thead>
-        <tbody id="teamTableBody"></tbody>
-      </table>
+    <div id="applicationsList">
+      <!-- Динамічно -->
     </div>
   </div>
 
-  <script src="../js/admin-applications.js"></script>
+  <script src="../js/admin-auth.js"></script>
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <script>
+    (function() {
+      const TRIP_APPS_KEY = 'ridnya_trip_applications';
+      let applications = [];
+
+      function loadApplications() {
+        const stored = localStorage.getItem(TRIP_APPS_KEY);
+        applications = stored ? JSON.parse(stored) : [];
+        renderApplications();
+      }
+
+      function saveApplications() {
+        localStorage.setItem(TRIP_APPS_KEY, JSON.stringify(applications));
+      }
+
+      function updateStatus(id, newStatus) {
+        const app = applications.find(a => a.id === id);
+        if (app) {
+          app.status = newStatus;
+          saveApplications();
+          renderApplications();
+        }
+      }
+
+      function deleteApplication(id) {
+        if (!confirm('Видалити заявку?')) return;
+        applications = applications.filter(a => a.id !== id);
+        saveApplications();
+        renderApplications();
+      }
+
+      function renderApplications() {
+        const container = document.getElementById('applicationsList');
+        if (!container) return;
+        if (!applications.length) {
+          container.innerHTML = '<div style="text-align:center; padding:40px; color:#718096;"><i class="fas fa-inbox" style="font-size:3rem; opacity:0.3;"></i><p>Немає заявок</p></div>';
+          return;
+        }
+        container.innerHTML = applications.map(app => {
+          const statusClass = app.status === 'pending' ? 'status-pending' : (app.status === 'approved' ? 'status-approved' : 'status-rejected');
+          const statusText = app.status === 'pending' ? 'Очікує' : (app.status === 'approved' ? 'Підтверджено' : 'Відхилено');
+          return `
+            <div class="card" style="margin-bottom: 16px;">
+              <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 10px;">
+                <div>
+                  <strong style="font-size: 1.1rem;">${escapeHtml(app.tripTitle)}</strong>
+                  <div style="font-size: 0.9rem; color: #4a5568; margin-top: 4px;">
+                    ${escapeHtml(app.userName)} · ${escapeHtml(app.phone)} · ${escapeHtml(app.date)}
+                  </div>
+                  ${app.comment ? `<div style="margin-top: 6px; font-style: italic; color: #718096;">${escapeHtml(app.comment)}</div>` : ''}
+                </div>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <span class="status-badge ${statusClass}">${statusText}</span>
+                  <select onchange="updateStatus(${app.id}, this.value)" style="padding: 6px 10px; border-radius: 8px; border: 1px solid #e2e8f0; font-size: 0.85rem;">
+                    <option value="pending" ${app.status === 'pending' ? 'selected' : ''}>Очікує</option>
+                    <option value="approved" ${app.status === 'approved' ? 'selected' : ''}>Підтверджено</option>
+                    <option value="rejected" ${app.status === 'rejected' ? 'selected' : ''}>Відхилено</option>
+                  </select>
+                  <button class="icon-btn delete" onclick="deleteApplication(${app.id})" title="Видалити"><i class="fas fa-trash"></i></button>
+                </div>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      function escapeHtml(str) {
+        const div = document.createElement('div');
+        div.textContent = str || '';
+        return div.innerHTML;
+      }
+
+      // Глобальні функції для onclick
+      window.updateStatus = updateStatus;
+      window.deleteApplication = deleteApplication;
+
+      document.addEventListener('DOMContentLoaded', () => {
+        loadApplications();
+        document.getElementById('logoutBtn').addEventListener('click', () => { if (window.signOut) signOut(); });
+      });
+    })();
+  </script>
 </body>
 </html>

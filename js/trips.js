@@ -1,3 +1,4 @@
+// js/trips.js
 (function() {
   'use strict';
 

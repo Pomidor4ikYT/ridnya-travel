@@ -1,3 +1,4 @@
+// js/admin-auth.js
 (function() {
   'use strict';
 
@@ -19,19 +20,16 @@
     const supportBtn = document.querySelector('.btn-support');
     const currentPath = window.location.pathname;
 
-    // Показуємо адмін-кнопки на всіх сторінках, крім тих, що всередині папки /admin
     const isAdminPage = currentPath.includes('/admin');
     const showAdminControls = window.isAdmin && !isAdminPage;
 
     if (showAdminControls) {
-      // Показуємо всі елементи з класом .admin-only
       adminElements.forEach(el => { if (el) el.style.display = ''; });
       if (logoutBtn) logoutBtn.style.display = 'inline-flex';
       if (applicationsLink) applicationsLink.style.display = 'inline-flex';
       if (reviewsLink) reviewsLink.style.display = 'inline-flex';
       if (supportBtn) supportBtn.style.display = 'none';
     } else {
-      // Ховаємо адмін-елементи на адмін-сторінках або якщо не адмін
       adminElements.forEach(el => { if (el) el.style.display = 'none'; });
       if (logoutBtn) logoutBtn.style.display = 'none';
       if (applicationsLink) applicationsLink.style.display = 'none';
@@ -50,11 +48,10 @@
         sessionStorage.setItem('adminLoggedIn', 'true');
         sessionStorage.setItem('adminEmail', payload.email);
         updateAdminUI();
-        if (window.location.pathname.includes('/admin')) {
-          window.location.href = '../index.html';
-        } else {
-          location.reload();
-        }
+
+        // Виправлено: більше НЕ перекидаємо на головну з адмін-сторінок
+        // Просто перезавантажуємо ту саму сторінку, щоб оновився UI
+        location.reload();
       } else {
         alert('Доступ заборонено. Тільки для ' + ADMIN_EMAIL);
         signOut();
@@ -76,18 +73,22 @@
   };
 
   function initGoogleAuth() {
+    // На всіх сторінках шукаємо кнопку з класом google-login-btn
     const loginBtn = document.querySelector('.google-login-btn');
-    if (!loginBtn) return;
+    if (!loginBtn) return;  // якщо немає кнопки – нічого не робимо
+
     if (!GOOGLE_CLIENT_ID || GOOGLE_CLIENT_ID.includes('YOUR_GOOGLE_CLIENT_ID')) {
       console.warn('Google Client ID не налаштований. Admin-функції не працюватимуть.');
       return;
     }
+
     google.accounts.id.initialize({
       client_id: GOOGLE_CLIENT_ID,
       callback: handleCredentialResponse,
       auto_select: false,
       cancel_on_tap_outside: true,
     });
+
     google.accounts.id.renderButton(loginBtn, {
       type: 'standard',
       theme: 'outline',

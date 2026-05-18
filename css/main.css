@@ -203,35 +203,42 @@ main {
 /* ========== ВИПАДАЮЧЕ МЕНЮ "БІЛЬШЕ" – ТІЛЬКИ ВНИЗ ========== */
 .has-dropdown {
   position: relative;
-  display: inline-block;
 }
 
-.has-dropdown .dropdown-menu {
+.dropdown-menu {
+  display: none;
   position: absolute;
   top: 100%;
   left: 0;
-  right: auto;
   background: white;
-  border-radius: 20px;
-  box-shadow: var(--shadow-md);
-  min-width: 170px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+  border-radius: 12px;
+  min-width: 220px;
+  z-index: 1000;
   padding: 8px 0;
-  opacity: 0;
-  visibility: hidden;
-  transition: 0.2s;
   list-style: none;
-  z-index: 1001;
 }
 
 .has-dropdown:hover .dropdown-menu {
-  opacity: 1;
-  visibility: visible;
+  display: block;
+}
+
+.dropdown-menu li {
+  list-style: none;
 }
 
 .dropdown-menu a {
   display: block;
-  padding: 8px 20px;
-  font-size: 0.85rem;
+  padding: 10px 20px;
+  color: #2d3748;
+  text-decoration: none;
+  transition: background 0.2s;
+  white-space: nowrap;
+}
+
+.dropdown-menu a:hover {
+  background: #ebf4ff;
+  color: #0057b7;
 }
 
 /* ========== ФУТЕР ========== */
