@@ -8,18 +8,20 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;500;600;700&family=Montserrat:wght@600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="../css/main.css">
   <link rel="stylesheet" href="admin.css">
-  <script src="https://accounts.google.com/gsi/client" async defer></script>
-  <script src="../js/admin-auth.js"></script>
 </head>
 <body>
-  <div class="admin-login-container">
-    <div class="admin-login-card">
-      <div class="admin-logo"><img src="../images/logo.jpg" alt="РІДНЯ"></div>
-      <h1>Вхід для адміністратора</h1>
-      <div class="google-login-btn"></div>
-    </div>
+<div class="admin-login-container">
+  <div class="admin-login-card">
+    <div class="admin-logo"><img src="../images/logo.jpg" alt="РІДНЯ"></div>
+    <h1>Вхід для адміністратора</h1>
+    <div class="google-login-btn"></div>
   </div>
-  <script>setTimeout(()=>{ if(window.isAdmin) window.location.href='../index.html'; },200);</script>
+</div>
+<script src="../js/utils.js"></script>
+<script src="../js/admin-auth.js"></script>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<script>setTimeout(()=>{ if(window.isAdmin) window.location.href='../index.html'; },200);</script>
 </body>
 </html>

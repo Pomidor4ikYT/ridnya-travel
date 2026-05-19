@@ -30,8 +30,7 @@
           <li><a href="blog.html"><i class="fas fa-newspaper"></i> Блог</a></li>
           <li><a href="gallery.html"><i class="fas fa-images"></i> Галерея</a></li>
           <li><a href="contacts.html"><i class="fas fa-envelope"></i> Контакти</a></li>
-          <li class="has-dropdown">
-            <a href="javascript:void(0)"><i class="fas fa-ellipsis-h"></i> Більше</a>
+          <li class="has-dropdown"><a href="javascript:void(0)"><i class="fas fa-ellipsis-h"></i> Більше</a>
             <ul class="dropdown-menu">
               <li><a href="gear.html"><i class="fas fa-campground"></i> Спорядження</a></li>
               <li><a href="faq.html"><i class="fas fa-question-circle"></i> FAQ</a></li>
@@ -41,7 +40,7 @@
         </ul>
       </nav>
       <div class="header-actions">
-        <a href="https://secure.wayforpay.com/payment/s6bdf0263be8c" class="btn-support" target="_blank" rel="noopener noreferrer"><i class="fas fa-heart"></i> Підтримати</a>
+        <a href="https://secure.wayforpay.com/payment/s6bdf0263be8c" class="btn-support" target="_blank"><i class="fas fa-heart"></i> Підтримати</a>
         <div class="admin-controls">
           <a href="admin/applications.html" class="admin-only" style="display: none;"><i class="fas fa-clipboard-list"></i> Заявки</a>
           <a href="admin/reviews.html" class="admin-only" style="display: none;"><i class="fas fa-star"></i> Відгуки</a>
@@ -65,7 +64,7 @@
         <button id="clearSearch" class="clear-btn" style="display:none;"><i class="fas fa-times"></i></button>
       </div>
       <div style="display:flex; gap:12px;">
-        <button class="add-trip-btn admin-only" id="addTripBtn" style="display: none;"><i class="fas fa-plus"></i> Додати маршрут</button>
+        <button class="add-trip-btn admin-only" id="addTripBtn"><i class="fas fa-plus"></i> Додати маршрут</button>
       </div>
     </div>
 
@@ -78,9 +77,7 @@
             <option value="difficulty">За складністю</option>
             <option value="distance">За протяжністю</option>
           </select>
-          <button id="sortDirectionBtn" class="sort-direction-btn" title="Змінити порядок">
-            <i class="fas fa-arrow-up-wide-short"></i>
-          </button>
+          <button id="sortDirectionBtn" class="sort-direction-btn" title="Змінити порядок"><i class="fas fa-arrow-up-wide-short"></i></button>
         </div>
       </div>
       <div class="date-filter">
@@ -88,9 +85,7 @@
         <input type="text" id="dateFilterInput" placeholder="Виберіть дату">
       </div>
       <div style="display:flex; gap:12px; align-items:center;">
-        <button id="resetFiltersBtn" class="reset-btn" title="Скинути пошук, дату та сортування">
-          <i class="fas fa-undo-alt"></i> Скинути
-        </button>
+        <button id="resetFiltersBtn" class="reset-btn"><i class="fas fa-undo-alt"></i> Скинути</button>
         <div class="stats-tag"><i class="fas fa-eye"></i> <span id="visibleCount">17</span> маршрутів</div>
       </div>
     </div>
@@ -102,6 +97,9 @@
         <span class="section-label">Команда</span>
         <h3 style="font-size:1.6rem; font-weight:800;">Наші учасники та лідери</h3>
         <p>Рейтинг зірочок, який редагує адмін. Приєднуйтесь до лідера в похід!</p>
+      </div>
+      <div style="display: flex; justify-content: flex-end; margin-bottom: 20px;">
+        <button class="add-trip-btn admin-only" id="addLeaderBtn" style="background: var(--blue); color: white;"><i class="fas fa-user-plus"></i> Додати лідера</button>
       </div>
       <div id="membersContainer" class="members-grid"></div>
     </div>
@@ -129,30 +127,112 @@
     </div>
   </footer>
 
-  <!-- Модальні вікна (залишаються без змін) -->
+  <!-- Модальне вікно для маршрутів -->
   <div class="modal-overlay" id="tripModalOverlay">
-    <div class="modal">
+    <div class="modal modal-wide">
       <div class="modal-header">
         <h2 id="tripModalTitle"><i class="fas fa-hiking"></i> Новий маршрут</h2>
         <button class="modal-close" id="closeTripModalBtn">&times;</button>
       </div>
       <form id="addTripForm">
-        <div class="form-group"><label>Назва *</label><input type="text" id="tripTitle" placeholder="Назва маршруту" required></div>
-        <div class="form-row"><div class="form-group"><label>Дата</label><input type="date" id="tripDate"></div><div class="form-group"><label>Протяжність</label><input type="text" id="tripDistance" placeholder="8 км"></div></div>
-        <div class="form-row"><div class="form-group"><label>Складність</label><select id="tripDifficulty"><option value="легка">Легка</option><option value="середня">Середня</option><option value="вище середньої">Вище середньої</option></select></div><div class="form-group"><label>Тривалість</label><input type="text" id="tripDuration" placeholder="1 день"></div></div>
-        <div class="form-group"><label>Провідник</label><input type="text" id="tripGuide" placeholder="Ім'я"></div>
-        <div class="form-group"><label>URL карти (mapy.cz)</label><input type="url" id="tripMapUrl" placeholder="https://mapy.cz/..."></div>
-        <div class="form-group"><label>Примітки</label><textarea id="tripNotes" rows="2"></textarea></div>
-        <div class="form-group"><label>URL зображення</label><input type="url" id="tripImage" placeholder="https://..."></div>
-        <div class="checkbox-group"><label><input type="checkbox" id="tripIsCompleted"> <i class="fas fa-check-circle"></i> Виконано</label><label><input type="checkbox" id="tripIsTraditional"> <i class="fas fa-leaf"></i> Традиційний</label></div>
-        <div class="modal-footer"><button type="button" class="btn-cancel" id="cancelTripBtn">Скасувати</button><button type="submit" class="btn-submit"><i class="fas fa-save"></i> Зберегти</button></div>
+        <div class="modal-body">
+          <div class="form-group"><label>Назва *</label><input type="text" id="tripTitle" placeholder="Назва маршруту" required></div>
+          <div class="form-row">
+            <div class="form-group"><label>Дата</label><input type="date" id="tripDate"></div>
+            <div class="form-group"><label>Протяжність</label><input type="text" id="tripDistance" placeholder="8 км"></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label>Складність</label><select id="tripDifficulty"><option value="легка">Легка</option><option value="середня">Середня</option><option value="вище середньої">Вище середньої</option></select></div>
+            <div class="form-group"><label>Тривалість</label><input type="text" id="tripDuration" placeholder="1 день"></div>
+          </div>
+          <div class="form-group">
+            <label>Провідник</label>
+            <div style="display: flex; gap: 8px; align-items: center;">
+              <select id="tripGuideSelect" style="flex:1;"></select>
+              <button type="button" id="quickAddLeaderBtn" class="add-trip-btn" style="background: var(--blue); color: white; padding: 8px 12px; white-space: nowrap;"><i class="fas fa-plus"></i> Новий</button>
+            </div>
+            <input type="hidden" id="tripGuide" value="">
+          </div>
+          <div class="form-group"><label>URL карти (mapy.cz)</label><input type="url" id="tripMapUrl" placeholder="https://mapy.cz/..."></div>
+          <div class="form-group"><label>Примітки</label><textarea id="tripNotes" rows="2"></textarea></div>
+          <div class="form-group"><label>Історія маршруту (HTML)</label><textarea id="tripHistory" rows="4" placeholder="Опис походу, фото, враження... можна використовувати HTML теги"></textarea></div>
+          <div class="form-group"><label>URL зображення</label><input type="url" id="tripImage" placeholder="https://..."></div>
+          <div class="checkbox-group">
+            <label><input type="checkbox" id="tripIsCompleted"> <i class="fas fa-check-circle"></i> Виконано (ручне позначення)</label>
+            <label><input type="checkbox" id="tripIsTraditional"> <i class="fas fa-leaf"></i> Традиційний</label>
+          </div>
+
+          <!-- БЛОК КЕРУВАННЯ УЧАСНИКАМИ (лише для адміна) -->
+          <div class="admin-only participants-section" style="margin-top: 20px; border-top: 1px solid var(--gray-200); padding-top: 20px;">
+            <label style="font-weight: 700; margin-bottom: 12px; display: block;"><i class="fas fa-users"></i> Підтверджені учасники</label>
+            <div id="participantsListContainer" style="margin-bottom: 12px; max-height: 200px; overflow-y: auto; background: var(--gray-50); border-radius: 16px; padding: 12px;">
+              <!-- список учасників -->
+            </div>
+            <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+              <input type="text" id="newParticipantName" placeholder="Ім'я учасника" style="flex:2; min-width: 140px;">
+              <input type="tel" id="newParticipantPhone" placeholder="Телефон (необов'язково)" style="flex:2; min-width: 140px;">
+              <button type="button" id="addParticipantBtn" class="add-trip-btn" style="background: var(--blue); color: white; padding: 8px 16px;"><i class="fas fa-plus"></i> Додати</button>
+            </div>
+            <p class="help-text" style="font-size: 0.7rem; color: var(--gray-500); margin-top: 8px;">Учасники додаються одразу зі статусом "підтверджено". Їх буде видно в історії маршруту.</p>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn-cancel" id="cancelTripBtn">Скасувати</button>
+          <button type="submit" class="btn-submit"><i class="fas fa-save"></i> Зберегти</button>
+        </div>
       </form>
     </div>
   </div>
 
+  <!-- Модальне вікно для додавання лідера (швидке) -->
+  <div class="modal-overlay" id="leaderModalOverlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 id="leaderModalTitle"><i class="fas fa-user-plus"></i> Додати лідера</h2>
+        <button class="modal-close" id="closeLeaderModalBtn">&times;</button>
+      </div>
+      <form id="addLeaderForm">
+        <div class="modal-body">
+          <div class="form-group"><label>Ім'я та прізвище *</label><input type="text" id="leaderName" placeholder="Петро Маковський" required></div>
+          <div class="form-group"><label>Початковий рейтинг (1-5)</label><select id="leaderRating"><option value="5">5 зірок</option><option value="4" selected>4 зірки</option><option value="3">3 зірки</option><option value="2">2 зірки</option><option value="1">1 зірка</option></select></div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn-cancel" id="cancelLeaderBtn">Скасувати</button>
+          <button type="submit" class="btn-submit"><i class="fas fa-save"></i> Зберегти</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Модальне вікно для історії походу (учасники + історія) -->
+  <div id="tripHistoryModal" class="modal-overlay">
+    <div class="modal modal-wide">
+      <div class="modal-header">
+        <h2 id="historyModalTitle"><i class="fas fa-history"></i> Історія походу</h2>
+        <button class="modal-close" id="closeHistoryModal">&times;</button>
+      </div>
+      <div class="modal-body" id="historyModalBody"></div>
+      <div class="modal-footer"><button class="btn-cancel" id="closeHistoryFooter">Закрити</button></div>
+    </div>
+  </div>
+
+  <!-- Модальне вікно для маршрутів лідера -->
+  <div id="leaderTripsModal" class="modal-overlay">
+    <div class="modal modal-wide">
+      <div class="modal-header">
+        <h2 id="leaderTripsTitle"><i class="fas fa-user-hiking"></i> Маршрути лідера</h2>
+        <button class="modal-close" id="closeLeaderTripsModal">&times;</button>
+      </div>
+      <div class="modal-body" id="leaderTripsBody"></div>
+      <div class="modal-footer"><button class="btn-cancel" id="closeLeaderTripsFooter">Закрити</button></div>
+    </div>
+  </div>
+
+  <script src="js/utils.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
   <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/uk.js"></script>
   <script src="js/main.js"></script>
+  <script src="js/bg-collage.js"></script>
   <script src="js/admin-auth.js"></script>
   <script src="js/trips.js"></script>
   <script src="https://accounts.google.com/gsi/client" async defer></script>

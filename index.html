@@ -106,11 +106,7 @@
 
       <div class="content-card reveal">
         <div class="section-header"><span class="section-label">Відгуки</span><h2 class="section-title">Що кажуть мандрівники</h2></div>
-        <div class="testimonials-grid">
-          <div class="testimonial-card"><div class="testimonial-stars">★★★★★</div><p>«Неймовірна атмосфера! Вперше пішла в гори і закохалася. Дякую «Рідні» за організацію та підтримку.»</p><span class="testimonial-author">— Олена, 28 років</span></div>
-          <div class="testimonial-card"><div class="testimonial-stars">★★★★★</div><p>«Ходимо з клубом уже два роки. Чудові маршрути, гарна компанія, а головне — спільна справа для перемоги.»</p><span class="testimonial-author">— Андрій, 45 років</span></div>
-          <div class="testimonial-card"><div class="testimonial-stars">★★★★★</div><p>«Дізнався багато нового про історію УПА. Маршрути продумані, провідники — справжні професіонали.»</p><span class="testimonial-author">— Ігор, 33 роки</span></div>
-        </div>
+        <div class="testimonials-grid" id="homeReviewsGrid"></div>
       </div>
     </div>
   </main>
@@ -118,13 +114,10 @@
   <footer class="main-footer">
     <div class="footer-container">
       <div class="footer-top">
-<!-- Замінено блок footer-logo -->
-<div class="footer-logo">
-  <div class="header-logo-icon footer-logo-icon">
-    <img src="images/logo.jpg" alt="БФ Рідня" style="width:100%; height:100%; object-fit:contain;">
-  </div>
-  <div><strong>Благодійний фонд «Рідня»</strong><p>Клуб мандрівників</p></div>
-</div>
+        <div class="footer-logo">
+          <div class="header-logo-icon footer-logo-icon"><img src="images/logo.jpg" alt="БФ Рідня"></div>
+          <div><strong>Благодійний фонд «Рідня»</strong><p>Клуб мандрівників</p></div>
+        </div>
         <div class="footer-social">
           <a href="https://www.facebook.com/bfridnya"><i class="fab fa-facebook-f"></i></a>
           <a href="https://www.instagram.com/fond_ridnya"><i class="fab fa-instagram"></i></a>
@@ -140,9 +133,12 @@
     </div>
   </footer>
 
+  <script src="js/utils.js"></script>
   <script src="js/main.js"></script>
+  <!-- ДОДАНО: фоновий колаж -->
+  <script src="js/bg-collage.js"></script>
   <script src="js/admin-auth.js"></script>
-  <script src="https://accounts.google.com/gsi/client" async defer></script>
   <script src="js/reviews.js"></script>
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
 </body>
 </html>

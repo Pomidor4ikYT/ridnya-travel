@@ -531,6 +531,9 @@ main {
   transition: all 0.3s ease;
   box-shadow: 0 20px 40px rgba(0,0,0,0.3);
   border: 1px solid rgba(255,255,255,0.2);
+  min-width: 280px;
+  max-width: 90vw;
+  width: auto;
 }
 
 .custom-notification.show {
@@ -547,9 +550,25 @@ main {
 
 .notification-content p {
   color: white;
-  font-size: 1.1rem;
+  font-size: 1rem;
   margin: 0;
-  white-space: nowrap;
+  white-space: normal;
+  word-wrap: break-word;
+  line-height: 1.4;
+  max-width: 400px;
+}
+
+@media (max-width: 600px) {
+  .custom-notification {
+    padding: 20px 24px;
+    min-width: 260px;
+  }
+  .notification-content p {
+    font-size: 0.85rem;
+  }
+  .notification-content i {
+    font-size: 36px;
+  }
 }
 
 @media (max-width: 600px) {
@@ -690,4 +709,102 @@ main {
   align-items: center;
   gap: 12px;
   margin-left: 0;
+}
+
+/* ========== СТИЛІ ДЛЯ СТАРИХ ФОТО (POLAROID) ========== */
+#bgCollage {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+  overflow: visible;
+}
+
+.collage-polaroid {
+  position: absolute;
+  background: #fef9e8;  /* старий папір/білий колір */
+  padding: 12px 12px 20px 12px;
+  border-radius: 8px 12px 12px 8px;
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.5) inset;
+  transition: all 0.3s ease;
+  animation: floatOldPhoto 8s ease-in-out infinite;
+  backdrop-filter: blur(0.5px);
+}
+
+.collage-polaroid img {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  filter: sepia(0.2) contrast(1.05) brightness(0.98);
+  border-radius: 2px;
+}
+
+/* Додатковий ефект "обгризаних" країв через clip-path (різні форми) */
+.collage-polaroid:nth-child(odd) {
+  clip-path: polygon(0% 0%, 100% 0%, 98% 98%, 2% 100%);
+}
+.collage-polaroid:nth-child(even) {
+  clip-path: polygon(2% 0%, 98% 0%, 96% 96%, 4% 100%);
+}
+.collage-polaroid:nth-child(3n) {
+  clip-path: polygon(1% 1%, 99% 2%, 97% 97%, 3% 99%);
+}
+
+/* Легка тінь текстури паперу */
+.collage-polaroid::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: repeating-linear-gradient(45deg, rgba(0,0,0,0.02) 0px, rgba(0,0,0,0.02) 2px, transparent 2px, transparent 8px);
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+/* Анімація плавання */
+@keyframes floatOldPhoto {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-12px) rotate(1deg);
+  }
+}
+
+/* Адаптивність: на малих екранах зменшуємо розміри та ховаємо деякі фото */
+@media (max-width: 1024px) {
+  .collage-polaroid {
+    width: 200px !important;
+    padding: 8px 8px 14px 8px;
+  }
+  .collage-polaroid:nth-child(3),
+  .collage-polaroid:nth-child(6) {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .collage-polaroid {
+    width: 150px !important;
+    opacity: 0.5 !important;
+  }
+  .collage-polaroid:nth-child(2),
+  .collage-polaroid:nth-child(5) {
+    display: none;
+  }
+}
+/* Гарантія видимості адмін-кнопок */
+.admin-only.add-trip-btn {
+  display: none;
+}
+/* Коли адмін залогінений, клас admin-only отримує display: inline-flex через JS */
+/* Дублюємо для надійності */
+body:has(.admin-controls a[href="admin/applications.html"]:not([style*="display: none"])) .admin-only.add-trip-btn {
+  display: inline-flex !important;
 }

@@ -1,3 +1,4 @@
+// js/blog.js
 (function() {
   'use strict';
   const STORAGE_KEY = 'ridnya_blog';
@@ -68,11 +69,32 @@
 
   let blogPosts = [];
   let editingBlogId = null;
+  let currentPage = 1;
+  const ITEMS_PER_PAGE = 9;
 
-  function loadData() { try { const s = localStorage.getItem(STORAGE_KEY); return s ? JSON.parse(s) : [...defaultBlog]; } catch { return [...defaultBlog]; } }
-  function saveData() { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(blogPosts)); } catch(e){} }
-  function escapeHtml(str) { if (!str) return ''; return str.replace(/[&<>]/g, m => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;' }[m] || m)); }
+  function loadData() { blogPosts = Utils.getStorage(STORAGE_KEY, defaultBlog); }
+  function saveData() { Utils.setStorage(STORAGE_KEY, blogPosts); }
   function stripHtml(html) { if (!html) return ''; let tmp = document.createElement('div'); tmp.innerHTML = html; return tmp.textContent || tmp.innerText || ''; }
+
+  function parseDate(dateStr) {
+    if (!dateStr) return null;
+    let parts = dateStr.split('.');
+    if (parts.length === 3) return new Date(parts[2], parts[1]-1, parts[0]);
+    parts = dateStr.split('-');
+    if (parts.length === 3) return new Date(parts[0], parts[1]-1, parts[2]);
+    return null;
+  }
+
+  function sortPostsByDate(posts) {
+    return [...posts].sort((a, b) => {
+      const dateA = parseDate(a.date);
+      const dateB = parseDate(b.date);
+      if (!dateA && !dateB) return 0;
+      if (!dateA) return 1;
+      if (!dateB) return -1;
+      return dateB - dateA;
+    });
+  }
 
   function openBlogDetailsModal(postId) {
     const post = blogPosts.find(p => p.id === postId);
@@ -82,10 +104,10 @@
     overlay.className = 'modal-overlay active';
     overlay.innerHTML = `
       <div class="modal blog-detail-modal" style="max-width: 850px;">
-        <div class="modal-header"><h2><i class="fas fa-newspaper"></i> ${escapeHtml(title)}</h2><button class="modal-close">&times;</button></div>
+        <div class="modal-header"><h2><i class="fas fa-newspaper"></i> ${Utils.escapeHtml(title)}</h2><button class="modal-close">&times;</button></div>
         <div class="modal-body" style="padding: 0 28px 28px 28px;">
-          ${date ? `<div class="blog-detail-date"><i class="far fa-calendar-alt"></i> ${escapeHtml(date)}</div>` : ''}
-          ${image ? `<div class="blog-detail-image"><img src="${escapeHtml(image)}" alt="${escapeHtml(title)}" loading="lazy"></div>` : ''}
+          ${date ? `<div class="blog-detail-date"><i class="far fa-calendar-alt"></i> ${Utils.escapeHtml(date)}</div>` : ''}
+          ${image ? `<div class="blog-detail-image"><img src="${Utils.escapeHtml(image)}" alt="${Utils.escapeHtml(title)}" loading="lazy"></div>` : ''}
           <div class="blog-detail-content">${text}</div>
         </div>
         <div class="modal-footer" style="padding: 16px 28px;"><button class="btn-cancel close-modal-btn">Закрити</button></div>
@@ -97,34 +119,30 @@
     overlay.addEventListener('click', (e) => { if (e.target === overlay) closeModal(); });
   }
 
-  function renderBlog() {
-    const container = document.getElementById('blogContainer');
+  function renderPagination(totalPages) {
+    const container = document.getElementById('blogPagination');
     if (!container) return;
-    if (!blogPosts.length) {
-      container.innerHTML = '<div style="text-align:center; padding:50px;"><i class="fas fa-newspaper" style="font-size:3rem; opacity:0.4;"></i><p>Немає статей</p></div>';
+    if (totalPages <= 1) {
+      container.innerHTML = '';
       return;
     }
-    container.innerHTML = blogPosts.map(post => {
-      const shortText = stripHtml(post.text || '').substring(0, 130) + (stripHtml(post.text || '').length > 130 ? '...' : '');
-      const adminButtons = window.isAdmin ? `
-        <div class="blog-card-actions">
-          <button class="edit-btn" data-id="${post.id}"><i class="fas fa-pen"></i></button>
-          <button class="delete-btn" data-id="${post.id}"><i class="fas fa-trash"></i></button>
-        </div>
-      ` : '';
-      return `
-      <article class="blog-card" data-id="${post.id}">
-        ${adminButtons}
-        ${post.image ? `<img src="${post.image}" alt="${post.title}" loading="lazy">` : '<div class="blog-card-img"><i class="fas fa-image"></i></div>'}
-        <div class="blog-card-body">
-          <span class="blog-date">${post.date || ''}</span>
-          <h4>${escapeHtml(post.title)}</h4>
-          <p>${escapeHtml(shortText)}</p>
-          <a href="#" class="read-more-link" data-id="${post.id}">Читати далі →</a>
-        </div>
-      </article>`;
-    }).join('');
+    let html = '<div class="pagination-wrapper"><button class="page-nav" id="prevPageBtn" ' + (currentPage === 1 ? 'disabled' : '') + '><i class="fas fa-chevron-left"></i></button><div class="page-numbers">';
+    for (let i = 1; i <= totalPages; i++) {
+      html += `<button class="page-number ${i === currentPage ? 'active' : ''}" data-page="${i}">${i}</button>`;
+    }
+    html += `</div><button class="page-nav" id="nextPageBtn" ${currentPage === totalPages ? 'disabled' : ''}><i class="fas fa-chevron-right"></i></button></div>`;
+    container.innerHTML = html;
+    
+    document.getElementById('prevPageBtn')?.addEventListener('click', () => { if (currentPage > 1) { currentPage--; renderBlog(); } });
+    document.getElementById('nextPageBtn')?.addEventListener('click', () => { if (currentPage < totalPages) { currentPage++; renderBlog(); } });
+    document.querySelectorAll('.page-number').forEach(btn => {
+      btn.addEventListener('click', () => { currentPage = parseInt(btn.dataset.page); renderBlog(); });
+    });
+  }
 
+  function attachCardEvents() {
+    const container = document.getElementById('blogContainer');
+    if (!container) return;
     container.onclick = (e) => {
       if (window.isAdmin) {
         const editBtn = e.target.closest('.edit-btn');
@@ -135,6 +153,41 @@
       const readMoreLink = e.target.closest('.read-more-link');
       if (readMoreLink) { e.preventDefault(); e.stopPropagation(); openBlogDetailsModal(readMoreLink.dataset.id); }
     };
+  }
+
+  function renderBlog() {
+    const container = document.getElementById('blogContainer');
+    if (!container) return;
+    const sorted = sortPostsByDate(blogPosts);
+    const totalPages = Math.ceil(sorted.length / ITEMS_PER_PAGE);
+    if (currentPage > totalPages) currentPage = totalPages || 1;
+    const start = (currentPage - 1) * ITEMS_PER_PAGE;
+    const pagePosts = sorted.slice(start, start + ITEMS_PER_PAGE);
+    
+    if (!pagePosts.length) {
+      container.innerHTML = '<div style="text-align:center; padding:50px;"><i class="fas fa-newspaper" style="font-size:3rem; opacity:0.4;"></i><p>Немає статей</p></div>';
+      renderPagination(totalPages);
+      return;
+    }
+    
+    container.innerHTML = pagePosts.map(post => {
+      const shortText = stripHtml(post.text || '').substring(0, 130) + (stripHtml(post.text || '').length > 130 ? '...' : '');
+      const adminButtons = window.isAdmin ? `<div class="blog-card-actions"><button class="edit-btn" data-id="${post.id}"><i class="fas fa-pen"></i></button><button class="delete-btn" data-id="${post.id}"><i class="fas fa-trash"></i></button></div>` : '';
+      return `
+      <article class="blog-card" data-id="${post.id}">
+        ${adminButtons}
+        ${post.image ? `<img src="${post.image}" alt="${post.title}" loading="lazy">` : '<div class="blog-card-img"><i class="fas fa-image"></i></div>'}
+        <div class="blog-card-body">
+          <span class="blog-date">${post.date || ''}</span>
+          <h4>${Utils.escapeHtml(post.title)}</h4>
+          <p>${Utils.escapeHtml(shortText)}</p>
+          <a href="#" class="read-more-link" data-id="${post.id}">Читати далі →</a>
+        </div>
+      </article>`;
+    }).join('');
+    
+    attachCardEvents();
+    renderPagination(totalPages);
   }
 
   function openBlogModal(id = null) {
@@ -166,11 +219,9 @@
   }
 
   function init() {
-    blogPosts = loadData();
+    loadData();
     renderBlog();
-    if (window.isAdmin) {
-      document.getElementById('addBlogBtn')?.addEventListener('click', () => openBlogModal());
-    }
+    if (window.isAdmin) document.getElementById('addBlogBtn')?.addEventListener('click', () => openBlogModal());
     document.getElementById('closeBlogModalBtn')?.addEventListener('click', closeBlogModal);
     document.getElementById('cancelBlogBtn')?.addEventListener('click', closeBlogModal);
     document.getElementById('blogModalOverlay')?.addEventListener('click', (e) => { if (e.target === e.currentTarget) closeBlogModal(); });
@@ -178,11 +229,7 @@
       e.preventDefault();
       const title = document.getElementById('blogTitle').value.trim();
       if (!title) { alert('Заголовок обовʼязковий'); return; }
-      const data = {
-        title, date: document.getElementById('blogDate').value.trim(),
-        text: document.getElementById('blogText').value.trim(),
-        image: document.getElementById('blogImage').value.trim()
-      };
+      const data = { title, date: document.getElementById('blogDate').value.trim(), text: document.getElementById('blogText').value.trim(), image: document.getElementById('blogImage').value.trim() };
       if (editingBlogId) {
         const idx = blogPosts.findIndex(p => p.id === editingBlogId);
         if (idx !== -1) blogPosts[idx] = { ...blogPosts[idx], ...data };
@@ -190,10 +237,10 @@
         blogPosts.push({ id: 'b' + Date.now(), ...data });
       }
       saveData();
+      currentPage = 1;
       renderBlog();
       closeBlogModal();
     });
   }
-
   document.addEventListener('DOMContentLoaded', init);
 })();

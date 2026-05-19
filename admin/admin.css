@@ -1,4 +1,32 @@
-/* ========== ОСНОВНІ СТИЛІ АДМІН-ПАНЕЛІ ========== */
+/* ========== ЗМІННІ ========== */
+:root {
+  --admin-primary: #0057b7;
+  --admin-primary-dark: #003d82;
+  --admin-primary-light: #e8f0fe;
+  --admin-red: #d32f2f;
+  --admin-red-dark: #b71c1c;
+  --admin-green: #2e7d32;
+  --admin-green-light: #e8f5e9;
+  --admin-yellow: #f57f17;
+  --admin-yellow-light: #fff8e1;
+  --admin-gray-bg: #f8fafc;
+  --admin-border: #eef2f6;
+  --admin-border-dark: #e2e8f0;
+  --admin-text: #1f2937;
+  --admin-text-light: #6b7280;
+  --admin-text-lighter: #9ca3af;
+  --radius-sm: 12px;
+  --radius-md: 20px;
+  --radius-lg: 28px;
+  --radius-xl: 32px;
+  --radius-full: 9999px;
+  --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 12px 30px rgba(0, 0, 0, 0.15);
+  --transition: all 0.2s ease;
+}
+
+/* ========== ГЛОБАЛЬНІ ========== */
 * {
   margin: 0;
   padding: 0;
@@ -17,236 +45,573 @@ body {
   margin: 0 auto;
 }
 
-/* ========== ШАПКА АДМІНКИ ========== */
+/* ========== КОМПОНЕНТИ – КНОПКИ ========== */
+.btn,
+.action-btn,
+.add-trip-btn,
+.page-btn,
+.icon-btn,
+.admin-tab {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border-radius: var(--radius-full);
+  font-weight: 600;
+  transition: var(--transition);
+  cursor: pointer;
+  border: none;
+  background: white;
+  color: var(--admin-text);
+  text-decoration: none;
+}
+
+.btn {
+  padding: 8px 20px;
+  font-size: 0.9rem;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(4px);
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-primary {
+  background: var(--admin-primary);
+  color: white;
+}
+.btn-primary:hover {
+  background: var(--admin-primary-dark);
+  transform: translateY(-1px);
+}
+
+.btn-outline {
+  background: white;
+  border: 2px solid var(--admin-border-dark);
+  color: var(--admin-text);
+}
+.btn-outline:hover {
+  border-color: var(--admin-primary);
+  color: var(--admin-primary);
+  transform: translateY(-1px);
+}
+
+.action-btn {
+  padding: 6px 14px;
+  font-size: 0.75rem;
+  background: #f1f5f9;
+  color: var(--admin-text-light);
+}
+.action-btn:hover {
+  transform: translateY(-1px);
+}
+
+.action-btn.approve {
+  background: var(--admin-green-light);
+  color: var(--admin-green);
+}
+.action-btn.approve:hover {
+  background: var(--admin-green);
+  color: white;
+}
+
+.action-btn.reject {
+  background: #ffebee;
+  color: var(--admin-red);
+}
+.action-btn.reject:hover {
+  background: var(--admin-red);
+  color: white;
+}
+
+.action-btn.delete {
+  background: #f5f5f5;
+  color: #757575;
+}
+.action-btn.delete:hover {
+  background: #9e9e9e;
+  color: white;
+}
+
+.action-btn.view-details {
+  background: var(--admin-primary-light);
+  color: var(--admin-primary);
+}
+.action-btn.view-details:hover {
+  background: var(--admin-primary);
+  color: white;
+}
+
+/* ========== ШАПКА ========== */
 .admin-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(12px);
   padding: 16px 30px;
-  border-radius: 60px;
+  border-radius: var(--radius-full);
   margin-bottom: 30px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  box-shadow: var(--shadow-sm);
   border: 1px solid rgba(255, 255, 255, 0.8);
 }
 
 .admin-header h1 {
   font-size: 1.5rem;
-  color: #0057b7;
-}
-
-/* Кнопка виходу */
-.admin-logout {
-  background: none;
-  border: 1px solid #0057b7;
-  padding: 8px 20px;
-  border-radius: 40px;
-  cursor: pointer;
-  color: #0057b7;
-  transition: 0.2s;
-  font-weight: 600;
-}
-
-.admin-logout:hover {
-  background: #0057b7;
-  color: white;
-}
-
-/* Кнопка "На головну" */
-.admin-home-btn {
-  background: none;
-  border: 1px solid #0057b7;
-  padding: 8px 20px;
-  border-radius: 40px;
-  cursor: pointer;
-  color: #0057b7;
-  transition: 0.2s;
-  font-weight: 600;
-  text-decoration: none;
-  display: inline-flex;
+  color: var(--admin-primary);
+  display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 12px;
 }
 
-.admin-home-btn:hover {
-  background: #0057b7;
-  color: white;
+.header-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
 }
 
-/* ========== ВКЛАДКИ ========== */
+/* ========== ВКЛАДКИ ТА ФІЛЬТРИ ========== */
 .admin-tabs {
   display: flex;
   gap: 10px;
   background: rgba(255, 255, 255, 0.9);
   backdrop-filter: blur(8px);
   padding: 8px 20px;
-  border-radius: 50px;
+  border-radius: var(--radius-full);
   margin-bottom: 30px;
   width: fit-content;
+  flex-wrap: wrap;
 }
 
 .admin-tab {
   padding: 10px 24px;
-  border: none;
   background: transparent;
-  border-radius: 40px;
-  cursor: pointer;
-  font-weight: 600;
-  transition: 0.2s;
-  font-size: 0.9rem;
 }
-
 .admin-tab.active {
-  background: #0057b7;
+  background: var(--admin-primary);
   color: white;
 }
 
-/* ========== ТАБЛИЦІ ========== */
-.applications-table,
-.reviews-table {
-  background: white;
-  border-radius: 28px;
-  overflow-x: auto;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
-  width: 100%;
-  border-collapse: collapse;
+.status-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 30px;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(8px);
+  padding: 12px 20px;
+  border-radius: var(--radius-full);
+  align-items: center;
 }
 
-.applications-table th,
-.applications-table td,
-.reviews-table th,
-.reviews-table td {
-  padding: 14px 16px;
-  text-align: left;
-  border-bottom: 1px solid #e5e7eb;
-}
-
-.applications-table th,
-.reviews-table th {
-  background: #f9fafb;
-  font-weight: 700;
-}
-
-/* ========== СТАТУСИ ЗАЯВОК ========== */
-.status-badge {
-  display: inline-block;
-  padding: 4px 12px;
-  border-radius: 20px;
-  font-size: 0.75rem;
-  font-weight: 600;
-}
-
-.status-pending {
-  background: #fff8e1;
-  color: #f57f17;
-}
-
-.status-approved {
-  background: #e8f5e9;
-  color: #2e7d32;
-}
-
-.status-rejected {
-  background: #ffebee;
-  color: #b71c1c;
-}
-
-/* ========== КНОПКИ ДІЙ (ПРИЙНЯТИ/ВІДХИЛИТИ/ВИДАЛИТИ) ========== */
-.action-btn {
-  background: #f3f4f6;
-  border: none;
-  border-radius: 30px;
-  padding: 8px 14px;
-  font-size: 0.85rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s ease;
+.filter-group {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  margin: 0 4px;
+  gap: 4px;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: var(--radius-full);
+  padding: 2px 4px 2px 12px;
 }
 
-/* Кнопка "Прийняти" */
-.action-btn.approve {
-  background: #e8f5e9;
-  color: #2e7d32;
-}
-
-.action-btn.approve:hover {
-  background: #2e7d32;
-  color: white;
-  transform: translateY(-2px);
-}
-
-/* Кнопка "Відхилити" */
-.action-btn.reject {
-  background: #ffebee;
-  color: #b71c1c;
-}
-
-.action-btn.reject:hover {
-  background: #b71c1c;
-  color: white;
-  transform: translateY(-2px);
-}
-
-/* Кнопка "Видалити" */
-.action-btn.delete {
-  background: #f5f5f5;
-  color: #757575;
-}
-
-.action-btn.delete:hover {
-  background: #9e9e9e;
-  color: white;
-  transform: translateY(-2px);
-}
-
-/* ========== ФОРМА ДОДАВАННЯ ВІДГУКУ ========== */
-.review-form-card {
-  background: white;
-  border-radius: 28px;
-  padding: 30px;
-  margin-bottom: 30px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
-}
-
-.form-group {
-  margin-bottom: 20px;
-}
-
-.form-group label {
-  display: block;
-  margin-bottom: 8px;
+.status-filter-btn {
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid var(--admin-border-dark);
+  border-radius: var(--radius-full);
+  padding: 8px 20px;
   font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: var(--transition);
+  color: #4a5568;
 }
 
-.form-group input,
-.form-group textarea,
-.form-group select {
-  width: 100%;
-  padding: 12px 16px;
-  border: 2px solid #e5e7eb;
-  border-radius: 24px;
-  font-family: inherit;
+.status-filter-btn.active {
+  background: var(--admin-primary);
+  border-color: var(--admin-primary);
+  color: white;
+  box-shadow: 0 2px 8px rgba(0, 87, 183, 0.2);
+}
+
+.clear-category-btn {
+  background: none;
+  border: none;
+  color: var(--admin-red);
+  cursor: pointer;
+  font-size: 0.8rem;
+  padding: 6px 8px;
+  border-radius: var(--radius-full);
+  transition: var(--transition);
+}
+.clear-category-btn:hover {
+  background: #fed7d7;
+  transform: scale(1.05);
+}
+
+/* ========== СІТКА КАРТОК ========== */
+.applications-grid,
+.reviews-admin-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 24px;
+  margin-bottom: 30px;
+}
+
+/* ========== КАРТКИ ЗАЯВОК ========== */
+.app-card {
+  background: white;
+  border-radius: var(--radius-md);
+  padding: 16px;
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition);
+  border: 1px solid rgba(0, 87, 183, 0.1);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+.app-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--admin-primary);
+}
+
+.app-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+.app-card-title {
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--admin-primary);
+  line-height: 1.3;
+  word-break: break-word;
+}
+
+.app-status {
+  font-size: 0.75rem;
+  padding: 4px 12px;
+  border-radius: var(--radius-full);
+  font-weight: 600;
+  white-space: nowrap;
+}
+.app-status.pending { background: var(--admin-yellow-light); color: var(--admin-yellow); }
+.app-status.approved { background: var(--admin-green-light); color: var(--admin-green); }
+.app-status.rejected { background: #ffebee; color: var(--admin-red); }
+
+.app-card-info {
+  margin: 12px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.info-line {
+  font-size: 0.85rem;
+  color: #4b5563;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  word-break: break-word;
+}
+.info-line i {
+  width: 20px;
+  color: var(--admin-primary);
+}
+.preview-text {
+  background: var(--admin-gray-bg);
+  padding: 6px 8px;
+  border-radius: var(--radius-sm);
+  font-style: italic;
+  color: var(--admin-text-light);
+  font-size: 0.8rem;
+  margin-top: 4px;
+}
+
+.app-card-actions {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+  gap: 8px;
+  margin-top: auto;
+  padding-top: 12px;
+  border-top: 1px solid var(--admin-border);
+}
+
+/* ========== КАРТКИ ВІДГУКІВ ========== */
+.review-admin-card {
+  background: white;
+  border-radius: var(--radius-md);
+  padding: 20px;
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition);
+  border: 1px solid var(--admin-border);
+}
+.review-admin-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+  border-color: rgba(0, 87, 183, 0.2);
+}
+
+.review-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.review-author-info {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.review-name {
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--admin-primary);
+}
+.review-age {
+  font-size: 0.8rem;
+  color: var(--admin-text-light);
+  background: #f1f5f9;
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+}
+.review-stars {
+  color: #ffb800;
+  letter-spacing: 2px;
   font-size: 0.9rem;
 }
-
-.btn-submit {
-  background: #0057b7;
-  color: white;
-  border: none;
-  padding: 12px 28px;
-  border-radius: 30px;
+.review-text {
+  color: #374151;
+  line-height: 1.5;
+  margin: 12px 0;
+  font-size: 0.9rem;
+  background: var(--admin-gray-bg);
+  padding: 12px;
+  border-radius: 16px;
+}
+.review-status {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: var(--radius-full);
+  font-size: 0.7rem;
   font-weight: 600;
-  cursor: pointer;
-  transition: 0.2s;
+  margin-bottom: 12px;
+}
+.review-status.approved { background: var(--admin-green-light); color: var(--admin-green); }
+.review-status.pending { background: var(--admin-yellow-light); color: var(--admin-yellow); }
+
+.review-card-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  border-top: 1px solid var(--admin-border);
+  padding-top: 12px;
+  flex-wrap: wrap;
 }
 
-.btn-submit:hover {
-  background: #003d82;
+/* ========== ФІЛЬТРИ ВІДГУКІВ ========== */
+.reviews-filters {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 30px;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(8px);
+  padding: 12px 24px;
+  border-radius: var(--radius-full);
+  width: fit-content;
+  box-shadow: var(--shadow-sm);
+}
+.review-filter-btn {
+  background: white;
+  border: 1px solid var(--admin-border-dark);
+  border-radius: var(--radius-full);
+  padding: 8px 24px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: var(--transition);
+  color: #475569;
+}
+.review-filter-btn.active {
+  background: var(--admin-primary);
+  border-color: var(--admin-primary);
+  color: white;
+}
+.review-filter-btn:hover:not(.active) {
+  background: #eef2ff;
+  border-color: var(--admin-primary);
+  color: var(--admin-primary);
+}
+
+/* ========== ПАГІНАЦІЯ ========== */
+.pagination-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+.pagination {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.page-btn {
+  width: 40px;
+  height: 40px;
+  background: white;
+  border: 1px solid var(--admin-border-dark);
+  font-weight: 600;
+}
+.page-btn.active {
+  background: var(--admin-primary);
+  border-color: var(--admin-primary);
+  color: white;
+}
+.page-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ========== МОДАЛЬНІ ВІКНА ========== */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(6px);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+}
+.modal-overlay.active {
+  display: flex;
+}
+.modal {
+  background: white;
+  border-radius: var(--radius-lg);
+  max-width: 600px;
+  width: 90%;
+  max-height: 85vh;
+  overflow-y: auto;
+  box-shadow: 0 30px 50px rgba(0, 0, 0, 0.25);
+  border: none;
+}
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 28px 16px;
+  border-bottom: 1px solid var(--admin-border);
+  background: var(--admin-gray-bg);
+}
+.modal-header h2 {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--admin-text);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0;
+}
+.modal-header h2 i {
+  color: var(--admin-primary);
+}
+.modal-close {
+  background: none;
+  border: none;
+  font-size: 1.8rem;
+  cursor: pointer;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+}
+.modal-close:hover {
+  background: rgba(0, 0, 0, 0.05);
+  transform: rotate(90deg);
+}
+.modal-body {
+  padding: 24px 28px;
+}
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 16px;
+  padding: 20px 28px 28px;
+  border-top: 1px solid var(--admin-border);
+  background: var(--admin-gray-bg);
+}
+
+/* ========== ФОРМИ В МОДАЛКАХ ========== */
+.form-group {
+  margin-bottom: 24px;
+}
+.form-group label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: var(--admin-text);
+  font-size: 0.9rem;
+}
+.modal :is(input, textarea, select) {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1.5px solid var(--admin-border-dark);
+  border-radius: 16px;
+  font-size: 0.95rem;
+  font-family: inherit;
+  transition: var(--transition);
+  background: white;
+}
+.modal :is(input, textarea, select):focus {
+  outline: none;
+  border-color: var(--admin-primary);
+  box-shadow: 0 0 0 3px rgba(0, 87, 183, 0.1);
+}
+.modal textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+.modal select {
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%234b5563' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+  background-size: 16px;
+}
+
+/* ========== ДЕТАЛІ ЗАЯВКИ ========== */
+.modal-app-details {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.detail-row {
+  font-size: 0.95rem;
+  line-height: 1.5;
+  border-bottom: 1px solid var(--admin-border);
+  padding-bottom: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px;
+}
+.detail-row strong {
+  min-width: 120px;
+  color: var(--admin-primary);
+}
+.detail-row strong i {
+  margin-right: 4px;
 }
 
 /* ========== СТОРІНКА ВХОДУ АДМІНА ========== */
@@ -254,79 +619,185 @@ body {
   width: 100%;
   max-width: 480px;
   margin: 0 auto;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
 }
-
 .admin-login-card {
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(12px);
-  border-radius: 32px;
+  border-radius: var(--radius-xl);
   padding: 40px 30px;
   text-align: center;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-md);
   border: 1px solid rgba(255, 255, 255, 0.8);
+  width: 100%;
 }
-
 .admin-logo {
   width: 100px;
   height: 100px;
   margin: 0 auto 20px;
-  border-radius: 20px;
+  border-radius: var(--radius-md);
   overflow: hidden;
   background: white;
 }
-
 .admin-logo img {
   width: 100%;
   height: 100%;
   object-fit: contain;
 }
-
 .admin-login-card h1 {
   font-family: 'Montserrat', sans-serif;
   font-size: 1.8rem;
   margin-bottom: 24px;
   color: #1f2937;
 }
-
 .google-login-btn {
   display: flex;
   justify-content: center;
 }
 
-/* ========== СТИЛЬНИЙ ДИЗАЙН ДЛЯ АДМІН-ПАНЕЛІ FAQ ========== */
-#faqAdminList .faq-admin-item {
-  transition: all 0.3s ease;
-}
-
-#faqAdminList .faq-admin-item:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-}
-
-#addFaqBtn {
-  background: linear-gradient(135deg, #ffd700 0%, #ffc107 100%);
-  color: #1f2937;
-  border: none;
-  padding: 14px 28px;
-  font-size: 1rem;
-  transition: all 0.3s;
-}
-
-#addFaqBtn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(255, 215, 0, 0.4);
-}
-
-.modal form textarea {
-  font-family: 'Inter', monospace;
-  background: #f9fafb;
-  border: 2px solid #e5e7eb;
-  border-radius: 20px;
-  padding: 14px;
-}
-
-.modal form textarea:focus {
-  border-color: #0057b7;
+/* ========== СТИЛІ ДЛЯ FAQ В АДМІНЦІ ========== */
+.faq-list .card {
   background: white;
-  box-shadow: 0 0 0 3px rgba(0, 87, 183, 0.1);
+  border-radius: var(--radius-md);
+  padding: 24px;
+  margin-bottom: 16px;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  transition: var(--transition);
+}
+.faq-list .card:hover {
+  box-shadow: var(--shadow-md);
+  border-color: rgba(0, 87, 183, 0.15);
+}
+.faq-item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.faq-item-question {
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--admin-text);
+  flex: 1;
+}
+.faq-item-answer {
+  background: var(--admin-gray-bg);
+  padding: 16px;
+  border-radius: 16px;
+  margin-top: 8px;
+  color: #4a5568;
+  line-height: 1.6;
+}
+.icon-btn {
+  background: white;
+  border: 1px solid var(--admin-border-dark);
+  border-radius: var(--radius-sm);
+  width: 40px;
+  height: 40px;
+}
+.icon-btn:hover {
+  background: #f7fafc;
+  border-color: var(--admin-primary);
+  color: var(--admin-primary);
+}
+
+/* ========== ІНШІ ЕЛЕМЕНТИ ========== */
+.empty-state {
+  text-align: center;
+  padding: 50px;
+  color: var(--admin-text-lighter);
+}
+.empty-state i {
+  font-size: 3rem;
+  margin-bottom: 16px;
+  opacity: 0.5;
+}
+
+/* ========== АДАПТИВНІСТЬ ========== */
+@media (max-width: 768px) {
+  body {
+    padding: 12px;
+  }
+  .admin-header {
+    flex-direction: column;
+    text-align: center;
+    padding: 16px 20px;
+  }
+  .admin-tabs {
+    width: 100%;
+    justify-content: center;
+  }
+  .status-filters {
+    flex-direction: column;
+    align-items: stretch;
+    border-radius: 32px;
+  }
+  .filter-group {
+    width: 100%;
+    justify-content: space-between;
+  }
+  .applications-grid,
+  .reviews-admin-grid {
+    grid-template-columns: 1fr;
+  }
+  .modal-header {
+    padding: 16px 20px;
+  }
+  .modal-header h2 {
+    font-size: 1.2rem;
+  }
+  .modal-body {
+    padding: 16px 20px;
+  }
+  .modal-footer {
+    padding: 16px 20px 20px;
+    flex-wrap: wrap;
+  }
+  .detail-row {
+    flex-direction: column;
+    gap: 4px;
+  }
+  .detail-row strong {
+    min-width: auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .app-card-actions {
+    grid-template-columns: 1fr;
+  }
+  .review-card-actions {
+    flex-direction: column;
+  }
+  .review-card-actions .action-btn {
+    width: 100%;
+    justify-content: center;
+  }
+  .reviews-filters {
+    width: 100%;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .pagination {
+    gap: 4px;
+  }
+  .page-btn {
+    width: 36px;
+    height: 36px;
+    font-size: 0.8rem;
+  }
+}
+
+/* ========== ФОКУС ДЛЯ КЛАВІАТУРИ ========== */
+*:focus-visible {
+  outline: 2px solid var(--admin-primary);
+  outline-offset: 2px;
+  border-radius: 4px;
 }

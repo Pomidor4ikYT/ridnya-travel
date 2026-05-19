@@ -2,7 +2,6 @@
 (function() {
   'use strict';
 
-  // Мобільне меню
   function initMobileMenu() {
     const toggle = document.getElementById('mobileMenuToggle');
     const nav = document.getElementById('mainNav');
@@ -17,7 +16,6 @@
     });
   }
 
-  // Анімація появи блоків
   function initScrollReveal() {
     const reveals = document.querySelectorAll('.reveal');
     if (!reveals.length) return;
@@ -29,7 +27,6 @@
     reveals.forEach(el => observer.observe(el));
   }
 
-  // Плавний скрол до якорів
   function initSmoothScroll() {
     document.body.addEventListener('click', (e) => {
       const link = e.target.closest('a[href^="#"]');
@@ -44,7 +41,6 @@
     });
   }
 
-  // Анімація лічильників статистики (тільки на головній)
   function initStatsCounter() {
     const statNumbers = document.querySelectorAll('.stat-number[data-target]');
     if (!statNumbers.length) return;
@@ -71,13 +67,10 @@
     statNumbers.forEach(el => observer.observe(el));
   }
 
-  // Ініціалізація всього
   document.addEventListener('DOMContentLoaded', () => {
     initMobileMenu();
     initScrollReveal();
     initSmoothScroll();
     initStatsCounter();
-    // Функцію initFaqAccordion прибрано, щоб не було конфлікту з логікою на сторінці faq.html
   });
-
 })();

@@ -5,7 +5,6 @@
   const GOOGLE_CLIENT_ID = '738790400825-1nk23hrsuk3svfa8e1ess8q22kbi9pa3.apps.googleusercontent.com';
   const ADMIN_EMAIL = 'ridnyatravel@gmail.com';
 
-  // Негайна синхронна перевірка sessionStorage (до DOMContentLoaded)
   (function immediateCheck() {
     const loggedIn = sessionStorage.getItem('adminLoggedIn');
     const email = sessionStorage.getItem('adminEmail');
@@ -19,12 +18,21 @@
     const reviewsLink = document.querySelector('a[href="admin/reviews.html"]');
     const supportBtn = document.querySelector('.btn-support');
     const currentPath = window.location.pathname;
-
     const isAdminPage = currentPath.includes('/admin');
+
     const showAdminControls = window.isAdmin && !isAdminPage;
 
     if (showAdminControls) {
-      adminElements.forEach(el => { if (el) el.style.display = ''; });
+      adminElements.forEach(el => {
+        if (el) {
+          // Для кнопок додавання використовуємо inline-flex, для решти – ''
+          if (el.classList && (el.classList.contains('add-trip-btn') || el.classList.contains('btn'))) {
+            el.style.display = 'inline-flex';
+          } else {
+            el.style.display = '';
+          }
+        }
+      });
       if (logoutBtn) logoutBtn.style.display = 'inline-flex';
       if (applicationsLink) applicationsLink.style.display = 'inline-flex';
       if (reviewsLink) reviewsLink.style.display = 'inline-flex';
@@ -48,13 +56,10 @@
         sessionStorage.setItem('adminLoggedIn', 'true');
         sessionStorage.setItem('adminEmail', payload.email);
         updateAdminUI();
-
-        // Виправлено: більше НЕ перекидаємо на головну з адмін-сторінок
-        // Просто перезавантажуємо ту саму сторінку, щоб оновився UI
         location.reload();
       } else {
         alert('Доступ заборонено. Тільки для ' + ADMIN_EMAIL);
-        signOut();
+        window.signOut();
       }
     } catch (e) {
       console.error('Помилка декодування токена', e);
@@ -73,22 +78,18 @@
   };
 
   function initGoogleAuth() {
-    // На всіх сторінках шукаємо кнопку з класом google-login-btn
     const loginBtn = document.querySelector('.google-login-btn');
-    if (!loginBtn) return;  // якщо немає кнопки – нічого не робимо
-
+    if (!loginBtn) return;
     if (!GOOGLE_CLIENT_ID || GOOGLE_CLIENT_ID.includes('YOUR_GOOGLE_CLIENT_ID')) {
-      console.warn('Google Client ID не налаштований. Admin-функції не працюватимуть.');
+      console.warn('Google Client ID не налаштований.');
       return;
     }
-
     google.accounts.id.initialize({
       client_id: GOOGLE_CLIENT_ID,
       callback: handleCredentialResponse,
       auto_select: false,
       cancel_on_tap_outside: true,
     });
-
     google.accounts.id.renderButton(loginBtn, {
       type: 'standard',
       theme: 'outline',

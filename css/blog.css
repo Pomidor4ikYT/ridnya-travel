@@ -238,3 +238,50 @@
   margin-top: 8px;
   align-self: flex-start;
 }
+/* Пагінація для блогу та спорядження */
+.pagination-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  margin: 30px 0;
+}
+.page-numbers {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.page-number, .page-nav {
+  background: white;
+  border: 1px solid var(--gray-300);
+  border-radius: 30px;
+  width: 40px;
+  height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: var(--gray-700);
+}
+.page-number.active {
+  background: var(--blue);
+  border-color: var(--blue);
+  color: white;
+}
+.page-number:hover:not(.active), .page-nav:hover:not(:disabled) {
+  background: var(--blue-light);
+  border-color: var(--blue);
+  color: var(--blue);
+}
+.page-nav:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+@media (max-width: 600px) {
+  .page-number, .page-nav { width: 34px; height: 34px; font-size: 0.85rem; }
+  .pagination-wrapper { gap: 10px; }
+  .page-numbers { gap: 5px; }
+}

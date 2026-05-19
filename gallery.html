@@ -16,9 +16,7 @@
   <header class="main-header">
     <div class="header-container">
       <a href="index.html" class="header-logo">
-        <div class="header-logo-icon">
-          <img src="images/logo.jpg" alt="БФ Рідня" style="width:100%; height:100%; object-fit:contain;">
-        </div>
+        <div class="header-logo-icon"><img src="images/logo.jpg" alt="БФ Рідня"></div>
         <div class="header-logo-text">
           <span class="header-logo-title">РІДНЯ</span>
           <span class="header-logo-sub">Клуб мандрівників</span>
@@ -61,13 +59,12 @@
         <p class="section-subtitle">Діліться фотографіями з мандрівок</p>
       </div>
       <div style="display:flex; justify-content:center; margin-bottom:30px;">
-        <button class="add-trip-btn admin-only" id="addAlbumBtn" style="display: none;"><i class="fas fa-plus"></i> Створити альбом</button>
+        <button class="add-trip-btn admin-only" id="addAlbumBtn"><i class="fas fa-plus"></i> Створити альбом</button>
       </div>
       <div id="galleryContainer" class="albums-grid"></div>
     </section>
   </main>
 
-  <!-- Модальне вікно для альбому -->
   <div class="modal-overlay" id="albumModalOverlay">
     <div class="modal">
       <div class="modal-header">
@@ -75,22 +72,10 @@
         <button class="modal-close" id="closeAlbumModalBtn">&times;</button>
       </div>
       <form id="addAlbumForm">
-        <div class="form-group">
-          <label>Назва альбому *</label>
-          <input type="text" id="albumTitle" placeholder="Назва альбому" required>
-        </div>
-        <div class="form-group">
-          <label>Обкладинка (URL)</label>
-          <input type="url" id="albumCover" placeholder="https://...">
-        </div>
-        <div class="form-group">
-          <label>Фото (URL через кому)</label>
-          <textarea id="albumPhotos" rows="3" placeholder="url1, url2, url3..."></textarea>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn-cancel" id="cancelAlbumBtn">Скасувати</button>
-          <button type="submit" class="btn-submit"><i class="fas fa-save"></i> Зберегти</button>
-        </div>
+        <div class="form-group"><label>Назва альбому *</label><input type="text" id="albumTitle" placeholder="Назва альбому" required></div>
+        <div class="form-group"><label>Обкладинка (URL)</label><input type="url" id="albumCover" placeholder="https://..."></div>
+        <div class="form-group"><label>Фото (URL через кому)</label><textarea id="albumPhotos" rows="3" placeholder="url1, url2, url3..."></textarea></div>
+        <div class="modal-footer"><button type="button" class="btn-cancel" id="cancelAlbumBtn">Скасувати</button><button type="submit" class="btn-submit"><i class="fas fa-save"></i> Зберегти</button></div>
       </form>
     </div>
   </div>
@@ -99,15 +84,13 @@
     <div class="footer-container">
       <div class="footer-top">
         <div class="footer-logo">
-          <div class="header-logo-icon footer-logo-icon">
-            <img src="images/logo.jpg" alt="БФ Рідня" style="width:100%; height:100%; object-fit:contain;">
-          </div>
+          <div class="header-logo-icon footer-logo-icon"><img src="images/logo.jpg" alt="БФ Рідня"></div>
           <div><strong>Благодійний фонд «Рідня»</strong><p>Клуб мандрівників</p></div>
         </div>
         <div class="footer-social">
-          <a href="https://www.facebook.com/bfridnya" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
-          <a href="https://www.instagram.com/fond_ridnya" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-          <a href="https://www.youtube.com/channel/UCr67AbASZGqx4RefbKaIRSQ" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+          <a href="https://www.facebook.com/bfridnya"><i class="fab fa-facebook-f"></i></a>
+          <a href="https://www.instagram.com/fond_ridnya"><i class="fab fa-instagram"></i></a>
+          <a href="https://www.youtube.com/channel/UCr67AbASZGqx4RefbKaIRSQ"><i class="fab fa-youtube"></i></a>
         </div>
       </div>
       <div class="footer-middle">
@@ -115,14 +98,13 @@
         <div class="footer-nav"><h4>Про клуб</h4><ul><li><a href="reviews.html">Відгуки</a></li><li><a href="contacts.html">Контакти</a></li><li><a href="contacts.html#donate">Підтримати фонд</a></li></ul></div>
         <div class="footer-nav"><h4>Контакти</h4><ul><li><i class="fas fa-map-marker-alt"></i> м. Стрий, вул. Незалежності, 8</li><li><i class="fas fa-phone"></i> +380 50 370 16 40</li><li><i class="fas fa-envelope"></i> mgastryi2026@gmail.com</li></ul></div>
       </div>
-      <div class="footer-bottom">
-        <p>&copy; 2026 Благодійний фонд «Рідня».</p>
-        <p>Розроблено з <i class="fas fa-heart"></i> для громад</p>
-      </div>
+      <div class="footer-bottom"><p>&copy; 2026 Благодійний фонд «Рідня».</p><p>Розроблено з <i class="fas fa-heart"></i> для громад</p></div>
     </div>
   </footer>
 
+  <script src="js/utils.js"></script>
   <script src="js/main.js"></script>
+  <script src="js/bg-collage.js"></script>
   <script src="js/admin-auth.js"></script>
   <script src="js/gallery.js"></script>
   <script src="https://accounts.google.com/gsi/client" async defer></script>
