@@ -1,0 +1,11 @@
+RewriteEngine On
+
+# Переадресація на HTTPS (якщо у вас є SSL-сертифікат)
+RewriteCond %{HTTPS} !=on
+RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
+
+# Власна сторінка 404
+ErrorDocument 404 /404.html
+
+# Захист від перегляду вмісту папок
+Options -Indexes
