@@ -52,33 +52,38 @@
     </div>
   </header>
 
-  <main>
-    <section class="section active">
-      <div class="section-header">
-        <span class="section-label">Зв'язок</span>
-        <h2 class="section-title">Контакти</h2>
-        <p class="section-subtitle">Напишіть нам або завітайте особисто</p>
-      </div>
-      <div class="contacts-layout">
-        <div class="contact-info glass-card">
-          <div class="contact-item"><i class="fas fa-map-marker-alt"></i><div><strong>Адреса</strong><br>м. Стрий, вул. Незалежності, 8</div></div>
-          <div class="contact-item"><i class="fas fa-phone"></i><div><strong>Телефон</strong><br>+380 50 370 16 40</div></div>
-          <div class="contact-item"><i class="fas fa-envelope"></i><div><strong>Email</strong><br>mgastryi2026@gmail.com</div></div>
-          <div class="contact-social">
-            <a href="https://www.facebook.com/bfridnya"><i class="fab fa-facebook-f"></i></a>
-            <a href="https://www.instagram.com/fond_ridnya"><i class="fab fa-instagram"></i></a>
-            <a href="https://www.youtube.com/channel/UCr67AbASZGqx4RefbKaIRSQ"><i class="fab fa-youtube"></i></a>
-          </div>
+<main>
+  <section class="section active">
+    <div class="section-header">
+      <span class="section-label">Зв'язок</span>
+      <h2 class="section-title">Контакти</h2>
+      <p class="section-subtitle">Напишіть нам або завітайте особисто</p>
+    </div>
+    <div class="contacts-layout">
+      <!-- Ліва частина – контактна інформація (без змін) -->
+      <div class="contact-info glass-card">
+        <div class="contact-item"><i class="fas fa-map-marker-alt"></i><div><strong>Адреса</strong><br>м. Стрий, вул. Незалежності, 8</div></div>
+        <div class="contact-item"><i class="fas fa-phone"></i><div><strong>Телефон</strong><br>+380 50 370 16 40</div></div>
+        <div class="contact-item"><i class="fas fa-envelope"></i><div><strong>Email</strong><br>mgastryi2026@gmail.com</div></div>
+        <div class="contact-social">
+          <a href="https://www.facebook.com/bfridnya"><i class="fab fa-facebook-f"></i></a>
+          <a href="https://www.instagram.com/fond_ridnya"><i class="fab fa-instagram"></i></a>
+          <a href="https://www.youtube.com/channel/UCr67AbASZGqx4RefbKaIRSQ"><i class="fab fa-youtube"></i></a>
         </div>
-        <form class="contact-form glass-card" id="contactForm">
-          <div class="form-group"><label for="contactName">Ваше ім’я</label><input type="text" id="contactName" placeholder="Ім’я Прізвище" required></div>
-          <div class="form-group"><label for="contactEmail">Email</label><input type="email" id="contactEmail" placeholder="your@email.com" required></div>
-          <div class="form-group"><label for="contactMsg">Повідомлення</label><textarea id="contactMsg" rows="4" placeholder="Ваше повідомлення..." required></textarea></div>
-          <button type="submit" class="btn-submit"><i class="fas fa-paper-plane"></i> Надіслати</button>
-        </form>
       </div>
-    </section>
-  </main>
+
+      <!-- Права частина – кнопка для Google Форми -->
+      <div class="contact-form glass-card" style="text-align: center;">
+        <i class="fas fa-paper-plane" style="font-size: 2rem; color: var(--blue); margin-bottom: 16px; display: inline-block;"></i>
+        <h3 style="margin-bottom: 12px;">Подати заявку в команду</h3>
+        <p style="margin-bottom: 24px; color: var(--gray-600);">Заповніть коротку Google-форму, і ми зв’яжемося з вами</p>
+        <a href="https://forms.gle/tEZ8ZNhFPKjgME5R6" target="_blank" rel="noopener noreferrer" class="btn-submit" style="display: inline-flex; gap: 10px;">
+          <i class="fas fa-external-link-alt"></i> Надіслати заявку
+        </a>
+      </div>
+    </div>
+  </section>
+</main>
 
   <footer class="main-footer">
     <div class="footer-container">

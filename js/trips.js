@@ -413,65 +413,17 @@ if (addBtn) {
   }
   function closeLeaderTripsModal() { document.getElementById('leaderTripsModal').classList.remove('active'); }
 
-  function openTripApplyModal(tripId, tripTitle) {
-    const modal = document.createElement('div');
-    modal.className = 'modal-overlay active';
-    modal.innerHTML = `
-      <div class="modal" style="max-width: 480px;">
-        <div class="modal-header"><h2><i class="fas fa-hiking"></i> Запис на похід</h2><button class="modal-close">&times;</button></div>
-        <div class="modal-body" style="padding: 24px;"><p style="margin-bottom: 16px;"><strong>${Utils.escapeHtml(tripTitle)}</strong></p>
-        <form id="applyTripForm"><div class="form-group"><label>Ім'я та прізвище *</label><input type="text" id="applyName" required placeholder="Іван Петренко"></div>
-        <div class="form-group"><label>Телефон *</label><input type="tel" id="applyPhone" required placeholder="+380 50 123 45 67"></div>
-        <div class="form-group"><label>Коментар</label><textarea id="applyComment" rows="2"></textarea></div>
-        <div class="modal-footer"><button type="button" class="btn-cancel" id="cancelApplyBtn">Скасувати</button><button type="submit" class="btn-submit"><i class="fas fa-paper-plane"></i> Надіслати</button></div></form></div></div>`;
-    document.body.appendChild(modal);
-    const closeModal = () => modal.remove();
-    modal.querySelector('.modal-close').addEventListener('click', closeModal);
-    modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
-    document.getElementById('cancelApplyBtn').addEventListener('click', closeModal);
-    document.getElementById('applyTripForm').addEventListener('submit', (e) => {
-      e.preventDefault();
-      const name = document.getElementById('applyName').value.trim();
-      const phone = document.getElementById('applyPhone').value.trim();
-      const comment = document.getElementById('applyComment').value.trim();
-      if (!name || !phone) { Utils.showNotification('Будь ласка, заповніть ім\'я та телефон', false); return; }
-      const apps = Utils.getStorage(TRIP_APPS_KEY);
-      apps.push({ id: Date.now(), tripId, tripTitle, userName: name, phone, comment, date: new Date().toLocaleString(), status: 'pending' });
-      Utils.setStorage(TRIP_APPS_KEY, apps);
-      Utils.showNotification('✅ Вашу заявку прийнято! Очікуйте зворотного зв\'язку.', true);
-      closeModal();
-    });
-  }
+function openTripApplyModal(tripId, tripTitle) {
+  // Відкриваємо Google Форму для заявок на маршрути
+  window.open('https://forms.gle/Npww8bQjRfMKT3s68', '_blank');
+  Utils.showNotification('📋 Ви переходите до Google Форми. Будь ласка, заповніть її, щоб записатися на похід.', true);
+}
 
-  function openLeaderApplyModal(leaderId, leaderName) {
-    const modal = document.createElement('div');
-    modal.className = 'modal-overlay active';
-    modal.innerHTML = `
-      <div class="modal" style="max-width: 480px;">
-        <div class="modal-header"><h2><i class="fas fa-users"></i> Записатись до лідера</h2><button class="modal-close">&times;</button></div>
-        <div class="modal-body" style="padding: 24px;"><p style="margin-bottom: 16px;">Лідер: <strong>${Utils.escapeHtml(leaderName)}</strong></p>
-        <form id="applyLeaderForm"><div class="form-group"><label>Ім'я та прізвище *</label><input type="text" id="applyLeaderName" required placeholder="Іван Петренко"></div>
-        <div class="form-group"><label>Телефон *</label><input type="tel" id="applyLeaderPhone" required placeholder="+380 50 123 45 67"></div>
-        <div class="form-group"><label>Коментар</label><textarea id="applyLeaderComment" rows="2"></textarea></div>
-        <div class="modal-footer"><button type="button" class="btn-cancel" id="cancelLeaderBtn">Скасувати</button><button type="submit" class="btn-submit">Надіслати</button></div></form></div></div>`;
-    document.body.appendChild(modal);
-    const closeModal = () => modal.remove();
-    modal.querySelector('.modal-close').addEventListener('click', closeModal);
-    modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
-    document.getElementById('cancelLeaderBtn').addEventListener('click', closeModal);
-    document.getElementById('applyLeaderForm').addEventListener('submit', (e) => {
-      e.preventDefault();
-      const name = document.getElementById('applyLeaderName').value.trim();
-      const phone = document.getElementById('applyLeaderPhone').value.trim();
-      const comment = document.getElementById('applyLeaderComment').value.trim();
-      if (!name || !phone) { Utils.showNotification('Будь ласка, заповніть ім\'я та телефон', false); return; }
-      const apps = Utils.getStorage(LEADER_APPS_KEY);
-      apps.push({ id: Date.now(), leaderId, leaderName, userName: name, phone: phone, comment, date: new Date().toLocaleString(), status: 'pending' });
-      Utils.setStorage(LEADER_APPS_KEY, apps);
-      Utils.showNotification('✅ Вашу заявку прийнято! Очікуйте зворотного зв\'язку від лідера.', true);
-      closeModal();
-    });
-  }
+function openLeaderApplyModal(leaderId, leaderName) {
+  // Відкриваємо Google Форму для заявок до лідера
+  window.open('https://forms.gle/tjNqxMC7Dfi8g78u8', '_blank');
+  Utils.showNotification('👨‍🏫 Ви переходите до Google Форми. Будь ласка, заповніть її, щоб записатися до лідера.', true);
+}
 
   // ========== РОБОТА З ЛІДЕРАМИ ==========
   function populateGuideSelect() {
