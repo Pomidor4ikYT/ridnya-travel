@@ -12,61 +12,84 @@
   <link rel="stylesheet" href="admin.css">
 </head>
 <body>
-<div class="admin-container">
-  <div class="admin-header">
-    <h1><i class="fas fa-clipboard-list"></i> Усі заявки</h1>
-    <div class="header-actions">
-      <a href="../index.html" class="btn btn-outline"><i class="fas fa-home"></i> На головну</a>
-      <button id="logoutBtn" class="btn btn-outline"><i class="fas fa-sign-out-alt"></i> Вийти</button>
+  <aside class="admin-sidebar">
+    <div class="logo">
+      <img src="../images/logo.jpg" alt="РІДНЯ">
+      <h1>РІДНЯ</h1>
+    </div>
+    <nav class="admin-nav">
+      <a href="../index.html"><i class="fas fa-home"></i> На сайт</a>
+      <a href="applications.html" class="active"><i class="fas fa-clipboard-list"></i> Заявки</a>
+      <a href="reviews.html"><i class="fas fa-star"></i> Відгуки</a>
+      <a href="faq.html"><i class="fas fa-question-circle"></i> FAQ</a>
+      <div class="logout">
+        <a href="#" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Вийти</a>
+      </div>
+    </nav>
+  </aside>
+
+  <main class="admin-main">
+    <div class="admin-header">
+      <h1><i class="fas fa-clipboard-list" style="color:var(--admin-primary);"></i> Заявки</h1>
+      <div class="actions">
+        <a href="../index.html" class="btn btn-outline"><i class="fas fa-arrow-left"></i> На головну</a>
+      </div>
+    </div>
+
+    <!-- Вкладки -->
+    <div class="admin-tabs">
+      <button class="admin-tab active" data-tab="trip"><i class="fas fa-hiking"></i> Походи</button>
+      <button class="admin-tab" data-tab="leader"><i class="fas fa-user-hiking"></i> До лідерів</button>
+      <button class="admin-tab" data-tab="team"><i class="fas fa-users"></i> Команда</button>
+    </div>
+
+    <!-- Фільтри -->
+    <div class="status-filters" id="statusFilters">
+      <div class="filter-group">
+        <button class="status-filter-btn active" data-status="all">📋 Усі</button>
+        <button class="clear-category-btn" data-status="all" title="Очистити всі заявки"><i class="fas fa-trash-alt"></i></button>
+      </div>
+      <div class="filter-group">
+        <button class="status-filter-btn" data-status="pending">⏳ Очікувані</button>
+        <button class="clear-category-btn" data-status="pending" title="Очистити очікувані"><i class="fas fa-trash-alt"></i></button>
+      </div>
+      <div class="filter-group">
+        <button class="status-filter-btn" data-status="approved">✅ Прийняті</button>
+        <button class="clear-category-btn" data-status="approved" title="Очистити прийняті"><i class="fas fa-trash-alt"></i></button>
+      </div>
+      <div class="filter-group">
+        <button class="status-filter-btn" data-status="rejected">❌ Відхилені</button>
+        <button class="clear-category-btn" data-status="rejected" title="Очистити відхилені"><i class="fas fa-trash-alt"></i></button>
+      </div>
+    </div>
+
+    <div id="applicationsContainer" class="applications-grid"></div>
+    <div class="pagination-container" id="paginationContainer"></div>
+  </main>
+
+  <!-- Модалка деталей -->
+  <div id="applicationModal" class="modal-overlay">
+    <div class="modal modal-wide">
+      <div class="modal-header">
+        <h2 id="modalAppTitle"><i class="fas fa-file-alt"></i> Деталі заявки</h2>
+        <button class="modal-close" id="closeModalBtn">&times;</button>
+      </div>
+      <div class="modal-body" id="modalAppBody"></div>
+      <div class="modal-footer">
+        <button class="btn-cancel" id="closeModalFooterBtn">Закрити</button>
+      </div>
     </div>
   </div>
 
-  <div class="admin-tabs">
-    <button class="admin-tab active" data-tab="trip"><i class="fas fa-hiking"></i> Походи</button>
-    <button class="admin-tab" data-tab="leader"><i class="fas fa-user-hiking"></i> До лідерів</button>
-    <button class="admin-tab" data-tab="team"><i class="fas fa-users"></i> Команда</button>
-  </div>
-
-  <div class="status-filters" id="statusFilters">
-    <div class="filter-group">
-      <button class="status-filter-btn active" data-status="all">📋 Усі</button>
-      <button class="clear-category-btn" data-status="all" title="Очистити всі заявки"><i class="fas fa-trash-alt"></i></button>
-    </div>
-    <div class="filter-group">
-      <button class="status-filter-btn" data-status="pending">⏳ Очікувані</button>
-      <button class="clear-category-btn" data-status="pending" title="Очистити очікувані"><i class="fas fa-trash-alt"></i></button>
-    </div>
-    <div class="filter-group">
-      <button class="status-filter-btn" data-status="approved">✅ Прийняті</button>
-      <button class="clear-category-btn" data-status="approved" title="Очистити прийняті"><i class="fas fa-trash-alt"></i></button>
-    </div>
-    <div class="filter-group">
-      <button class="status-filter-btn" data-status="rejected">❌ Відхилені</button>
-      <button class="clear-category-btn" data-status="rejected" title="Очистити відхилені"><i class="fas fa-trash-alt"></i></button>
-    </div>
-  </div>
-
-  <div id="applicationsContainer" class="applications-grid"></div>
-
-  <div class="pagination-container" id="paginationContainer"></div>
-</div>
-
-<div id="applicationModal" class="modal-overlay">
-  <div class="modal modal-wide">
-    <div class="modal-header">
-      <h2 id="modalAppTitle"><i class="fas fa-file-alt"></i> Деталі заявки</h2>
-      <button class="modal-close" id="closeModalBtn">&times;</button>
-    </div>
-    <div class="modal-body" id="modalAppBody"></div>
-    <div class="modal-footer">
-      <button class="btn-cancel" id="closeModalFooterBtn">Закрити</button>
-    </div>
-  </div>
-</div>
-
-<script src="../js/utils.js"></script>
-<script src="../js/admin-auth.js"></script>
-<script src="admin-applications.js"></script>
-<script src="https://accounts.google.com/gsi/client" async defer></script>
+  <script src="../js/utils.js"></script>
+  <script src="../js/admin-auth.js"></script>
+  <script src="admin-applications.js"></script>
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <script>
+    document.getElementById('logoutBtn')?.addEventListener('click', function(e) {
+      e.preventDefault();
+      if (window.signOut) signOut();
+    });
+  </script>
 </body>
 </html>

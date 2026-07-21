@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Адмін-панель · РІДНЯ</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+  <aside class="admin-sidebar" id="adminSidebar">
+    <div class="logo">
+      <img src="../images/logo.jpg" alt="РІДНЯ">
+      <h1>РІДНЯ</h1>
+    </div>
+    <nav class="admin-nav">
+      <a href="#" class="active" data-tab="trips"><i class="fas fa-hiking"></i> Маршрути</a>
+      <a href="#" data-tab="blog"><i class="fas fa-newspaper"></i> Блог</a>
+      <a href="#" data-tab="gallery"><i class="fas fa-images"></i> Галерея</a>
+      <a href="#" data-tab="team"><i class="fas fa-users"></i> Команда</a>
+      <a href="#" data-tab="contacts"><i class="fas fa-address-card"></i> Контакти</a>
+      <a href="#" data-tab="gear"><i class="fas fa-campground"></i> Спорядження</a>
+      <a href="#" data-tab="faq"><i class="fas fa-question-circle"></i> FAQ</a>
+      <a href="#" data-tab="reviews"><i class="fas fa-star"></i> Відгуки</a>
+      <a href="#" data-tab="applications"><i class="fas fa-clipboard-list"></i> Заявки</a>
+      <div class="logout">
+        <a href="#" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Вийти</a>
+      </div>
+    </nav>
+  </aside>
+
+  <main class="admin-main">
+    <div class="admin-header">
+      <h1 id="pageTitle"><i class="fas fa-hiking"></i> Маршрути</h1>
+      <div class="actions">
+        <a href="../index.html" class="btn btn-outline"><i class="fas fa-arrow-left"></i> На сайт</a>
+        <button id="addBtn" class="btn btn-primary"><i class="fas fa-plus"></i> Додати</button>
+      </div>
+    </div>
+
+    <div id="contentContainer"></div>
+  </main>
+
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 id="modalTitle"><i class="fas fa-plus-circle"></i> Додати</h2>
+        <button class="modal-close" id="modalClose">&times;</button>
+      </div>
+      <div class="modal-body" id="modalBody"></div>
+      <div class="modal-footer">
+        <button class="btn-cancel" id="modalCancel">Скасувати</button>
+        <button class="btn btn-primary" id="modalSave">Зберегти</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../js/utils.js"></script>
+  <script src="../js/admin-auth.js"></script>
+  <script src="admin.js"></script>
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+</body>
+</html>

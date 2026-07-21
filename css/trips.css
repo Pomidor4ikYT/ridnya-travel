@@ -1062,3 +1062,79 @@ select {
   font-size: 0.7rem;
   color: var(--gray-500);
 }
+/* Бейдж "Новинка" на картці маршруту */
+.trip-badge.new {
+  background: #ffd700;
+  color: #1f2937;
+}
+.pagination-container {
+  display: flex;
+  flex-direction: row !important; /* примусово горизонтально */
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  margin-top: 30px;
+  flex-wrap: wrap;
+}
+
+.pagination-container .pagination-wrapper {
+  display: flex;
+  flex-direction: row !important;
+  align-items: center;
+  gap: 12px;
+}
+
+.pagination-container .page-numbers {
+  display: flex;
+  flex-direction: row !important;
+  gap: 8px;
+}
+
+.pagination-container .page-number,
+.pagination-container .page-nav {
+  width: 40px;
+  height: 40px;
+  border: 1px solid #e2e8f0;
+  border-radius: 30px;
+  background: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #4b5563;
+}
+
+.pagination-container .page-number.active {
+  background: #0057b7;
+  border-color: #0057b7;
+  color: white;
+}
+
+.pagination-container .page-number:hover:not(.active),
+.pagination-container .page-nav:hover:not(:disabled) {
+  background: #e8f0fe;
+  border-color: #0057b7;
+  color: #0057b7;
+}
+
+.pagination-container .page-nav:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+@media (max-width: 600px) {
+  .pagination-container .page-number,
+  .pagination-container .page-nav {
+    width: 34px;
+    height: 34px;
+    font-size: 0.85rem;
+  }
+  .pagination-container {
+    gap: 10px;
+  }
+  .pagination-container .page-numbers {
+    gap: 5px;
+  }
+}

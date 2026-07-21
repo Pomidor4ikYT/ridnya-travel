@@ -9,19 +9,76 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;500;600;700&family=Montserrat:wght@600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link rel="stylesheet" href="../css/main.css">
-  <link rel="stylesheet" href="admin.css">
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #f0f4ff 0%, #ffffff 100%);
+      padding: 20px;
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+    }
+    .admin-login-card {
+      background: rgba(255,255,255,0.95);
+      backdrop-filter: blur(16px);
+      border-radius: 32px;
+      padding: 48px 40px;
+      text-align: center;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+      border: 1px solid rgba(255,255,255,0.8);
+      max-width: 420px;
+      width: 100%;
+      transition: 0.3s;
+    }
+    .admin-login-card:hover {
+      box-shadow: 0 30px 80px rgba(0,0,0,0.12);
+    }
+    .admin-logo {
+      width: 100px;
+      height: 100px;
+      margin: 0 auto 24px;
+      border-radius: 28px;
+      overflow: hidden;
+      background: white;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+    }
+    .admin-logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+    .admin-login-card h1 {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 800;
+      font-size: 1.6rem;
+      color: #1f2937;
+      margin-bottom: 8px;
+    }
+    .admin-login-card p {
+      color: #6b7280;
+      font-size: 0.95rem;
+      margin-bottom: 28px;
+    }
+    .google-login-btn {
+      display: flex;
+      justify-content: center;
+    }
+  </style>
 </head>
 <body>
-<div class="admin-login-container">
   <div class="admin-login-card">
     <div class="admin-logo"><img src="../images/logo.jpg" alt="РІДНЯ"></div>
     <h1>Вхід для адміністратора</h1>
+    <p>Увійдіть через Google, щоб керувати сайтом</p>
     <div class="google-login-btn"></div>
   </div>
-</div>
-<script src="../js/utils.js"></script>
-<script src="../js/admin-auth.js"></script>
-<script src="https://accounts.google.com/gsi/client" async defer></script>
-<script>setTimeout(()=>{ if(window.isAdmin) window.location.href='../index.html'; },200);</script>
+  <script src="../js/utils.js"></script>
+  <script src="../js/admin-auth.js"></script>
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <script>
+    if (window.isAdmin) window.location.href = 'dashboard.html';
+  </script>
 </body>
 </html>

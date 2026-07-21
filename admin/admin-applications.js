@@ -2,10 +2,10 @@
 (function() {
   'use strict';
 
-  const KEYS = {
-    trip: 'ridnya_trip_applications',
-    leader: 'ridnya_leader_applications',
-    team: 'ridnya_team_applications'
+  const ENTITIES = {
+    trip: 'trip_applications',
+    leader: 'leader_applications',
+    team: 'team_applications'
   };
 
   let currentTab = 'trip';
@@ -15,15 +15,19 @@
   const ITEMS_PER_PAGE = 8;
 
   function loadData() {
-    data.trip = Utils.getStorage(KEYS.trip);
-    data.leader = Utils.getStorage(KEYS.leader);
-    data.team = Utils.getStorage(KEYS.team);
+    const promises = Object.keys(ENTITIES).map(key => Utils.fetchData(ENTITIES[key]));
+    Promise.all(promises).then(results => {
+      data.trip = Array.isArray(results[0]) ? results[0] : [];
+      data.leader = Array.isArray(results[1]) ? results[1] : [];
+      data.team = Array.isArray(results[2]) ? results[2] : [];
+      renderCurrentTab();
+    });
   }
 
   function saveData() {
-    Utils.setStorage(KEYS.trip, data.trip);
-    Utils.setStorage(KEYS.leader, data.leader);
-    Utils.setStorage(KEYS.team, data.team);
+    Utils.saveData(ENTITIES.trip, data.trip);
+    Utils.saveData(ENTITIES.leader, data.leader);
+    Utils.saveData(ENTITIES.team, data.team);
   }
 
   function updateStatus(type, id, status) {
@@ -255,40 +259,15 @@
     renderCurrentTab();
   }
 
-  function init() {
-    if (!window.isAdmin) {
-      window.location.href = '../index.html';
-      return;
-    }
+  document.addEventListener('DOMContentLoaded', function() {
+    if (!window.isAdmin) { window.location.href = '../index.html'; return; }
     loadData();
-    renderCurrentTab();
-
-    document.querySelectorAll('.admin-tab').forEach(btn => {
-      btn.addEventListener('click', () => switchTab(btn.dataset.tab));
-    });
-
-    document.querySelectorAll('.status-filter-btn').forEach(btn => {
-      btn.addEventListener('click', () => setStatusFilter(btn.dataset.status));
-    });
-
-    document.querySelectorAll('.clear-category-btn').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const status = btn.dataset.status;
-        clearApplicationsByStatus(currentTab, status);
-      });
-    });
-
-    const logoutBtn = document.getElementById('logoutBtn');
-    if (logoutBtn) logoutBtn.addEventListener('click', () => { if (window.signOut) signOut(); });
-
-    const closeModalBtn = document.getElementById('closeModalBtn');
-    const closeModalFooter = document.getElementById('closeModalFooterBtn');
-    const modalOverlay = document.getElementById('applicationModal');
-    if (closeModalBtn) closeModalBtn.addEventListener('click', closeModal);
-    if (closeModalFooter) closeModalFooter.addEventListener('click', closeModal);
-    if (modalOverlay) modalOverlay.addEventListener('click', (e) => { if (e.target === modalOverlay) closeModal(); });
-  }
-
-  document.addEventListener('DOMContentLoaded', init);
+    document.querySelectorAll('.admin-tab').forEach(btn => btn.addEventListener('click', () => switchTab(btn.dataset.tab)));
+    document.querySelectorAll('.status-filter-btn').forEach(btn => btn.addEventListener('click', () => setStatusFilter(btn.dataset.status)));
+    document.querySelectorAll('.clear-category-btn').forEach(btn => btn.addEventListener('click', (e) => { e.stopPropagation(); clearApplicationsByStatus(currentTab, btn.dataset.status); }));
+    document.getElementById('logoutBtn')?.addEventListener('click', () => { if (window.signOut) signOut(); });
+    document.getElementById('closeModalBtn')?.addEventListener('click', closeModal);
+    document.getElementById('closeModalFooterBtn')?.addEventListener('click', closeModal);
+    document.getElementById('applicationModal')?.addEventListener('click', (e) => { if (e.target === e.currentTarget) closeModal(); });
+  });
 })();

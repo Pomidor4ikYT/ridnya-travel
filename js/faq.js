@@ -1,10 +1,10 @@
-// js/faq.js – логіка для публічної сторінки FAQ
+// js/faq.js
 (function() {
   'use strict';
+  const ENTITY = 'faq';
+  let faqItems = [];
 
-  const FAQ_STORAGE_KEY = 'ridnya_faq';
-
-  const defaultFaqItems = [
+  const defaultFaq = [
     {
       id: 'f1',
       question: 'Правила туристичного клубу «Рідня»',
@@ -55,32 +55,31 @@
   ];
 
   function loadFaq() {
-    try {
-      let stored = localStorage.getItem(FAQ_STORAGE_KEY);
-      let items;
-      if (stored) {
-        items = JSON.parse(stored);
-      } else {
-        items = defaultFaqItems;
-        localStorage.setItem(FAQ_STORAGE_KEY, JSON.stringify(items));
-      }
-      const container = document.getElementById('faqDynamicList');
-      if (container && items.length) {
-        container.innerHTML = items.map(item => `
-          <div class="faq-item">
-            <button class="faq-question">
-              <span>${item.id === 'f1' ? '<i class="fas fa-star" style="color:var(--yellow); margin-right:8px;"></i> ' : ''}${Utils.escapeHtml(item.question)}</span>
-              <i class="fas fa-chevron-down"></i>
-            </button>
-            <div class="faq-answer">${item.answer}</div>
-          </div>
-        `).join('');
-        document.querySelectorAll('.faq-question').forEach(btn => {
-          btn.removeEventListener('click', handleFaqClick);
-          btn.addEventListener('click', handleFaqClick);
-        });
-      }
-    } catch(e) { console.error(e); }
+    Utils.fetchData(ENTITY).then(data => {
+      faqItems = Array.isArray(data) && data.length ? data : defaultFaq;
+      renderFaq();
+    });
+  }
+
+  function saveFaq() { Utils.saveData(ENTITY, faqItems); }
+
+  function renderFaq() {
+    const container = document.getElementById('faqDynamicList');
+    if (container && faqItems.length) {
+      container.innerHTML = faqItems.map(item => `
+        <div class="faq-item">
+          <button class="faq-question">
+            <span>${item.id === 'f1' ? '<i class="fas fa-star" style="color:var(--yellow); margin-right:8px;"></i> ' : ''}${Utils.escapeHtml(item.question)}</span>
+            <i class="fas fa-chevron-down"></i>
+          </button>
+          <div class="faq-answer">${item.answer}</div>
+        </div>
+      `).join('');
+      document.querySelectorAll('.faq-question').forEach(btn => {
+        btn.removeEventListener('click', handleFaqClick);
+        btn.addEventListener('click', handleFaqClick);
+      });
+    }
   }
 
   function handleFaqClick(e) {

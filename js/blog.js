@@ -1,7 +1,12 @@
 // js/blog.js
 (function() {
   'use strict';
-  const STORAGE_KEY = 'ridnya_blog';
+
+  const ENTITY = 'blog';
+  let blogPosts = [];
+  let editingBlogId = null;
+  let currentPage = 1;
+  const ITEMS_PER_PAGE = 9;
 
   const defaultBlog = [
     {
@@ -19,7 +24,8 @@
       <h3>Підсумки та поради</h3>
       <ol><li>Не економте на взутті.</li><li>Рухайтеся повільно, але впевнено.</li><li>Беріть запасні рукавиці та шкарпетки.</li><li>Пийте гарячі напої кожні 40 хвилин.</li></ol>
       <p>Детальний звіт на <a href="https://www.youtube.com/channel/UCr67AbASZGqx4RefbKaIRSQ" target="_blank">YouTube</a> та <a href="https://www.facebook.com/bfridnya" target="_blank">Facebook</a>. До зустрічі на вершинах!</p>`,
-      image: 'https://splav.lviv.ua/foto/big/hoverla-winter.jpg'
+      image: 'https://splav.lviv.ua/foto/big/hoverla-winter.jpg',
+      createdAt: Date.now() - 60 * 86400000
     },
     {
       id: 'b2',
@@ -35,7 +41,8 @@
       <h3>Як підготуватися</h3>
       <ul><li>Зручне трекінгове взуття</li><li>Дощовик</li><li>Фотоапарат</li><li>Вода та перекус</li><li>Нотатник для історій</li></ul>
       <p>Запрошуємо на наступний похід «Стежками УПА на <strong>Яйко-Ілемське</strong>». Реєстрація на сторінці <a href="contacts.html" target="_blank">Контакти</a>. Візьміть синьо-жовтий прапор!</p>`,
-      image: 'https://karpatium.com.ua/rails/active_storage/blobs/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBdG9DIiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--21c10b132ed3f73f42821cd909e65e11a3e64592/%D0%B3%D0%BE%D1%80%D0%B0-%D0%BC%D0%B0%D0%BA%D1%96%D0%B2%D0%BA%D0%B0-%D0%BC%D0%B5%D0%BC%D0%BE%D1%80%D1%96%D0%B0%D0%BB.jpeg'
+      image: 'https://karpatium.com.ua/rails/active_storage/blobs/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBdG9DIiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--21c10b132ed3f73f42821cd909e65e11a3e64592/%D0%B3%D0%BE%D1%80%D0%B0-%D0%BC%D0%B0%D0%BA%D1%96%D0%B2%D0%BA%D0%B0-%D0%BC%D0%B5%D0%BC%D0%BE%D1%80%D1%96%D0%B0%D0%BB.jpeg',
+      createdAt: Date.now() - 60 * 86400000
     },
     {
       id: 'b3',
@@ -49,7 +56,8 @@
       <h3>Поради</h3>
       <ol><li>Багатошаровий одяг</li><li>Дощовик навіть у сонце</li><li>Фотоапарат для квітів</li><li>Трекінгові палиці</li><li>Запас води 1,5 л</li></ol>
       <p>Більше фото в альбомі <a href="gallery.html" target="_blank">«Наші мандрівки 2026»</a>. Наступного тижня — похід на <strong>Кукул</strong>!</p>`,
-      image: 'https://vidviday.ua/storage/media/tour/10897/hora-lopata.jpg'
+      image: 'https://vidviday.ua/storage/media/tour/10897/hora-lopata.jpg',
+      createdAt: Date.now() - 60 * 86400000
     },
     {
       id: 'b4',
@@ -63,25 +71,33 @@
       <h3>3. Фільтр Katadyn BeFree 1L</h3>
       <p>Пийте з будь-якого струмка за 30 секунд. Вага 80 г.</p>
       <p>У наступному огляді — намети та спальники. Пишіть у <a href="contacts.html" target="_blank">контактну форму</a> для групової закупівлі зі знижкою.</p>`,
-      image: 'https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=800'
+      image: 'https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=800',
+      createdAt: Date.now() - 60 * 86400000
     }
   ];
 
-  let blogPosts = [];
-  let editingBlogId = null;
-  let currentPage = 1;
-  const ITEMS_PER_PAGE = 9;
+  function loadData() {
+    Utils.fetchData(ENTITY).then(data => {
+      blogPosts = Array.isArray(data) && data.length ? data : defaultBlog;
+      renderBlog();
+    });
+  }
 
-  function loadData() { blogPosts = Utils.getStorage(STORAGE_KEY, defaultBlog); }
-  function saveData() { Utils.setStorage(STORAGE_KEY, blogPosts); }
-  function stripHtml(html) { if (!html) return ''; let tmp = document.createElement('div'); tmp.innerHTML = html; return tmp.textContent || tmp.innerText || ''; }
+  function saveData() { Utils.saveData(ENTITY, blogPosts); }
+
+  function stripHtml(html) {
+    if (!html) return '';
+    let tmp = document.createElement('div');
+    tmp.innerHTML = html;
+    return tmp.textContent || tmp.innerText || '';
+  }
 
   function parseDate(dateStr) {
     if (!dateStr) return null;
     let parts = dateStr.split('.');
-    if (parts.length === 3) return new Date(parts[2], parts[1]-1, parts[0]);
+    if (parts.length === 3) return new Date(parts[2], parts[1] - 1, parts[0]);
     parts = dateStr.split('-');
-    if (parts.length === 3) return new Date(parts[0], parts[1]-1, parts[2]);
+    if (parts.length === 3) return new Date(parts[0], parts[1] - 1, parts[2]);
     return null;
   }
 
@@ -132,7 +148,6 @@
     }
     html += `</div><button class="page-nav" id="nextPageBtn" ${currentPage === totalPages ? 'disabled' : ''}><i class="fas fa-chevron-right"></i></button></div>`;
     container.innerHTML = html;
-    
     document.getElementById('prevPageBtn')?.addEventListener('click', () => { if (currentPage > 1) { currentPage--; renderBlog(); } });
     document.getElementById('nextPageBtn')?.addEventListener('click', () => { if (currentPage < totalPages) { currentPage++; renderBlog(); } });
     document.querySelectorAll('.page-number').forEach(btn => {
@@ -148,7 +163,13 @@
         const editBtn = e.target.closest('.edit-btn');
         if (editBtn) { e.stopPropagation(); openBlogModal(editBtn.dataset.id); return; }
         const deleteBtn = e.target.closest('.delete-btn');
-        if (deleteBtn) { e.stopPropagation(); if (confirm('Видалити статтю?')) { blogPosts = blogPosts.filter(p => p.id !== deleteBtn.dataset.id); saveData(); renderBlog(); } return; }
+        if (deleteBtn) {
+          e.stopPropagation();
+          if (confirm('Видалити статтю?')) {
+            Utils.deleteItem(ENTITY, deleteBtn.dataset.id).then(() => loadData());
+          }
+          return;
+        }
       }
       const readMoreLink = e.target.closest('.read-more-link');
       if (readMoreLink) { e.preventDefault(); e.stopPropagation(); openBlogDetailsModal(readMoreLink.dataset.id); }
@@ -163,29 +184,32 @@
     if (currentPage > totalPages) currentPage = totalPages || 1;
     const start = (currentPage - 1) * ITEMS_PER_PAGE;
     const pagePosts = sorted.slice(start, start + ITEMS_PER_PAGE);
-    
+
     if (!pagePosts.length) {
       container.innerHTML = '<div style="text-align:center; padding:50px;"><i class="fas fa-newspaper" style="font-size:3rem; opacity:0.4;"></i><p>Немає статей</p></div>';
       renderPagination(totalPages);
       return;
     }
-    
+
     container.innerHTML = pagePosts.map(post => {
+      // Бейдж "Новинка" показуємо тільки якщо createdAt < 30 днів
+      const isNew = (post.createdAt && (Date.now() - post.createdAt < 30 * 86400000));
       const shortText = stripHtml(post.text || '').substring(0, 130) + (stripHtml(post.text || '').length > 130 ? '...' : '');
       const adminButtons = window.isAdmin ? `<div class="blog-card-actions"><button class="edit-btn" data-id="${post.id}"><i class="fas fa-pen"></i></button><button class="delete-btn" data-id="${post.id}"><i class="fas fa-trash"></i></button></div>` : '';
+      const newBadge = isNew ? '<span class="badge-new" style="font-size:0.6rem; background:#ffd700; padding:2px 8px; border-radius:20px; margin-left:8px; display:inline-block;">Новинка</span>' : '';
       return `
       <article class="blog-card" data-id="${post.id}">
         ${adminButtons}
         ${post.image ? `<img src="${post.image}" alt="${post.title}" loading="lazy">` : '<div class="blog-card-img"><i class="fas fa-image"></i></div>'}
         <div class="blog-card-body">
           <span class="blog-date">${post.date || ''}</span>
-          <h4>${Utils.escapeHtml(post.title)}</h4>
+          <h4>${Utils.escapeHtml(post.title)} ${newBadge}</h4>
           <p>${Utils.escapeHtml(shortText)}</p>
           <a href="#" class="read-more-link" data-id="${post.id}">Читати далі →</a>
         </div>
       </article>`;
     }).join('');
-    
+
     attachCardEvents();
     renderPagination(totalPages);
   }
@@ -218,29 +242,30 @@
     editingBlogId = null;
   }
 
-  function init() {
-    loadData();
-    renderBlog();
+  document.addEventListener('DOMContentLoaded', function() {
     if (window.isAdmin) document.getElementById('addBlogBtn')?.addEventListener('click', () => openBlogModal());
     document.getElementById('closeBlogModalBtn')?.addEventListener('click', closeBlogModal);
     document.getElementById('cancelBlogBtn')?.addEventListener('click', closeBlogModal);
     document.getElementById('blogModalOverlay')?.addEventListener('click', (e) => { if (e.target === e.currentTarget) closeBlogModal(); });
-    document.getElementById('addBlogForm')?.addEventListener('submit', (e) => {
+    document.getElementById('addBlogForm')?.addEventListener('submit', function(e) {
       e.preventDefault();
       const title = document.getElementById('blogTitle').value.trim();
       if (!title) { alert('Заголовок обовʼязковий'); return; }
-      const data = { title, date: document.getElementById('blogDate').value.trim(), text: document.getElementById('blogText').value.trim(), image: document.getElementById('blogImage').value.trim() };
+      const data = {
+        title,
+        date: document.getElementById('blogDate').value.trim(),
+        text: document.getElementById('blogText').value.trim(),
+        image: document.getElementById('blogImage').value.trim(),
+        createdAt: Date.now() // новий запис отримує поточний час
+      };
       if (editingBlogId) {
-        const idx = blogPosts.findIndex(p => p.id === editingBlogId);
-        if (idx !== -1) blogPosts[idx] = { ...blogPosts[idx], ...data };
+        Utils.updateItem(ENTITY, editingBlogId, data).then(() => loadData());
       } else {
-        blogPosts.push({ id: 'b' + Date.now(), ...data });
+        Utils.addItem(ENTITY, data).then(() => loadData());
       }
-      saveData();
       currentPage = 1;
-      renderBlog();
       closeBlogModal();
     });
-  }
-  document.addEventListener('DOMContentLoaded', init);
+    loadData();
+  });
 })();

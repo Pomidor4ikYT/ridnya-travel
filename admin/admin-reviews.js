@@ -1,16 +1,18 @@
 // admin/admin-reviews.js
 (function() {
-  const STORAGE_KEY = 'ridnya_reviews';
+  const ENTITY = 'reviews';
   let reviews = [];
   let editingId = null;
-  let currentFilter = 'all'; // all, approved, pending
+  let currentFilter = 'all';
 
   function loadReviews() {
-    reviews = Utils.getStorage(STORAGE_KEY, []);
-    renderReviews();
+    Utils.fetchData(ENTITY).then(data => {
+      reviews = Array.isArray(data) ? data : [];
+      renderReviews();
+    });
   }
 
-  function saveReviews() { Utils.setStorage(STORAGE_KEY, reviews); }
+  function saveReviews() { Utils.saveData(ENTITY, reviews); }
 
   function renderReviews() {
     const container = document.getElementById('reviewsList');
@@ -18,12 +20,10 @@
     let filtered = reviews;
     if (currentFilter === 'approved') filtered = reviews.filter(r => r.approved === true);
     else if (currentFilter === 'pending') filtered = reviews.filter(r => r.approved !== true);
-
     if (!filtered.length) {
       container.innerHTML = '<div class="empty-state"><i class="fas fa-comment-slash"></i><p>Немає відгуків</p></div>';
       return;
     }
-
     container.innerHTML = filtered.map(r => `
       <div class="review-admin-card" data-id="${r.id}">
         <div class="review-card-header">
@@ -42,27 +42,9 @@
         </div>
       </div>
     `).join('');
-
-    document.querySelectorAll('.approve-review').forEach(btn => {
-      btn.addEventListener('click', () => approveReview(btn.dataset.id));
-    });
-    document.querySelectorAll('.edit-review').forEach(btn => {
-      btn.addEventListener('click', () => openModal(btn.dataset.id));
-    });
-    document.querySelectorAll('.delete-review').forEach(btn => {
-      btn.addEventListener('click', () => { if (confirm('Видалити відгук?')) deleteReview(btn.dataset.id); });
-    });
-  }
-
-  function approveReview(id) {
-    const rev = reviews.find(r => r.id == id);
-    if (rev) { rev.approved = true; saveReviews(); renderReviews(); }
-  }
-
-  function deleteReview(id) {
-    reviews = reviews.filter(r => r.id != id);
-    saveReviews();
-    renderReviews();
+    document.querySelectorAll('.approve-review').forEach(btn => btn.addEventListener('click', () => { const rev = reviews.find(r => r.id == btn.dataset.id); if (rev) { rev.approved = true; saveReviews(); renderReviews(); } }));
+    document.querySelectorAll('.edit-review').forEach(btn => btn.addEventListener('click', () => openModal(btn.dataset.id)));
+    document.querySelectorAll('.delete-review').forEach(btn => btn.addEventListener('click', () => { if (confirm('Видалити відгук?')) { reviews = reviews.filter(r => r.id != btn.dataset.id); saveReviews(); renderReviews(); } }));
   }
 
   function openModal(id = null) {
@@ -119,7 +101,7 @@
     renderReviews();
   }
 
-  document.addEventListener('DOMContentLoaded', () => {
+  document.addEventListener('DOMContentLoaded', function() {
     if (!window.isAdmin) { window.location.href = '../index.html'; return; }
     loadReviews();
     document.getElementById('addReviewBtn').addEventListener('click', () => openModal());
@@ -127,8 +109,6 @@
     document.getElementById('cancelReviewModal').addEventListener('click', closeModal);
     document.getElementById('reviewModal').addEventListener('click', e => { if (e.target === e.currentTarget) closeModal(); });
     document.getElementById('logoutBtn').addEventListener('click', () => window.signOut && window.signOut());
-    document.querySelectorAll('.review-filter-btn').forEach(btn => {
-      btn.addEventListener('click', () => setFilter(btn.dataset.filter));
-    });
+    document.querySelectorAll('.review-filter-btn').forEach(btn => btn.addEventListener('click', () => setFilter(btn.dataset.filter)));
   });
 })();

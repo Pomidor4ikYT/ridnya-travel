@@ -2,45 +2,81 @@
 <html lang="uk">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Управління FAQ · РІДНЯ</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link rel="stylesheet" href="../css/main.css">
-  <link rel="stylesheet" href="../css/admin.css">
-  <style>
-    .faq-item-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
-    .faq-item-question { font-weight: 700; font-size: 1.1rem; }
-    .faq-item-answer { background: #f7fafc; padding: 16px; border-radius: 16px; margin-top: 8px; }
-    .faq-item-actions { display: flex; gap: 8px; }
-  </style>
+  <link rel="stylesheet" href="admin.css">
 </head>
 <body>
-<div class="admin-container">
-  <div class="admin-header">
-    <h1><i class="fas fa-question-circle"></i> Управління FAQ</h1>
-    <div class="header-actions">
-      <a href="../index.html" class="btn btn-outline">На головну</a>
-      <button id="logoutBtn" class="btn btn-outline">Вийти</button>
-      <button id="addQuestionBtn" class="btn btn-primary"><i class="fas fa-plus"></i> Додати питання</button>
+  <aside class="admin-sidebar">
+    <div class="logo">
+      <img src="../images/logo.jpg" alt="РІДНЯ">
+      <h1>РІДНЯ</h1>
+    </div>
+    <nav class="admin-nav">
+      <a href="../index.html"><i class="fas fa-home"></i> На сайт</a>
+      <a href="applications.html"><i class="fas fa-clipboard-list"></i> Заявки</a>
+      <a href="reviews.html"><i class="fas fa-star"></i> Відгуки</a>
+      <a href="faq.html" class="active"><i class="fas fa-question-circle"></i> FAQ</a>
+      <div class="logout">
+        <a href="#" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Вийти</a>
+      </div>
+    </nav>
+  </aside>
+
+  <main class="admin-main">
+    <div class="admin-header">
+      <h1><i class="fas fa-question-circle" style="color:var(--admin-primary);"></i> Управління FAQ</h1>
+      <div class="actions">
+        <a href="../index.html" class="btn btn-outline"><i class="fas fa-arrow-left"></i> На головну</a>
+        <button id="addQuestionBtn" class="btn btn-primary"><i class="fas fa-plus"></i> Додати питання</button>
+      </div>
+    </div>
+
+    <div id="faqList"></div>
+  </main>
+
+  <!-- Модалка додавання/редагування -->
+  <div id="faqModal" class="modal-overlay" style="display:none;">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 id="modalTitle"><i class="fas fa-plus-circle"></i> Нове питання</h2>
+        <button class="modal-close" id="closeFaqModalBtn">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group"><label>Питання</label><input type="text" id="faqQuestion" placeholder="Ваше питання"></div>
+        <div class="form-group"><label>Відповідь (HTML)</label><textarea id="faqAnswer" rows="5"></textarea></div>
+      </div>
+      <div class="modal-footer">
+        <button id="cancelModalBtn" class="btn-cancel">Скасувати</button>
+        <button id="saveQuestionBtn" class="btn btn-primary">Зберегти</button>
+      </div>
     </div>
   </div>
-  <div id="faqList"></div>
-</div>
 
-<div id="faqModal" class="modal-overlay" style="display: none;">
-  <div class="modal">
-    <h2 id="modalTitle"><i class="fas fa-plus-circle"></i> Нове питання</h2>
-    <div class="form-group"><label>Питання</label><input type="text" id="faqQuestion" placeholder="Ваше питання"></div>
-    <div class="form-group"><label>Відповідь (HTML)</label><textarea id="faqAnswer" rows="5"></textarea></div>
-    <div class="modal-footer">
-      <button id="cancelModalBtn" class="btn btn-outline">Скасувати</button>
-      <button id="saveQuestionBtn" class="btn btn-primary">Зберегти</button>
-    </div>
-  </div>
-</div>
-
-<script src="../js/utils.js"></script>
-<script src="../js/admin-auth.js"></script>
-<script src="admin-faq.js"></script>
-<script src="https://accounts.google.com/gsi/client" async defer></script>
+  <script src="../js/utils.js"></script>
+  <script src="../js/admin-auth.js"></script>
+  <script src="admin-faq.js"></script>
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <script>
+    document.getElementById('logoutBtn')?.addEventListener('click', function(e) {
+      e.preventDefault();
+      if (window.signOut) signOut();
+    });
+    // Прив'язка закриття модалки
+    document.getElementById('closeFaqModalBtn')?.addEventListener('click', function() {
+      document.getElementById('faqModal').style.display = 'none';
+    });
+    document.getElementById('cancelModalBtn')?.addEventListener('click', function() {
+      document.getElementById('faqModal').style.display = 'none';
+    });
+    document.getElementById('faqModal')?.addEventListener('click', function(e) {
+      if (e.target === this) this.style.display = 'none';
+    });
+  </script>
 </body>
 </html>

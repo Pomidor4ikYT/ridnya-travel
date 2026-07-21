@@ -41,12 +41,12 @@
         </ul>
       </nav>
       <div class="header-actions">
-        <a href="https://secure.wayforpay.com/payment/s6bdf0263be8c" class="btn-support" target="_blank" rel="noopener noreferrer"><i class="fas fa-heart"></i> Підтримати</a>
-        <div class="admin-controls">
-          <a href="admin/applications.html" class="admin-only" style="display: none;"><i class="fas fa-clipboard-list"></i> Заявки</a>
-          <a href="admin/reviews.html" class="admin-only" style="display: none;"><i class="fas fa-star"></i> Відгуки</a>
-          <button id="adminLogoutBtn" class="admin-only" style="display: none;" onclick="if(window.signOut) signOut();">Вийти</button>
-        </div>
+        <a href="https://secure.wayforpay.com/payment/s6bdf0263be8c" class="btn-support" target="_blank" rel="noopener noreferrer">
+          <i class="fas fa-heart"></i> Підтримати
+        </a>
+        <a href="/admin/dashboard.html" id="adminPanelLink" class="btn-support" style="display: none; background: var(--blue);">
+          <i class="fas fa-cog"></i> Адмін-панель
+        </a>
       </div>
     </div>
   </header>
@@ -136,7 +136,6 @@
 
   <script src="js/utils.js"></script>
   <script src="js/main.js"></script>
-  <!-- ДОДАНО: фоновий колаж -->
   <script src="js/bg-collage.js"></script>
   <script src="js/admin-auth.js"></script>
   <script src="js/reviews.js"></script>
